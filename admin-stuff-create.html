@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un stuff | Les Z-héros</title>
+    <meta name="description" content="Création d'un stuff pour le catalogue Les Z-héros.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <script src="assets/js/admin.js" defer></script>
+</head>
+<body class="admin-body">
+    <div class="admin-app">
+        <aside class="admin-sidebar" aria-label="Navigation administration">
+            <a class="admin-brand" href="index.html">
+                <img src="assets/img/logo.png" alt="">
+                <span>Les Z-héros</span>
+            </a>
+
+            <nav class="admin-nav">
+                <a class="admin-nav__link" href="admin.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+                <p class="admin-nav__label">Contenus</p>
+                <a class="admin-nav__link" href="admin-announcements.html"><i class="fa-solid fa-bullhorn"></i><span>Annonces</span></a>
+                <a class="admin-nav__link" href="admin-missions.html"><i class="fa-solid fa-scroll"></i><span>Missions</span></a>
+                <a class="admin-nav__link" href="admin-guides.html"><i class="fa-solid fa-book-open"></i><span>Guides</span></a>
+                <a class="admin-nav__link" href="admin-gallery.html"><i class="fa-regular fa-images"></i><span>Galerie</span></a>
+                <a class="admin-nav__link is-active" href="admin-stuffs.html"><i class="fa-solid fa-shield-halved"></i><span>Catalogue stuffs</span></a>
+                <p class="admin-nav__label">Activités</p>
+                <a class="admin-nav__link" href="admin-lottery.html"><i class="fa-solid fa-dice"></i><span>Loterie</span></a>
+                <a class="admin-nav__link" href="admin-ranking.html"><i class="fa-solid fa-trophy"></i><span>Classement</span></a>
+                <p class="admin-nav__label">Communauté</p>
+                <a class="admin-nav__link" href="admin-users.html"><i class="fa-solid fa-users"></i><span>Utilisateurs</span></a>
+                <a class="admin-nav__link" href="admin-validations.html"><i class="fa-solid fa-circle-check"></i><span>Validations</span></a>
+                <a class="admin-nav__link" href="admin-comments.html"><i class="fa-solid fa-comments"></i><span>Commentaires</span></a>
+                <p class="admin-nav__label">Administration</p>
+                <a class="admin-nav__link" href="admin-roles.html"><i class="fa-solid fa-user-shield"></i><span>Rôles</span></a>
+                <a class="admin-nav__link" href="admin-settings.html"><i class="fa-solid fa-gear"></i><span>Paramètres</span></a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="admin-breadcrumb">
+                    <button class="admin-menu-button" type="button" aria-label="Ouvrir la navigation">
+                        <i class="fa-solid fa-table-columns"></i>
+                    </button>
+                    <span></span>
+                    <p>Catalogue stuffs / Créer</p>
+                </div>
+
+                <div class="admin-actions">
+                    <a class="admin-secondary-button" href="admin-stuffs.html">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Retour àu catalogue</span>
+                    </a>
+                </div>
+            </header>
+
+            <section class="admin-content">
+                <div class="admin-title">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h1>Créer un stuff</h1>
+                </div>
+
+                <section class="admin-form-card" aria-labelledby="stuff-form-title">
+                    <div class="admin-form-head">
+                        <div>
+                            <h2 id="stuff-form-title">Informations du stuff</h2>
+                            <p>Ajoute un build au catalogue avec son lien Dofusbook et ses conditions.</p>
+                        </div>
+                    </div>
+
+                    <form class="admin-mission-form" action="#" method="post">
+                        <section class="admin-form-section">
+                            <div class="admin-form-section-title">
+                                <span>1</span>
+                                <div>
+                                    <h3>Build</h3>
+                                    <p>Renseigne le lien et les informations principales du stuff.</p>
+                                </div>
+                            </div>
+
+                            <div class="admin-stuff-form-grid">
+                                <label class="admin-field" for="stuff-dofusbook">
+                                    <span>URL Dofusbook</span>
+                                    <input id="stuff-dofusbook" name="dofusbook_url" type="url" placeholder="https://www.dofusbook.net/..." required>
+                                </label>
+
+                                <label class="admin-field" for="stuff-class">
+                                    <span>Classe</span>
+                                    <select id="stuff-class" name="class" required>
+                                        <option value="">Choisir une classe</option>
+                                        <option>Pandawa</option>
+                                        <option>Eniripsa</option>
+                                        <option>Iop</option>
+                                        <option>Cra</option>
+                                        <option>Feca</option>
+                                        <option>Sadida</option>
+                                    </select>
+                                </label>
+
+                                <label class="admin-field" for="stuff-element">
+                                    <span>Élément</span>
+                                    <select id="stuff-element" name="element" required>
+                                        <option value="">Choisir un élément</option>
+                                        <option>Air</option>
+                                        <option>Feu</option>
+                                        <option>Eau</option>
+                                        <option>Terre</option>
+                                        <option>Multi</option>
+                                    </select>
+                                </label>
+
+                                <label class="admin-field" for="stuff-mode">
+                                    <span>Mode</span>
+                                    <select id="stuff-mode" name="mode" required>
+                                        <option value="">Choisir un mode</option>
+                                        <option>DPS</option>
+                                        <option>Tank</option>
+                                        <option>Soutien</option>
+                                        <option>Placement</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </section>
+
+                        <section class="admin-form-section">
+                            <div class="admin-form-section-title">
+                                <span>2</span>
+                                <div>
+                                    <h3>Conditions</h3>
+                                    <p>Précise les niveaux, le budget et les remarques utiles.</p>
+                                </div>
+                            </div>
+
+                            <div class="admin-stuff-form-grid">
+                                <label class="admin-field" for="stuff-meta">
+                                    <span>Meta optionnel</span>
+                                    <input id="stuff-meta" name="meta" type="text" placeholder="ex: 3.5">
+                                </label>
+
+                                <label class="admin-field" for="stuff-min-level">
+                                    <span>Niveau min</span>
+                                    <input id="stuff-min-level" name="min_level" type="number" min="1" max="200" placeholder="196">
+                                </label>
+
+                                <label class="admin-field" for="stuff-max-level">
+                                    <span>Niveau max optionnel</span>
+                                    <input id="stuff-max-level" name="max_level" type="number" min="1" max="200" placeholder="200">
+                                </label>
+
+                                <label class="admin-field" for="stuff-budget">
+                                    <span>Budget optionnel</span>
+                                    <select id="stuff-budget" name="budget">
+                                        <option value="">Choisir un budget</option>
+                                        <option>Économique</option>
+                                        <option>Standard</option>
+                                        <option>Optimisé</option>
+                                        <option>Très haut budget</option>
+                                    </select>
+                                </label>
+
+                                <label class="admin-field admin-field--full" for="stuff-comment">
+                                    <span>Commentaire</span>
+                                    <textarea id="stuff-comment" name="comment" placeholder="Pour quel type de joueur, variantes, points forts/faibles..."></textarea>
+                                </label>
+
+                                <label class="admin-check-field admin-field--full" for="stuff-highlight">
+                                    <input id="stuff-highlight" name="is_featured" type="checkbox">
+                                    <span>Mettre en avant ce build</span>
+                                </label>
+                            </div>
+                        </section>
+
+                        <div class="admin-form-actions">
+                            <a class="admin-secondary-button" href="admin-stuffs.html">
+                                <i class="fa-solid fa-xmark"></i>
+                                <span>Annuler</span>
+                            </a>
+                            <button class="admin-create-button" type="submit">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                <span>Enregistrer</span>
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

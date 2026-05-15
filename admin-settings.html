@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paramètres | Les Z-héros</title>
+    <meta name="description" content="Paramètres de l'administration Les Z-héros.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <script src="assets/js/admin.js" defer></script>
+    <script src="assets/js/admin-settings.js" defer></script>
+</head>
+<body class="admin-body">
+    <div class="admin-app">
+        <aside class="admin-sidebar" aria-label="Navigation administration">
+            <a class="admin-brand" href="index.html">
+                <img src="assets/img/logo.png" alt="">
+                <span>Les Z-héros</span>
+            </a>
+
+            <nav class="admin-nav">
+                <a class="admin-nav__link" href="admin.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+                <p class="admin-nav__label">Contenus</p>
+                <a class="admin-nav__link" href="admin-announcements.html"><i class="fa-solid fa-bullhorn"></i><span>Annonces</span></a>
+                <a class="admin-nav__link" href="admin-missions.html"><i class="fa-solid fa-scroll"></i><span>Missions</span></a>
+                <a class="admin-nav__link" href="admin-guides.html"><i class="fa-solid fa-book-open"></i><span>Guides</span></a>
+                <a class="admin-nav__link" href="admin-gallery.html"><i class="fa-regular fa-images"></i><span>Galerie</span></a>
+                <a class="admin-nav__link" href="admin-stuffs.html"><i class="fa-solid fa-shield-halved"></i><span>Catalogue stuffs</span></a>
+                <p class="admin-nav__label">Activités</p>
+                <a class="admin-nav__link" href="admin-lottery.html"><i class="fa-solid fa-dice"></i><span>Loterie</span></a>
+                <a class="admin-nav__link" href="admin-ranking.html"><i class="fa-solid fa-trophy"></i><span>Classement</span></a>
+                <p class="admin-nav__label">Communauté</p>
+                <a class="admin-nav__link" href="admin-users.html"><i class="fa-solid fa-users"></i><span>Utilisateurs</span></a>
+                <a class="admin-nav__link" href="admin-validations.html"><i class="fa-solid fa-circle-check"></i><span>Validations</span></a>
+                <a class="admin-nav__link" href="admin-comments.html"><i class="fa-solid fa-comments"></i><span>Commentaires</span></a>
+                <p class="admin-nav__label">Administration</p>
+                <a class="admin-nav__link" href="admin-roles.html"><i class="fa-solid fa-user-shield"></i><span>Rôles</span></a>
+                <a class="admin-nav__link is-active" href="admin-settings.html"><i class="fa-solid fa-gear"></i><span>Paramètres</span></a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="admin-breadcrumb">
+                    <button class="admin-menu-button" type="button" aria-label="Ouvrir la navigation">
+                        <i class="fa-solid fa-table-columns"></i>
+                    </button>
+                    <span></span>
+                    <p>Paramètres</p>
+                </div>
+            </header>
+
+            <section class="admin-content admin-settings" data-admin-settings>
+                <div class="admin-title admin-title--split">
+                    <div>
+                        <i class="fa-solid fa-gear"></i>
+                        <h1>Paramètres</h1>
+                    </div>
+                    <p>Réglages globaux du cycle des missions et du calcul des points.</p>
+                </div>
+
+                <div class="admin-settings-grid">
+                    <article class="admin-settings-card">
+                        <header class="admin-settings-card__head">
+                            <span class="admin-settings-card__icon"><i class="fa-solid fa-hourglass-half"></i></span>
+                            <div>
+                                <h2>Date de fin des missions</h2>
+                                <p>Définis la fin du cycle actif. Une fois dépassée, la date sera prolongée de 7 jours.</p>
+                            </div>
+                        </header>
+
+                        <form class="admin-settings-form" data-settings-form="missions-cycle">
+                            <label class="admin-field" for="mission-cycle-end">
+                                <span>Date de fin</span>
+                                <input id="mission-cycle-end" name="mission_cycle_end" type="datetime-local" value="2026-05-19T08:00" data-cycle-end>
+                            </label>
+
+                            <p class="admin-settings-help" data-cycle-summary>
+                                Les missions restent déclarables jusqu'au mardi 19 mai 2026 à 08:00.
+                            </p>
+
+                            <button class="admin-create-button admin-settings-submit" type="submit">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                <span>Enregistrer</span>
+                            </button>
+                        </form>
+                    </article>
+
+                    <article class="admin-settings-card">
+                        <header class="admin-settings-card__head">
+                            <span class="admin-settings-card__icon"><i class="fa-solid fa-sliders"></i></span>
+                            <div>
+                                <h2>Barème de points</h2>
+                                <p>Règle les points qui servent ensuite à calculer les tickets de loterie.</p>
+                            </div>
+                        </header>
+
+                        <form class="admin-settings-form" data-settings-form="points">
+                            <div class="admin-settings-field-grid">
+                                <label class="admin-field" for="mission-points-base">
+                                    <span>Mission terminée</span>
+                                    <input id="mission-points-base" name="mission_points_base" type="number" min="0" step="0.01" value="1.00" data-points-base>
+                                </label>
+
+                                <label class="admin-field" for="mission-points-bonus">
+                                    <span>Bonus par perso</span>
+                                    <input id="mission-points-bonus" name="mission_bonus_per_extra_character" type="number" min="0" step="0.01" value="0.25" data-points-bonus>
+                                </label>
+
+                                <label class="admin-field" for="guild-help-points">
+                                    <span>Aide guilde</span>
+                                    <input id="guild-help-points" name="guild_help_points" type="number" min="0" step="0.01" value="0.50" data-help-points>
+                                </label>
+                            </div>
+
+                            <div class="admin-settings-preview" data-points-preview>
+                                Mission à 4 personnages : 1,75 pts. Aide guilde : 0,50 pt.
+                            </div>
+
+                            <button class="admin-create-button admin-settings-submit" type="submit">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                <span>Sauvegarder le barème</span>
+                            </button>
+                        </form>
+                    </article>
+                </div>
+
+            </section>
+        </main>
+    </div>
+</body>
+</html>

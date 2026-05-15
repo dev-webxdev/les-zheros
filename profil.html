@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Zheros | Guilde Dofus</title>
+    <meta name="description" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/main.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <div class="site-header-bar">
+                <a class="site-logo" href="index.html"><img src="assets/img/logo.png" alt="Les Zheros"></a>
+
+                <button class="site-menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav-panel" aria-label="Ouvrir le menu" data-nav-toggle>
+                    <span class="site-menu-toggle-line"></span>
+                    <span class="site-menu-toggle-line"></span>
+                    <span class="site-menu-toggle-line"></span>
+                </button>
+
+                <div class="site-nav-panel" id="site-nav-panel" data-nav>
+                    <div class="site-nav-panel-shell">
+                        <nav class="site-nav site-nav--main" aria-label="Navigation principale">
+                            <ul>
+                                <li><a href="index.html"><i class="fa-solid fa-house"></i><span>Accueil</span></a></li>
+                                <li><a href="sorties.html"><i class="fa-solid fa-users"></i><span>Sorties</span></a></li>
+                                <li><a href="missions.html"><i class="fa-solid fa-scroll"></i><span>Missions</span></a></li>
+                            </ul>
+                        </nav>
+                        <nav class="site-nav site-nav--account" aria-label="Navigation du compte">
+                            <ul>
+                                <li class="is-active"><a href="profil.html"><i class="fa-solid fa-user"></i><span>Adon</span></a></li>
+                                <li class="account-action account-action--admin"><a href="admin.html" aria-label="Administration du site" title="Administration du site"><i class="fa-solid fa-user-shield"></i></a></li>
+                                <li class="account-action account-action--logout"><a href="login.html" aria-label="Déconnexion" title="Déconnexion"><i class="fa-solid fa-right-from-bracket"></i></a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="profile-hero">
+        <div class="container">
+            <h1 class="profile-hero-title" data-profile-page-title>Mon profil</h1>
+            <div class="profile-hero-meta">
+                <div class="guild-rank-badge rank--recruteur">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Recruteur</span>
+                </div>
+                <div class="profile-member-since">Inscrit depuis 5 ans</div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="profile-tabs" aria-label="Navigation du profil">
+        <div class="container">
+            <ul role="tablist">
+                <li class="is-active" role="presentation"><a href="#profile-panel" role="tab" aria-selected="true" aria-controls="profile-panel" data-profile-tab data-title="Mon profil"><i class="fa-solid fa-user-pen"></i><span>Profil</span></a></li>
+                <li role="presentation"><a href="#missions-panel" role="tab" aria-selected="false" aria-controls="missions-panel" data-profile-tab data-title="Missions hebdomadaires"><i class="fa-solid fa-scroll"></i><span>Missions hebdomadaires</span></a></li>
+                <li role="presentation"><a href="#stats-panel" role="tab" aria-selected="false" aria-controls="stats-panel" data-profile-tab data-title="Statistiques"><i class="fa-solid fa-chart-column"></i><span>Statistiques</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="profile-page" data-profile-tabs-root>
+        <section id="profile-panel" class="profile-tab-panel is-active" role="tabpanel">
+            <h2 class="section-title"><i class="fa-regular fa-user"></i> Mes informations</h2>
+
+            <form action="" method="post" class="form-block">
+                <div class="panel form-grid form-grid--3">
+                    <div class="field">
+                        <label for="profile-email">Email</label>
+                        <input id="profile-email" type="email" value="yohan.katerina@gmail.com">
+                    </div>
+                    <div class="field">
+                        <label for="profile-username">Pseudo</label>
+                        <input id="profile-username" type="text" value="Adon">
+                    </div>
+                    <div class="field">
+                        <label for="profile-country">Pays</label>
+                        <select id="profile-country" name="country">
+                            <option value="fr">France</option>
+                            <option value="es">Espagne</option>
+                            <option value="pt">Portugal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="action-row form-actions">
+                    <button type="submit" class="btn btn--primary">Modifier mon profil</button>
+                </div>
+            </form>
+
+            <h2 class="section-title"><i class="fa-solid fa-key"></i> Mot de passe</h2>
+
+            <form action="" method="post" class="form-block">
+                <div class="panel form-grid form-grid--2">
+                    <div class="field">
+                        <label for="profile-new-password">Nouveau mot de passe</label>
+                        <input id="profile-new-password" type="password">
+                    </div>
+                    <div class="field">
+                        <label for="profile-confirm-password">Confirmer le mot de passe</label>
+                        <input id="profile-confirm-password" type="password">
+                    </div>
+                </div>
+
+                <div class="action-row form-actions">
+                    <button type="submit" class="btn btn--primary">Modifier mon mot de passe</button>
+                </div>
+            </form>
+
+            <section class="content-section profile-security-block">
+                <div class="profile-security-content">
+                    <h2 class="section-title profile-security-title"><i class="fa-solid fa-mobile-screen-button"></i> Authentification à deux facteurs</h2>
+                    <p class="profile-security-text">Protégez votre compte en activant la double authentification. Vous aurez besoin d'une application comme <a class="profile-security-link" href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&pcampaignid=web_share">google authenticator</a>.</p>
+                </div>
+                <div class="action-row">
+                    <button type="button" class="btn btn--primary"><i class="fa-solid fa-mobile-screen-button"></i><span>Activer la 2FA</span></button>
+                </div>
+            </section>
+
+            <section class="content-section profile-security-block profile-security-block--danger">
+                <div class="profile-security-content">
+                    <h2 class="section-title profile-security-title profile-security-title--danger"><i class="fa-solid fa-triangle-exclamation"></i> Zone de non retour</h2>
+                    <p class="profile-security-text">Vous n'êtes pas satisfait du contenu du site ?</p>
+                    <p class="profile-security-text">Ou vous souhaitez supprimer toutes les informations associées à ce compte ?</p>
+                </div>
+                <div class="action-row">
+                    <button type="button" class="btn btn--danger"><i class="fa-solid fa-trash-can"></i><span>Supprimer mon compte</span></button>
+                </div>
+            </section>
+        </section>
+
+        <section id="missions-panel" class="profile-tab-panel" role="tabpanel" hidden>
+            <h2 class="section-title"><i class="fa-solid fa-paper-plane"></i> Declaration de mission</h2>
+
+            <form action="" method="post" class="form-block mission-form" data-mission-form>
+                <p class="helper-text">Choisis la mission faite, indique le nombre de personnages, puis colle ton screen de fin avant l'envoi.</p>
+
+                <div class="panel form-grid form-grid--1">
+                    <div class="form-grid form-grid--2 form-grid--nested">
+                        <div class="field">
+                            <label for="mission-name">Mission</label>
+                            <select id="mission-name" name="mission_name">
+                                <option value="">Choisir une mission</option>
+                                <option value="royalmouth">Vaincre Misere dans son donjon</option>
+                                <option value="xp">Vaincre Ush Galesh dans son donjon</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="mission-characters">Persos utilises</label>
+                            <input id="mission-characters" type="number" name="mission_characters" value="1" min="1" max="8">
+                        </div>
+                    </div>
+
+                    <label class="check">
+                        <input type="checkbox" name="has_teammates" data-mission-teammates-toggle>
+                        <span>J'ai des coequipiers</span>
+                    </label>
+
+                    <div class="mission-teammates" data-mission-teammates hidden>
+                        <div class="mission-teammates-list" data-mission-teammates-list>
+                            <div class="mission-teammate-row">
+                                <div class="field">
+                                    <label>Coequipier</label>
+                                    <select name="teammate_name[]">
+                                        <option value="">Choisir un coequipier</option>
+                                        <option value="adon">Adon</option>
+                                        <option value="sacri">Sacri Terre</option>
+                                        <option value="barbofus">Barbofus</option>
+                                        <option value="panda">Panda Air</option>
+                                    </select>
+                                </div>
+
+                                <div class="field">
+                                    <label>Persos coequipier</label>
+                                    <input type="number" name="teammate_characters[]" value="1" min="1" max="8">
+                                </div>
+
+                                <button type="button" class="btn btn--outline mission-remove-button" data-remove-teammate hidden>Retirer</button>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn--outline mission-add-button" data-add-teammate>Ajouter un coequipier</button>
+                    </div>
+
+                    <button type="button" class="btn btn--secondary mission-proof-button" data-paste-proof>
+                        <i class="fa-solid fa-paste"></i>
+                        <span>Coller le screen</span>
+                    </button>
+                </div>
+
+                <div class="action-row form-actions">
+                    <button type="submit" class="btn btn--primary">Envoyer au meneur</button>
+                </div>
+            </form>
+
+            <h2 class="section-title"><i class="fa-solid fa-clipboard-check"></i> Missions terminees</h2>
+
+            <section class="content-section panel">
+                <div class="list-row">
+                    <div class="list-item-info">
+                        <img src="https://api.dofusdb.fr/img/monsters/1664.png" alt="Plateau de Ush">
+                        <div class="list-item-info-text">
+                            <h3 class="list-title">Plateau de Ush</h3>
+                            <p class="list-text">Vaincre Ush Galesh dans son donjon.</p>
+                        </div>
+                    </div>
+                    <span class="pill pill--success">Valider</span>
+                </div>
+
+                <div class="list-row">
+                    <div class="list-item-info">
+                        <img src="https://les-zheros.fr/assets/uploads/missions/mission_20260505_115849_e38310e388d4.webp" alt="Sentence de la Balance">
+                        <div class="list-item-info-text">
+                            <h3 class="list-title">Sentence de la Balance</h3>
+                            <p class="list-text">Vaincre Misere dans son donjon.</p>
+                        </div>
+                    </div>
+                    <span class="pill pill--error">Refuser</span>
+                </div>
+
+                <div class="list-row">
+                    <div class="list-item-info">
+                        <img src="https://les-zheros.fr/assets/uploads/missions/mission_20260505_120149_b331153e8601.png" alt="Fers de la Tyrannie">
+                        <div class="list-item-info-text">
+                            <h3 class="list-title">Fers de la Tyrannie</h3>
+                            <p class="list-text">Vaincre Servitude dans son donjon.</p>
+                        </div>
+                    </div>
+                    <span class="pill pill--waiting">En attente</span>
+                </div>
+            </section>
+        </section>
+
+        <section id="stats-panel" class="profile-tab-panel" role="tabpanel" hidden>
+            <h2 class="section-title"><i class="fa-solid fa-chart-column"></i> Statistiques</h2>
+
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <span class="stat-label">Succes de guilde</span>
+                    <strong class="stat-value">128</strong>
+                </article>
+
+                <article class="stat-card">
+                    <span class="stat-label">Sorties realisees</span>
+                    <strong class="stat-value">34</strong>
+                </article>
+
+                <article class="stat-card">
+                    <span class="stat-label">Taux de participation</span>
+                    <strong class="stat-value">87%</strong>
+                </article>
+            </div>
+
+            <section class="content-section panel">
+                <div class="list-row">
+                    <div>
+                        <h3 class="list-title">Activite recente</h3>
+                        <p class="list-text">Tu as participé à 6 activités cette semaine, dont 2 sorties donjon et 1 défense percepteur.</p>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+</body>
+</html>
+

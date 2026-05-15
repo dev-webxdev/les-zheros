@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rôles | Les Zheros</title>
+    <meta name="description" content="Administration des rôles de la guilde Les Zheros.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <script src="assets/js/admin.js" defer></script>
+    <script src="assets/js/admin-roles.js" defer></script>
+</head>
+<body class="admin-body">
+    <div class="admin-app">
+        <aside class="admin-sidebar" aria-label="Navigation administration">
+            <a class="admin-brand" href="index.html">
+                <img src="assets/img/logo.png" alt="">
+                <span>Les Zheros</span>
+            </a>
+
+            <nav class="admin-nav">
+                <a class="admin-nav__link" href="admin.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+                <p class="admin-nav__label">Contenus</p>
+                <a class="admin-nav__link" href="admin-announcements.html"><i class="fa-solid fa-bullhorn"></i><span>Annonces</span></a>
+                <a class="admin-nav__link" href="admin-missions.html"><i class="fa-solid fa-scroll"></i><span>Missions</span></a>
+                <a class="admin-nav__link" href="admin-guides.html"><i class="fa-solid fa-book-open"></i><span>Guides</span></a>
+                <a class="admin-nav__link" href="admin-gallery.html"><i class="fa-regular fa-images"></i><span>Galerie</span></a>
+                <a class="admin-nav__link" href="admin-stuffs.html"><i class="fa-solid fa-shield-halved"></i><span>Catalogue stuffs</span></a>
+                <p class="admin-nav__label">Activités</p>
+                <a class="admin-nav__link" href="admin-lottery.html"><i class="fa-solid fa-dice"></i><span>Loterie</span></a>
+                <a class="admin-nav__link" href="admin-ranking.html"><i class="fa-solid fa-trophy"></i><span>Classement</span></a>
+                <p class="admin-nav__label">Communauté</p>
+                <a class="admin-nav__link" href="admin-users.html"><i class="fa-solid fa-users"></i><span>Utilisateurs</span></a>
+                <a class="admin-nav__link" href="admin-validations.html"><i class="fa-solid fa-circle-check"></i><span>Validations</span></a>
+                <a class="admin-nav__link" href="admin-comments.html"><i class="fa-solid fa-comments"></i><span>Commentaires</span></a>
+                <p class="admin-nav__label">Administration</p>
+                <a class="admin-nav__link is-active" href="admin-roles.html"><i class="fa-solid fa-user-shield"></i><span>Rôles</span></a>
+                <a class="admin-nav__link" href="admin-settings.html"><i class="fa-solid fa-gear"></i><span>Paramètres</span></a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="admin-breadcrumb">
+                    <button class="admin-menu-button" type="button" aria-label="Ouvrir la navigation">
+                        <i class="fa-solid fa-table-columns"></i>
+                    </button>
+                    <span></span>
+                    <p>Rôles</p>
+                </div>
+
+                <div class="admin-actions">
+                    <label class="admin-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="search" placeholder="Rechercher...">
+                    </label>
+                    <a class="admin-secondary-button" href="admin-roles-trash.html">
+                        <i class="fa-regular fa-trash-can"></i>
+                        <span>Corbeille</span>
+                    </a>
+                    <a class="admin-create-button" href="admin-role-create.html">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <span>Créer un rôle</span>
+                    </a>
+                </div>
+            </header>
+
+            <section class="admin-content">
+                <div class="admin-title">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h1>Rôles</h1>
+                </div>
+
+                <div class="admin-table-card">
+                    <table class="admin-table admin-table--roles">
+                        <thead>
+                            <tr>
+                                <th>Rôle</th>
+                                <th>Résumé</th>
+                                <th>Utilisateurs</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><div class="admin-role-cell"><span class="admin-tag">Administrateur</span></div></td>
+                                <td><span class="admin-tag admin-tag--danger" data-permission-count="all">Accès total</span></td>
+                                <td>1</td>
+                                <td><div class="admin-row-actions"><a class="admin-action-button admin-action-button--edit" href="admin-role-create.html?mode=edit" aria-label="Modifier Administrateur" title="Modifier"><i class="fa-regular fa-pen-to-square"></i></a><button class="admin-action-button admin-action-button--delete" type="button" data-confirm-trash="Administrateur" data-confirm-trash-url="admin-roles-trash.html" aria-label="Supprimer Administrateur" title="Supprimer"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="admin-role-cell"><span class="admin-tag">Modérateur</span></div></td>
+                                <td><span class="admin-tag" data-permission-count="3">3 permissions</span></td>
+                                <td>1</td>
+                                <td><div class="admin-row-actions"><a class="admin-action-button admin-action-button--edit" href="admin-role-create.html?mode=edit" aria-label="Modifier Modérateur" title="Modifier"><i class="fa-regular fa-pen-to-square"></i></a><button class="admin-action-button admin-action-button--delete" type="button" data-confirm-trash="Modérateur" data-confirm-trash-url="admin-roles-trash.html" aria-label="Supprimer Modérateur" title="Supprimer"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="admin-role-cell"><span class="admin-tag">Maître de mission</span></div></td>
+                                <td><span class="admin-tag" data-permission-count="3">3 permissions</span></td>
+                                <td>1</td>
+                                <td><div class="admin-row-actions"><a class="admin-action-button admin-action-button--edit" href="admin-role-create.html?mode=edit" aria-label="Modifier Maître de mission" title="Modifier"><i class="fa-regular fa-pen-to-square"></i></a><button class="admin-action-button admin-action-button--delete" type="button" data-confirm-trash="Maître de mission" data-confirm-trash-url="admin-roles-trash.html" aria-label="Supprimer Maître de mission" title="Supprimer"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="admin-role-cell"><span class="admin-tag">Rédacteur</span></div></td>
+                                <td><span class="admin-tag" data-permission-count="2">2 permissions</span></td>
+                                <td>1</td>
+                                <td><div class="admin-row-actions"><a class="admin-action-button admin-action-button--edit" href="admin-role-create.html?mode=edit" aria-label="Modifier Rédacteur" title="Modifier"><i class="fa-regular fa-pen-to-square"></i></a><button class="admin-action-button admin-action-button--delete" type="button" data-confirm-trash="Rédacteur" data-confirm-trash-url="admin-roles-trash.html" aria-label="Supprimer Rédacteur" title="Supprimer"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="admin-role-cell"><span class="admin-tag">Illustrateur</span></div></td>
+                                <td><span class="admin-tag" data-permission-count="2">2 permissions</span></td>
+                                <td>1</td>
+                                <td><div class="admin-row-actions"><a class="admin-action-button admin-action-button--edit" href="admin-role-create.html?mode=edit" aria-label="Modifier Illustrateur" title="Modifier"><i class="fa-regular fa-pen-to-square"></i></a><button class="admin-action-button admin-action-button--delete" type="button" data-confirm-trash="Illustrateur" data-confirm-trash-url="admin-roles-trash.html" aria-label="Supprimer Illustrateur" title="Supprimer"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="admin-role-cell"><span class="admin-tag">Membre</span></div></td>
+                                <td><span class="admin-tag">Accès membre</span></td>
+                                <td>35</td>
+                                <td><div class="admin-row-actions"><a class="admin-action-button admin-action-button--edit" href="admin-role-create.html?mode=edit" aria-label="Modifier Membre" title="Modifier"><i class="fa-regular fa-pen-to-square"></i></a><button class="admin-action-button admin-action-button--delete" type="button" data-confirm-trash="Membre" data-confirm-trash-url="admin-roles-trash.html" aria-label="Supprimer Membre" title="Supprimer"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="admin-modal" data-confirm-trash-modal hidden>
+        <div class="admin-modal__backdrop" data-confirm-trash-cancel></div>
+        <section class="admin-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="trash-modal-title" aria-describedby="trash-modal-text">
+            <div class="admin-modal__icon"><i class="fa-regular fa-trash-can"></i></div>
+            <div class="admin-modal__content">
+                <h2 id="trash-modal-title">Mettre à la corbeille ?</h2>
+                <p id="trash-modal-text">Cette action déplacera <strong data-confirm-trash-name>cet élément</strong> dans la corbeille.</p>
+            </div>
+            <div class="admin-modal__actions">
+                <button class="admin-secondary-button" type="button" data-confirm-trash-cancel>Annuler</button>
+                <button class="admin-danger-button" type="button" data-confirm-trash-submit>Déplacer</button>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter une déclaration | Les Zheros</title>
+    <meta name="description" content="Ajout manuel d'une déclaration de mission pour la guilde Les Zheros.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <script src="assets/js/admin.js" defer></script>
+    <script src="assets/js/admin-validations.js" defer></script>
+</head>
+<body class="admin-body">
+    <div class="admin-app">
+        <aside class="admin-sidebar" aria-label="Navigation administration">
+            <a class="admin-brand" href="index.html">
+                <img src="assets/img/logo.png" alt="">
+                <span>Les Zheros</span>
+            </a>
+
+            <nav class="admin-nav">
+                <a class="admin-nav__link" href="admin.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+                <p class="admin-nav__label">Contenus</p>
+                <a class="admin-nav__link" href="admin-announcements.html"><i class="fa-solid fa-bullhorn"></i><span>Annonces</span></a>
+                <a class="admin-nav__link" href="admin-missions.html"><i class="fa-solid fa-scroll"></i><span>Missions</span></a>
+                <a class="admin-nav__link" href="admin-guides.html"><i class="fa-solid fa-book-open"></i><span>Guides</span></a>
+                <a class="admin-nav__link" href="admin-gallery.html"><i class="fa-regular fa-images"></i><span>Galerie</span></a>
+                <a class="admin-nav__link" href="admin-stuffs.html"><i class="fa-solid fa-shield-halved"></i><span>Catalogue stuffs</span></a>
+                <p class="admin-nav__label">Activités</p>
+                <a class="admin-nav__link" href="admin-lottery.html"><i class="fa-solid fa-dice"></i><span>Loterie</span></a>
+                <a class="admin-nav__link" href="admin-ranking.html"><i class="fa-solid fa-trophy"></i><span>Classement</span></a>
+                <p class="admin-nav__label">Communauté</p>
+                <a class="admin-nav__link" href="admin-users.html"><i class="fa-solid fa-users"></i><span>Utilisateurs</span></a>
+                <a class="admin-nav__link is-active" href="admin-validations.html"><i class="fa-solid fa-circle-check"></i><span>Validations</span></a>
+                <a class="admin-nav__link" href="admin-comments.html"><i class="fa-solid fa-comments"></i><span>Commentaires</span></a>
+                <p class="admin-nav__label">Administration</p>
+                <a class="admin-nav__link" href="admin-roles.html"><i class="fa-solid fa-user-shield"></i><span>Rôles</span></a>
+                <a class="admin-nav__link" href="admin-settings.html"><i class="fa-solid fa-gear"></i><span>Paramètres</span></a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="admin-breadcrumb">
+                    <button class="admin-menu-button" type="button" aria-label="Ouvrir la navigation">
+                        <i class="fa-solid fa-table-columns"></i>
+                    </button>
+                    <span></span>
+                    <p>Validations / Ajouter</p>
+                </div>
+
+                <div class="admin-actions">
+                    <a class="admin-secondary-button" href="admin-validations.html">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Retour àux validations</span>
+                    </a>
+                </div>
+            </header>
+
+            <section class="admin-content">
+                <div class="admin-title">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <h1>Ajouter une déclaration</h1>
+                </div>
+
+                <section class="admin-form-card" aria-labelledby="validation-create-title">
+                    <div class="admin-form-head">
+                        <div>
+                            <h2 id="validation-create-title">Déclaration joueur</h2>
+                            <p>Ajoute une validation manuellement pour un joueur, avec ou sans coéquipier.</p>
+                        </div>
+                    </div>
+
+                    <form class="admin-mission-form" action="#" method="post" enctype="multipart/form-data">
+                        <section class="admin-form-section">
+                            <div class="admin-form-section-title">
+                                <span>1</span>
+                                <div>
+                                    <h3>Mission</h3>
+                                    <p>Choisis la mission de la semaine et le joueur principal.</p>
+                                </div>
+                            </div>
+
+                            <div class="admin-form-grid admin-form-grid--validation">
+                                <label class="admin-field" for="validation-mission">
+                                    <span>Mission</span>
+                                    <select id="validation-mission" name="mission" required>
+                                        <option value="">Choisir une mission</option>
+                                        <option>Ush Galesh</option>
+                                        <option>Chêne Mou</option>
+                                        <option>Bworker</option>
+                                        <option>Gardien de donjon sous anomalie niveau 110 ou +</option>
+                                    </select>
+                                </label>
+
+                                <label class="admin-field" for="validation-player">
+                                    <span>Joueur</span>
+                                    <select id="validation-player" name="player" required>
+                                        <option value="">Choisir un joueur</option>
+                                        <option>Opacity</option>
+                                        <option>Maitroxx</option>
+                                        <option>Eco-Mortelle</option>
+                                        <option>Aerendyl</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </section>
+
+                        <section class="admin-form-section">
+                            <div class="admin-form-section-title">
+                                <span>2</span>
+                                <div>
+                                    <h3>Participation</h3>
+                                    <p>Indique le nombre de personnages et l'aide éventuelle.</p>
+                                </div>
+                            </div>
+
+                            <div class="admin-validation-entry">
+                                <div class="admin-form-grid admin-form-grid--validation admin-form-grid--validation-small">
+                                    <label class="admin-field" for="validation-characters">
+                                        <span>Personnages du joueur</span>
+                                        <input id="validation-characters" name="characters" type="number" min="1" max="8" value="1" required>
+                                    </label>
+
+                                </div>
+
+                                <label class="admin-toggle-field">
+                                    <input type="checkbox" name="has_teammate" data-validation-teammate-toggle>
+                                    <span>Le joueur avait un coéquipier</span>
+                                </label>
+
+                                <div class="admin-form-grid admin-form-grid--validation admin-validation-teammate" data-validation-teammate-fields hidden>
+                                    <label class="admin-field" for="validation-teammate">
+                                        <span>Coéquipier</span>
+                                        <select id="validation-teammate" name="teammate">
+                                            <option value="">Choisir un coéquipier</option>
+                                            <option>Opacity</option>
+                                            <option>Maitroxx</option>
+                                            <option>Eco-Mortelle</option>
+                                            <option>Aerendyl</option>
+                                        </select>
+                                    </label>
+
+                                    <label class="admin-field" for="validation-teammate-characters">
+                                        <span>Personnages du coéquipier</span>
+                                        <input id="validation-teammate-characters" name="teammate_characters" type="number" min="1" max="8" value="1">
+                                    </label>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div class="admin-form-actions">
+                            <a class="admin-secondary-button" href="admin-validations.html">
+                                <i class="fa-solid fa-xmark"></i>
+                                <span>Annuler</span>
+                            </a>
+                            <button class="admin-create-button" type="submit">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                <span>Enregistrer</span>
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
+
+
+

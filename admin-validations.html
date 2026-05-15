@@ -1,0 +1,293 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validations | Les Zheros</title>
+    <meta name="description" content="Administration des validations de missions de la guilde Les Zheros.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <script src="assets/js/admin.js" defer></script>
+    <script src="assets/js/admin-validations.js" defer></script>
+</head>
+<body class="admin-body">
+    <div class="admin-app">
+        <aside class="admin-sidebar" aria-label="Navigation administration">
+            <a class="admin-brand" href="index.html">
+                <img src="assets/img/logo.png" alt="">
+                <span>Les Zheros</span>
+            </a>
+
+            <nav class="admin-nav">
+                <a class="admin-nav__link" href="admin.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+                <p class="admin-nav__label">Contenus</p>
+                <a class="admin-nav__link" href="admin-announcements.html"><i class="fa-solid fa-bullhorn"></i><span>Annonces</span></a>
+                <a class="admin-nav__link" href="admin-missions.html"><i class="fa-solid fa-scroll"></i><span>Missions</span></a>
+                <a class="admin-nav__link" href="admin-guides.html"><i class="fa-solid fa-book-open"></i><span>Guides</span></a>
+                <a class="admin-nav__link" href="admin-gallery.html"><i class="fa-regular fa-images"></i><span>Galerie</span></a>
+                <a class="admin-nav__link" href="admin-stuffs.html"><i class="fa-solid fa-shield-halved"></i><span>Catalogue stuffs</span></a>
+                <p class="admin-nav__label">Activités</p>
+                <a class="admin-nav__link" href="admin-lottery.html"><i class="fa-solid fa-dice"></i><span>Loterie</span></a>
+                <a class="admin-nav__link" href="admin-ranking.html"><i class="fa-solid fa-trophy"></i><span>Classement</span></a>
+                <p class="admin-nav__label">Communauté</p>
+                <a class="admin-nav__link" href="admin-users.html"><i class="fa-solid fa-users"></i><span>Utilisateurs</span></a>
+                <a class="admin-nav__link is-active" href="admin-validations.html"><i class="fa-solid fa-circle-check"></i><span>Validations</span></a>
+                <a class="admin-nav__link" href="admin-comments.html"><i class="fa-solid fa-comments"></i><span>Commentaires</span></a>
+                <p class="admin-nav__label">Administration</p>
+                <a class="admin-nav__link" href="admin-roles.html"><i class="fa-solid fa-user-shield"></i><span>Rôles</span></a>
+                <a class="admin-nav__link" href="admin-settings.html"><i class="fa-solid fa-gear"></i><span>Paramètres</span></a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="admin-breadcrumb">
+                    <button class="admin-menu-button" type="button" aria-label="Ouvrir la navigation">
+                        <i class="fa-solid fa-table-columns"></i>
+                    </button>
+                    <span></span>
+                    <p>Validations</p>
+                </div>
+
+                <div class="admin-actions">
+                    <label class="admin-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="search" placeholder="Rechercher..." data-validation-filter="search">
+                    </label>
+                    <a class="admin-secondary-button" href="admin-validations-trash.html">
+                        <i class="fa-regular fa-trash-can"></i>
+                        <span>Corbeille</span>
+                    </a>
+                    <a class="admin-create-button" href="admin-validation-create.html">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <span>Ajouter une déclaration</span>
+                    </a>
+                </div>
+            </header>
+
+            <section class="admin-content">
+                <div class="admin-title admin-title--split">
+                    <div>
+                        <i class="fa-solid fa-circle-check"></i>
+                        <h1>Validations joueurs</h1>
+                    </div>
+                    <p>Contrôle les déclarations de missions, vérifie les preuves et garde l'historique des semaines précédentes.</p>
+                </div>
+
+                <section class="admin-validation-stats" aria-label="Résumé des validations">
+                    <article><span>En attente</span><strong>8</strong></article>
+                    <article><span>Validées</span><strong>35</strong></article>
+                    <article><span>Refusées</span><strong>3</strong></article>
+                    <article><span>Points validés</span><strong>64.5</strong></article>
+                </section>
+
+                <section class="admin-validation-filters" aria-label="Filtres des validations">
+                    <label class="admin-field" for="validation-player">
+                        <span>Joueur</span>
+                        <select id="validation-player" data-validation-filter="player">
+                            <option value="all">Tous les joueurs</option>
+                            <option value="Opacity">Opacity</option>
+                            <option value="Maitroxx">Maitroxx</option>
+                            <option value="Eco-Mortelle">Eco-Mortelle</option>
+                        </select>
+                    </label>
+                    <label class="admin-field" for="validation-status">
+                        <span>Statut</span>
+                        <select id="validation-status" data-validation-filter="status">
+                            <option value="all">Tous</option>
+                            <option value="pending">En attente</option>
+                            <option value="validated">Validé</option>
+                            <option value="refused">Refusé</option>
+                        </select>
+                    </label>
+                    <label class="admin-field" for="validation-week">
+                        <span>Semaine</span>
+                        <select id="validation-week" data-validation-filter="week">
+                            <option value="2026-05-05">05/05/2026 au 12/05/2026</option>
+                            <option value="2026-04-28">28/04/2026 au 05/05/2026</option>
+                            <option value="2026-04-21">21/04/2026 au 28/04/2026</option>
+                        </select>
+                    </label>
+                </section>
+
+                <section class="admin-bulk-actions" data-validation-bulk hidden>
+                    <div class="admin-bulk-actions__summary">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <strong><span data-validation-selected-count>0</span> sélectionné(s)</strong>
+                    </div>
+                    <label class="admin-field admin-field--sr-label" for="validation-bulk-action">
+                        <span>Action groupée</span>
+                        <select id="validation-bulk-action" data-validation-bulk-action>
+                            <option value="">Choisir une action</option>
+                            <option value="validated">Valider</option>
+                            <option value="pending">Remettre en attente</option>
+                            <option value="refused">Refuser</option>
+                            <option value="trash">Mettre à la corbeille</option>
+                        </select>
+                    </label>
+                    <button class="admin-create-button" type="button" data-validation-bulk-apply>
+                        <i class="fa-solid fa-check"></i>
+                        <span>Appliquer</span>
+                    </button>
+                </section>
+
+                <section class="admin-validation-layout">
+                    <div class="admin-table-card admin-validation-table-card">
+                        <table class="admin-table admin-table--validations">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" aria-label="Tout sélectionner" data-validation-select-all></th>
+                                    <th>Joueur</th>
+                                    <th>Mission</th>
+                                    <th>Aide</th>
+                                    <th>Persos</th>
+                                    <th>Points</th>
+                                    <th>Preuve</th>
+                                    <th>Statut</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="is-selected" data-validation-row data-player="Opacity" data-status="validated" data-week="2026-05-05">
+                                    <td><input type="checkbox" aria-label="Sélectionner la validation de Opacity" data-validation-select></td>
+                                    <td><strong>Opacity</strong></td>
+                                    <td><strong>Ush Galesh</strong><span>Mission terminée</span></td>
+                                    <td>Oui</td>
+                                    <td>2</td>
+                                    <td>1</td>
+                                    <td><button class="admin-secondary-button" type="button" data-proof-src="https://les-zheros.fr/assets/uploads/missions/proof_20260510_202514_dc02c6f6a3e0.png" data-proof-player="Opacity" data-proof-mission="Ush Galesh"><span>Voir</span></button></td>
+                                    <td><span class="admin-tag admin-tag--success">Validé</span></td>
+                                    <td><time datetime="2026-05-10T22:25">10 mai 22h25</time></td>
+                                    <td>
+                                        <details class="admin-action-menu">
+                                            <summary><i class="fa-solid fa-ellipsis"></i><span>Actions</span></summary>
+                                            <div>
+                                                <a href="admin-validation-edit.html"><i class="fa-regular fa-pen-to-square"></i> Modifier</a>
+                                                <button type="button" data-validation-status-action="validated"><i class="fa-solid fa-check"></i> Valider</button>
+                                                <button type="button" data-validation-status-confirm="refused"><i class="fa-solid fa-xmark"></i> Refuser</button>
+                                                <button type="button" data-validation-status-confirm="pending"><i class="fa-regular fa-clock"></i> En attente</button>
+                                                <button type="button" class="is-danger" data-confirm-trash="Validation Opacity - Ush Galesh" data-confirm-trash-url="admin-validations-trash.html"><i class="fa-regular fa-trash-can"></i> Corbeille</button>
+                                            </div>
+                                        </details>
+                                    </td>
+                                </tr>
+                                <tr data-validation-row data-player="Maitroxx" data-status="pending" data-week="2026-05-05">
+                                    <td><input type="checkbox" aria-label="Sélectionner la validation de Maitroxx" data-validation-select></td>
+                                    <td><strong>Maitroxx</strong></td>
+                                    <td><strong>Chêne Mou</strong><span>Mission terminée</span></td>
+                                    <td>Oui</td>
+                                    <td>4</td>
+                                    <td>2.25</td>
+                                    <td><button class="admin-secondary-button" type="button" data-proof-src="assets/img/card-mission/expedition.png" data-proof-player="Maitroxx" data-proof-mission="Chêne Mou"><span>Voir</span></button></td>
+                                    <td><span class="admin-tag admin-tag--primary">En attente</span></td>
+                                    <td><time datetime="2026-05-10T21:47">10 mai 21h47</time></td>
+                                    <td>
+                                        <details class="admin-action-menu">
+                                            <summary><i class="fa-solid fa-ellipsis"></i><span>Actions</span></summary>
+                                            <div>
+                                                <a href="admin-validation-edit.html"><i class="fa-regular fa-pen-to-square"></i> Modifier</a>
+                                                <button type="button" data-validation-status-action="validated"><i class="fa-solid fa-check"></i> Valider</button>
+                                                <button type="button" data-validation-status-confirm="refused"><i class="fa-solid fa-xmark"></i> Refuser</button>
+                                                <button type="button" data-validation-status-confirm="pending"><i class="fa-regular fa-clock"></i> En attente</button>
+                                                <button type="button" class="is-danger" data-confirm-trash="Validation Maitroxx - Chêne Mou" data-confirm-trash-url="admin-validations-trash.html"><i class="fa-regular fa-trash-can"></i> Corbeille</button>
+                                            </div>
+                                        </details>
+                                    </td>
+                                </tr>
+                                <tr data-validation-row data-player="Eco-Mortelle" data-status="refused" data-week="2026-04-28">
+                                    <td><input type="checkbox" aria-label="Sélectionner la validation de Eco-Mortelle" data-validation-select></td>
+                                    <td><strong>Eco-Mortelle</strong></td>
+                                    <td><strong>Bworker</strong><span>Mission terminée</span></td>
+                                    <td>Non</td>
+                                    <td>3</td>
+                                    <td>1.5</td>
+                                    <td><button class="admin-secondary-button" type="button" data-proof-src="assets/img/card-mission/regulation.png" data-proof-player="Eco-Mortelle" data-proof-mission="Bworker"><span>Voir</span></button></td>
+                                    <td><span class="admin-tag admin-tag--danger">Refusé</span></td>
+                                    <td><time datetime="2026-05-09T16:48">9 mai 16h48</time></td>
+                                    <td>
+                                        <details class="admin-action-menu">
+                                            <summary><i class="fa-solid fa-ellipsis"></i><span>Actions</span></summary>
+                                            <div>
+                                                <a href="admin-validation-edit.html"><i class="fa-regular fa-pen-to-square"></i> Modifier</a>
+                                                <button type="button" data-validation-status-action="validated"><i class="fa-solid fa-check"></i> Valider</button>
+                                                <button type="button" data-validation-status-confirm="refused"><i class="fa-solid fa-xmark"></i> Refuser</button>
+                                                <button type="button" data-validation-status-confirm="pending"><i class="fa-regular fa-clock"></i> En attente</button>
+                                                <button type="button" class="is-danger" data-confirm-trash="Validation Eco-Mortelle - Bworker" data-confirm-trash-url="admin-validations-trash.html"><i class="fa-regular fa-trash-can"></i> Corbeille</button>
+                                            </div>
+                                        </details>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <aside class="admin-proof-panel" data-proof-viewer>
+                        <div class="admin-proof-panel__head">
+                            <span>Preuve sélectionnée</span>
+                            <strong data-proof-title>Opacity - Ush Galesh</strong>
+                        </div>
+                        <button class="admin-proof-preview" type="button" data-proof-open aria-label="Agrandir la preuve">
+                            <img src="https://les-zheros.fr/assets/uploads/missions/proof_20260510_202514_dc02c6f6a3e0.png" alt="Preuve de validation" data-proof-image>
+                            <span><i class="fa-solid fa-magnifying-glass-plus"></i> Agrandir</span>
+                        </button>
+                        <dl>
+                            <div><dt>Joueur</dt><dd data-proof-player>Opacity</dd></div>
+                            <div><dt>Mission</dt><dd data-proof-mission>Ush Galesh</dd></div>
+                            <div><dt>Statut</dt><dd><span class="admin-tag admin-tag--success">Validé</span></dd></div>
+                        </dl>
+                    </aside>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <div class="admin-modal" data-confirm-trash-modal hidden>
+        <div class="admin-modal__backdrop" data-confirm-trash-cancel></div>
+        <section class="admin-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="trash-modal-title" aria-describedby="trash-modal-text">
+            <div class="admin-modal__icon"><i class="fa-regular fa-trash-can"></i></div>
+            <div class="admin-modal__content">
+                <h2 id="trash-modal-title">Mettre à la corbeille </h2>
+                <p id="trash-modal-text">Cette action déplacera <strong data-confirm-trash-name>cette validation</strong> dans la corbeille.</p>
+            </div>
+            <div class="admin-modal__actions">
+                <button class="admin-secondary-button" type="button" data-confirm-trash-cancel>Annuler</button>
+                <button class="admin-danger-button" type="button" data-confirm-trash-submit>Déplacer</button>
+            </div>
+        </section>
+    </div>
+
+    <div class="admin-modal" data-validation-status-modal hidden>
+        <div class="admin-modal__backdrop" data-validation-status-cancel></div>
+        <section class="admin-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="validation-status-modal-title" aria-describedby="validation-status-modal-text">
+            <div class="admin-modal__icon" data-validation-status-icon><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="admin-modal__content">
+                <h2 id="validation-status-modal-title" data-validation-status-title>Confirmer l'action </h2>
+                <p id="validation-status-modal-text">Cette action passera <strong data-validation-status-name>cette validation</strong> en <strong data-validation-status-label>ce statut</strong>.</p>
+            </div>
+            <div class="admin-modal__actions">
+                <button class="admin-secondary-button" type="button" data-validation-status-cancel>Annuler</button>
+                <button class="admin-danger-button" type="button" data-validation-status-submit>Confirmer</button>
+            </div>
+        </section>
+    </div>
+
+    <div class="admin-proof-modal" data-proof-modal hidden>
+        <div class="admin-proof-modal__backdrop" data-proof-close></div>
+        <section class="admin-proof-modal__dialog" role="dialog" aria-modal="true" aria-label="Preuve en grand">
+            <button class="admin-proof-modal__close" type="button" data-proof-close aria-label="Fermer la preuve">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img src="https://les-zheros.fr/assets/uploads/missions/proof_20260510_202514_dc02c6f6a3e0.png" alt="Preuve de validation en grand" data-proof-modal-image>
+        </section>
+    </div>
+</body>
+</html>
+
+
+
+

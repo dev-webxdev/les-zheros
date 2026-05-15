@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un utilisateur | Les Zheros</title>
+    <meta name="description" content="Création d'un utilisateur de la guilde Les Zheros.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <script src="assets/js/admin.js" defer></script>
+    <script src="assets/js/admin-users.js" defer></script>
+</head>
+<body class="admin-body">
+    <div class="admin-app">
+        <aside class="admin-sidebar" aria-label="Navigation administration">
+            <a class="admin-brand" href="index.html">
+                <img src="assets/img/logo.png" alt="">
+                <span>Les Zheros</span>
+            </a>
+
+            <nav class="admin-nav">
+                <a class="admin-nav__link" href="admin.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+                <p class="admin-nav__label">Contenus</p>
+                <a class="admin-nav__link" href="admin-announcements.html"><i class="fa-solid fa-bullhorn"></i><span>Annonces</span></a>
+                <a class="admin-nav__link" href="admin-missions.html"><i class="fa-solid fa-scroll"></i><span>Missions</span></a>
+                <a class="admin-nav__link" href="admin-guides.html"><i class="fa-solid fa-book-open"></i><span>Guides</span></a>
+                <a class="admin-nav__link" href="admin-gallery.html"><i class="fa-regular fa-images"></i><span>Galerie</span></a>
+                <a class="admin-nav__link" href="admin-stuffs.html"><i class="fa-solid fa-shield-halved"></i><span>Catalogue stuffs</span></a>
+                <p class="admin-nav__label">Activités</p>
+                <a class="admin-nav__link" href="admin-lottery.html"><i class="fa-solid fa-dice"></i><span>Loterie</span></a>
+                <a class="admin-nav__link" href="admin-ranking.html"><i class="fa-solid fa-trophy"></i><span>Classement</span></a>
+                <p class="admin-nav__label">Communauté</p>
+                <a class="admin-nav__link is-active" href="admin-users.html"><i class="fa-solid fa-users"></i><span>Utilisateurs</span></a>
+                <a class="admin-nav__link" href="admin-validations.html"><i class="fa-solid fa-circle-check"></i><span>Validations</span></a>
+                <a class="admin-nav__link" href="admin-comments.html"><i class="fa-solid fa-comments"></i><span>Commentaires</span></a>
+                <p class="admin-nav__label">Administration</p>
+                <a class="admin-nav__link" href="admin-roles.html"><i class="fa-solid fa-user-shield"></i><span>Rôles</span></a>
+                <a class="admin-nav__link" href="admin-settings.html"><i class="fa-solid fa-gear"></i><span>Paramètres</span></a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="admin-breadcrumb">
+                    <button class="admin-menu-button" type="button" aria-label="Ouvrir la navigation">
+                        <i class="fa-solid fa-table-columns"></i>
+                    </button>
+                    <span></span>
+                    <p>Utilisateurs / Créer</p>
+                </div>
+
+                <div class="admin-actions">
+                    <a class="admin-secondary-button" href="admin-users.html">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Retour àux utilisateurs</span>
+                    </a>
+                </div>
+            </header>
+
+            <section class="admin-content">
+                <div class="admin-title">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <h1>Créer un utilisateur</h1>
+                </div>
+
+                <section class="admin-form-card" aria-labelledby="create-user-title">
+                    <div class="admin-form-head">
+                        <div>
+                            <h2 id="create-user-title">Informations du compte</h2>
+                            <p>Renseigne le pseudo, l'email, le rôle et le mot de passe du nouvel utilisateur.</p>
+                        </div>
+                    </div>
+
+                    <form class="admin-mission-form" action="#" method="post" data-admin-user-form data-user-form-mode="create">
+                        <section class="admin-form-section">
+                            <div class="admin-form-section-title">
+                                <span>1</span>
+                                <div>
+                                    <h3>Identite</h3>
+                                    <p>Le compte sera ajouté à la liste des utilisateurs.</p>
+                                </div>
+                            </div>
+
+                            <div class="admin-form-grid admin-form-grid--user">
+                                <label class="admin-field" for="u-pseudo">
+                                    <span>Pseudo</span>
+                                    <input id="u-pseudo" name="pseudo" type="text" placeholder="Ex: Pandawa" required>
+                                </label>
+
+                                <label class="admin-field" for="u-email">
+                                    <span>Email</span>
+                                    <input id="u-email" name="email" type="email" placeholder="pseudo@leszheros.fr" required>
+                                </label>
+
+                                <div class="admin-user-role-board" data-user-role-board>
+                                    <div class="admin-user-role-column admin-user-role-column--available">
+                                        <div class="admin-user-role-column__head">
+                                            <h4>Rôles disponibles</h4>
+                                            <span>À ajouter</span>
+                                        </div>
+                                        <div class="admin-user-role-list" data-user-role-list="available">
+                                            <button class="admin-user-role-chip" type="button" draggable="true" data-user-role-chip="admin"><i class="fa-solid fa-shield-halved"></i><span>Administrateur</span></button>
+                                            <button class="admin-user-role-chip" type="button" draggable="true" data-user-role-chip="moderator"><i class="fa-solid fa-gavel"></i><span>Modérateur</span></button>
+                                            <button class="admin-user-role-chip" type="button" draggable="true" data-user-role-chip="recruiter"><i class="fa-solid fa-user-plus"></i><span>Recruteur</span></button>
+                                        </div>
+                                    </div>
+                                    <div class="admin-user-role-column admin-user-role-column--selected">
+                                        <div class="admin-user-role-column__head">
+                                            <h4>Rôles de l'utilisateur</h4>
+                                            <span>Actifs</span>
+                                        </div>
+                                        <div class="admin-user-role-list" data-user-role-list="selected">
+                                            <button class="admin-user-role-chip" type="button" draggable="true" data-user-role-chip="member"><i class="fa-solid fa-user"></i><span>Membre</span></button>
+                                            <p class="admin-user-role-empty" data-user-role-empty hidden>Aucun rôle sélectionné.</p>
+                                        </div>
+                                        <div data-user-role-inputs></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-form-section">
+                            <div class="admin-form-section-title">
+                                <span>2</span>
+                                <div>
+                                    <h3>Securite</h3>
+                                    <p>Tu peux saisir un mot de passe ou le générer automatiquement.</p>
+                                </div>
+                            </div>
+
+                            <div class="admin-form-grid admin-form-grid--user">
+                                <label class="admin-field admin-field--with-action" for="u-password">
+                                    <span>Mot de passe</span>
+                                    <span class="admin-field-action">
+                                        <input id="u-password" name="password" type="text" placeholder="Mot de passe" required data-password-input>
+                                        <button class="admin-secondary-button" type="button" data-generate-password>
+                                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                            <span>Générer</span>
+                                        </button>
+                                    </span>
+                                </label>
+                            </div>
+                        </section>
+
+                        <div class="admin-form-actions">
+                            <a class="admin-secondary-button" href="admin-users.html">
+                                <i class="fa-solid fa-xmark"></i>
+                                <span>Annuler</span>
+                            </a>
+                            <button class="admin-create-button" type="submit">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                <span>Créer</span>
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
+
+
+

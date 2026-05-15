@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Les Zheros</title>
+    <meta name="description" content="Vue d'ensemble de l'administration de la guilde Les Zheros.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <script src="assets/js/admin.js" defer></script>
+    <script src="assets/js/admin-dashboard.js" defer></script>
+</head>
+<body class="admin-body">
+    <div class="admin-app">
+        <aside class="admin-sidebar" aria-label="Navigation administration">
+            <a class="admin-brand" href="index.html">
+                <img src="assets/img/logo.png" alt="">
+                <span>Les Zheros</span>
+            </a>
+
+            <nav class="admin-nav">
+                <a class="admin-nav__link is-active" href="admin.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+                <p class="admin-nav__label">Contenus</p>
+                <a class="admin-nav__link" href="admin-announcements.html"><i class="fa-solid fa-bullhorn"></i><span>Annonces</span></a>
+                <a class="admin-nav__link" href="admin-missions.html"><i class="fa-solid fa-scroll"></i><span>Missions</span></a>
+                <a class="admin-nav__link" href="admin-guides.html"><i class="fa-solid fa-book-open"></i><span>Guides</span></a>
+                <a class="admin-nav__link" href="admin-gallery.html"><i class="fa-regular fa-images"></i><span>Galerie</span></a>
+                <a class="admin-nav__link" href="admin-stuffs.html"><i class="fa-solid fa-shield-halved"></i><span>Catalogue stuffs</span></a>
+                <p class="admin-nav__label">Activités</p>
+                <a class="admin-nav__link" href="admin-lottery.html"><i class="fa-solid fa-dice"></i><span>Loterie</span></a>
+                <a class="admin-nav__link" href="admin-ranking.html"><i class="fa-solid fa-trophy"></i><span>Classement</span></a>
+                <p class="admin-nav__label">Communauté</p>
+                <a class="admin-nav__link" href="admin-users.html"><i class="fa-solid fa-users"></i><span>Utilisateurs</span></a>
+                <a class="admin-nav__link" href="admin-validations.html"><i class="fa-solid fa-circle-check"></i><span>Validations</span></a>
+                <a class="admin-nav__link" href="admin-comments.html"><i class="fa-solid fa-comments"></i><span>Commentaires</span></a>
+                <p class="admin-nav__label">Administration</p>
+                <a class="admin-nav__link" href="admin-roles.html"><i class="fa-solid fa-user-shield"></i><span>Rôles</span></a>
+                <a class="admin-nav__link" href="admin-settings.html"><i class="fa-solid fa-gear"></i><span>Paramètres</span></a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="admin-breadcrumb">
+                    <button class="admin-menu-button" type="button" aria-label="Ouvrir la navigation">
+                        <i class="fa-solid fa-table-columns"></i>
+                    </button>
+                    <span></span>
+                    <p>Dashboard</p>
+                </div>
+
+                <div class="admin-actions">
+                    <button class="admin-secondary-button" type="button" data-dashboard-edit>
+                        <i class="fa-solid fa-table-cells-large"></i>
+                        <span>Modifier la disposition</span>
+                    </button>
+                </div>
+            </header>
+
+            <section class="admin-content admin-dashboard">
+                <div class="admin-title admin-title--split">
+                    <div>
+                        <i class="fa-solid fa-house"></i>
+                        <h1>Dashboard</h1>
+                    </div>
+                    <p>Ton espace de travail admin. Tu peux ranger les blocs dans l'ordre que tu veux.</p>
+                </div>
+
+                <section class="admin-dashboard-layout" data-dashboard-layout>
+                    <div class="admin-dashboard-column" data-dashboard-column="left" aria-label="Colonne gauche">
+                        <article class="admin-dashboard-panel" draggable="true" data-dashboard-widget="todo">
+                            <div class="admin-dashboard-panel__head">
+                                <div>
+                                    <h2>Priorités</h2>
+                                    <p>Ce qui mérite ton attention en premier.</p>
+                                </div>
+                            </div>
+                            <div class="admin-dashboard-widget-tools" aria-label="Disposition du widget">
+                                <button type="button" data-dashboard-move="toggle" title="Changer de colonne"><i class="fa-solid fa-right-left"></i></button>
+                            </div>
+                            <div class="admin-dashboard-tasks">
+                                <a href="admin-validations.html">
+                                    <span class="admin-dashboard-task__icon"><i class="fa-solid fa-hourglass-half"></i></span>
+                                    <span><strong>8 validations en attente</strong><small>Dernière déclaration reçue le 10 mai à 21h47.</small></span>
+                                    <em>Traiter</em>
+                                </a>
+                                <a href="admin-guides.html">
+                                    <span class="admin-dashboard-task__icon"><i class="fa-solid fa-book-open"></i></span>
+                                    <span><strong>Guides à relire</strong><small>Ush Galesh et Chêne Mou ont besoin d'un dernier passage.</small></span>
+                                    <em>Ouvrir</em>
+                                </a>
+                            </div>
+                        </article>
+
+                        <article class="admin-dashboard-panel" draggable="true" data-dashboard-widget="notes">
+                            <div class="admin-dashboard-panel__head">
+                                <div>
+                                    <h2>Notes admin</h2>
+                                    <p>Un bloc simple pour les rappels d'équipe.</p>
+                                </div>
+                            </div>
+                            <div class="admin-dashboard-widget-tools" aria-label="Disposition du widget">
+                                <button type="button" data-dashboard-move="toggle" title="Changer de colonne"><i class="fa-solid fa-right-left"></i></button>
+                            </div>
+                            <textarea class="admin-dashboard-note" rows="7" placeholder="Ex: penser à publier la galerie après la sortie de vendredi."></textarea>
+                            <div class="admin-dashboard-note-actions">
+                                <button class="admin-create-button" type="button" data-dashboard-note-save>
+                                    <i class="fa-solid fa-floppy-disk"></i>
+                                    <span>Enregistrer</span>
+                                </button>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="admin-dashboard-column" data-dashboard-column="right" aria-label="Colonne droite">
+                        <article class="admin-dashboard-panel" draggable="true" data-dashboard-widget="shortcuts">
+                            <div class="admin-dashboard-panel__head">
+                                <div>
+                                    <h2>Raccourcis</h2>
+                                    <p>Les créations qu'on ouvre souvent.</p>
+                                </div>
+                            </div>
+                            <div class="admin-dashboard-widget-tools" aria-label="Disposition du widget">
+                                <button type="button" data-dashboard-move="toggle" title="Changer de colonne"><i class="fa-solid fa-right-left"></i></button>
+                            </div>
+                            <div class="admin-dashboard-shortcuts">
+                                <a href="admin-announcement-create.html"><i class="fa-solid fa-bullhorn"></i><span>Annonce</span></a>
+                                <a href="admin-mission-create.html"><i class="fa-solid fa-scroll"></i><span>Mission</span></a>
+                                <a href="admin-guide-create.html"><i class="fa-solid fa-book-open"></i><span>Guide</span></a>
+                                <a href="admin-gallery-create.html"><i class="fa-regular fa-images"></i><span>Image galerie</span></a>
+                                <a href="admin-lottery.html"><i class="fa-solid fa-dice"></i><span>Loterie</span></a>
+                                <a href="admin-user-create.html"><i class="fa-solid fa-user-plus"></i><span>Utilisateur</span></a>
+                            </div>
+                        </article>
+
+                        <article class="admin-dashboard-panel" draggable="true" data-dashboard-widget="maintenance">
+                            <div class="admin-dashboard-panel__head">
+                                <div>
+                                    <h2>Entretien</h2>
+                                    <p>Les coins à garder propres.</p>
+                                </div>
+                            </div>
+                            <div class="admin-dashboard-widget-tools" aria-label="Disposition du widget">
+                                <button type="button" data-dashboard-move="toggle" title="Changer de colonne"><i class="fa-solid fa-right-left"></i></button>
+                            </div>
+                            <div class="admin-dashboard-activity">
+                                <p><span></span><strong>Corbeilles</strong> vérifier les suppressions définitives.</p>
+                                <p><span></span><strong>Rôles</strong> contrôler les accès après changement d'équipe.</p>
+                                <p><span></span><strong>Galerie</strong> publier seulement les images prêtes.</p>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,172 @@
+main.login-page {
+    width: min(calc(100% - 58px), 342px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    min-height: 100vh;
+    padding: 40px 0;
+}
+
+main.login-page img {
+    width: 140px;
+    margin: 0 auto;
+}
+
+main.login-page h1 {
+    color: var(--color-text-primary);
+    font-size: 58px;
+    line-height: 1.05;
+    font-family: "Crimson Pro", serif;
+    font-weight: 700;
+    margin: 0 0 29px 10px;
+    text-align: left;
+}
+
+.login-card {
+    width: 100%;
+    padding: 27px 24px 25px;
+    background-color: #242650;
+    border-color: #30356d;
+}
+
+.login-card .form-stack {
+    gap: 18px;
+}
+
+.login-card .field {
+    gap: 8px;
+}
+
+.login-card .field label,
+.login-field-head a, .check span {
+    color: #8491c7;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.login-field-head a {
+    font-style: italic;
+    font-weight: 300;
+    font-size: 13px;
+}
+
+.login-field-head a:hover {
+    text-decoration: underline;
+}
+
+.login-card .field input {
+    min-height: 40px;
+    border-color: #30356d;
+    background-color: #171933;
+    color: var(--color-text-primary);
+}
+
+.login-card .field input:focus {
+    border-color: var(--color-accent);
+}
+
+.login-field-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.login-field-head a {
+    color: #4da2ff;
+    text-decoration: none;
+}
+
+.login-card .check {
+    align-self: flex-start;
+    color: #9cadff;
+}
+
+.login-card .check input {
+    appearance: none;
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #30356d;
+    border-radius: 3px;
+    background-color: #171933;
+    cursor: pointer;
+}
+
+.login-card .check input:checked {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    box-shadow: inset 0 0 0 4px #171933;
+}
+
+.login-submit {
+    width: 100%;
+    min-height: 40px;
+    margin-top: 1px;
+    background-color: #5799e9;
+    border-color: #5799e9;
+    font-size: 16px;
+}
+
+.login-submit i {
+    font-size: 14px;
+}
+
+@media screen and (max-width: 768px) {
+    main.login-page {
+        width: min(calc(100% - 32px), 420px);
+        padding: 32px 0;
+    }
+
+    main.login-page img {
+        width: 120px;
+    }
+
+    main.login-page h1 {
+        margin-left: 0;
+        font-size: 50px;
+        text-align: center;
+    }
+
+    .login-card {
+        padding: 24px 20px 22px;
+    }
+
+    .login-field-head {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    main.login-page {
+        width: min(calc(100% - 24px), 420px);
+        padding: 24px 0 32px;
+    }
+
+    main.login-page h1 {
+        font-size: 40px;
+        margin-bottom: 24px;
+    }
+
+    .login-card {
+        padding: 20px 16px 18px;
+    }
+
+    .login-card .field label,
+    .login-field-head a,
+    .check span {
+        font-size: 14px;
+    }
+
+    .login-field-head a {
+        font-size: 12px;
+    }
+
+    .login-submit {
+        font-size: 15px;
+    }
+}

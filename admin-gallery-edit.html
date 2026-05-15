@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier une image | Les Z-héros</title>
+    <meta name="description" content="Modification d'une image de la galerie de guilde Les Z-héros.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <script src="assets/js/admin.js" defer></script>
+    <script src="assets/js/admin-gallery.js" defer></script>
+</head>
+<body class="admin-body">
+    <div class="admin-app">
+        <aside class="admin-sidebar" aria-label="Navigation administration">
+            <a class="admin-brand" href="index.html"><img src="assets/img/logo.png" alt=""><span>Les Z-héros</span></a>
+            <nav class="admin-nav">
+                <a class="admin-nav__link" href="admin.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+                <p class="admin-nav__label">Contenus</p>
+                <a class="admin-nav__link" href="admin-announcements.html"><i class="fa-solid fa-bullhorn"></i><span>Annonces</span></a>
+                <a class="admin-nav__link" href="admin-missions.html"><i class="fa-solid fa-scroll"></i><span>Missions</span></a>
+                <a class="admin-nav__link" href="admin-guides.html"><i class="fa-solid fa-book-open"></i><span>Guides</span></a>
+                <a class="admin-nav__link is-active" href="admin-gallery.html"><i class="fa-regular fa-images"></i><span>Galerie</span></a>
+                <a class="admin-nav__link" href="admin-stuffs.html"><i class="fa-solid fa-shield-halved"></i><span>Catalogue stuffs</span></a>
+                <p class="admin-nav__label">Activités</p>
+                <a class="admin-nav__link" href="admin-lottery.html"><i class="fa-solid fa-dice"></i><span>Loterie</span></a>
+                <a class="admin-nav__link" href="admin-ranking.html"><i class="fa-solid fa-trophy"></i><span>Classement</span></a>
+                <p class="admin-nav__label">Communauté</p>
+                <a class="admin-nav__link" href="admin-users.html"><i class="fa-solid fa-users"></i><span>Utilisateurs</span></a>
+                <a class="admin-nav__link" href="admin-validations.html"><i class="fa-solid fa-circle-check"></i><span>Validations</span></a>
+                <a class="admin-nav__link" href="admin-comments.html"><i class="fa-solid fa-comments"></i><span>Commentaires</span></a>
+                <p class="admin-nav__label">Administration</p>
+                <a class="admin-nav__link" href="admin-roles.html"><i class="fa-solid fa-user-shield"></i><span>Rôles</span></a>
+                <a class="admin-nav__link" href="admin-settings.html"><i class="fa-solid fa-gear"></i><span>Paramètres</span></a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="admin-breadcrumb">
+                    <button class="admin-menu-button" type="button" aria-label="Ouvrir la navigation"><i class="fa-solid fa-table-columns"></i></button>
+                    <span></span>
+                    <p>Galerie / Modifier</p>
+                </div>
+                <div class="admin-actions">
+                    <a class="admin-secondary-button" href="admin-gallery.html"><i class="fa-solid fa-arrow-left"></i><span>Retour à la galerie</span></a>
+                </div>
+            </header>
+
+            <section class="admin-content admin-content--editor">
+                <form id="gallery-form" class="admin-gallery-editor admin-gallery-editor--cms" action="#" method="post" enctype="multipart/form-data">
+                    <section class="admin-gallery-compose">
+                        <label class="admin-guide-title-field" for="gallery-title">
+                            <span>Titre de l'image</span>
+                            <input id="gallery-title" name="title" type="text" value="Hall de guilde Frigostien" required>
+                        </label>
+
+                        <label class="admin-guide-summary admin-gallery-description" for="gallery-description">
+                            <span>Description</span>
+                            <textarea id="gallery-description" name="description">Souvenir du nouveau point de rassemblement sur Frigost.</textarea>
+                        </label>
+                    </section>
+
+                    <aside class="admin-gallery-editor__aside admin-gallery-editor__aside--cms" data-gallery-form>
+                        <section class="admin-guide-side-card">
+                            <div class="admin-guide-switch-row">
+                                <span>Publié</span>
+                                <label class="admin-switch">
+                                    <input type="checkbox" name="published" checked>
+                                    <span></span>
+                                </label>
+                            </div>
+                        </section>
+
+                        <section class="admin-guide-side-card admin-guide-side-card--cover">
+                            <label class="admin-gallery-cover-picker" for="gallery-file">
+                                <img class="admin-gallery-cover" src="assets/img/divers/hall-guilde.png" alt="" data-gallery-preview-image>
+                                <span>Aperçu</span>
+                            </label>
+                            <input id="gallery-file" class="admin-guide-cover-input" name="image" type="file" accept="image/*" data-gallery-file>
+                        </section>
+
+                        <section class="admin-guide-side-card">
+                            <label class="admin-field" for="gallery-url">
+                                <span>URL image</span>
+                                <input id="gallery-url" name="image_url" type="url" placeholder="https://..." data-gallery-url>
+                            </label>
+                        </section>
+
+                        <button class="admin-create-button admin-guide-save-button" type="submit">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>Enregistrer</span>
+                        </button>
+                    </aside>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

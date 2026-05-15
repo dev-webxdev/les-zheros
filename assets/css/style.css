@@ -1,0 +1,2798 @@
+@import url(reset.css);
+@import url(ui.css);
+@import url(profil.css);
+@import url(login.css);
+
+body {
+    background-color: var(--color-body-bg);
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+}
+
+body.is-nav-open {
+    overflow: hidden;
+}
+
+body.home-page {
+    overflow-x: hidden;
+}
+
+@keyframes motionRevealUp {
+    from {
+        opacity: 0;
+        transform: translateY(28px) scale(.985);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes motionPulseSoft {
+    0% {
+        transform: scale(1);
+    }
+
+    45% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes motionMetricPulse {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+
+    35% {
+        transform: translateY(-1px) scale(1.08);
+    }
+
+    100% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes motionModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes motionBackdropIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/************************* HEADER *************************/
+
+.container {
+    width: min(calc(100% - 32px), var(--content-width));
+    margin: 0 auto;
+}
+
+.site-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
+.site-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid #2a2e5e;
+}
+
+.site-logo {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+}
+
+.site-logo img {
+    width: 50px;
+    margin: 12px 10px 12px 0;
+}
+
+.site-nav-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    min-width: 0;
+}
+
+.site-nav-panel-shell {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.site-nav--main {
+    margin-right: auto;
+}
+
+.site-nav--account {
+    margin-left: auto;
+}
+
+.site-nav ul {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.site-nav--account ul {
+    gap: 12px;
+}
+
+.account-action--admin {
+    position: relative;
+    padding-left: 16px;
+}
+
+.account-action--admin::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 1px;
+    height: 24px;
+    background-color: #3b3f78;
+    transform: translateY(-50%);
+}
+
+.site-nav .is-active a {
+    color: #5396e7;
+}
+
+.site-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0;
+    color: #d4dcff;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.site-nav a:hover {
+    color: #5396e7;
+    transition-duration: .5s;
+}
+
+.site-nav a i {
+    font-size: 13px;
+}
+
+.site-menu-toggle {
+    display: none;
+    position: relative;
+    width: 48px;
+    height: 48px;
+    flex: 0 0 auto;
+    border: 1px solid rgba(95, 158, 242, .28);
+    border-radius: 999px;
+    background: rgba(24, 28, 60, .55);
+    color: #d4dcff;
+    cursor: pointer;
+    transition: border-color .25s, background-color .25s, transform .25s;
+}
+
+.site-menu-toggle:hover {
+    border-color: rgba(121, 183, 255, .72);
+    background-color: rgba(35, 41, 84, .82);
+}
+
+.site-menu-toggle-line {
+    position: absolute;
+    left: 14px;
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background-color: currentColor;
+    transition: transform .25s ease, opacity .25s ease, top .25s ease;
+}
+
+.site-menu-toggle-line:nth-child(1) {
+    top: 16px;
+}
+
+.site-menu-toggle-line:nth-child(2) {
+    top: 23px;
+}
+
+.site-menu-toggle-line:nth-child(3) {
+    top: 30px;
+}
+
+.site-menu-toggle[aria-expanded="true"] .site-menu-toggle-line:nth-child(1) {
+    top: 23px;
+    transform: rotate(45deg);
+}
+
+.site-menu-toggle[aria-expanded="true"] .site-menu-toggle-line:nth-child(2) {
+    opacity: 0;
+}
+
+.site-menu-toggle[aria-expanded="true"] .site-menu-toggle-line:nth-child(3) {
+    top: 23px;
+    transform: rotate(-45deg);
+}
+
+.account-action--admin a,
+.account-action--logout a {
+    justify-content: center;
+    min-width: 40px;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    transition: .3s;
+}
+
+.account-action--admin a {
+    border-color: #8a6a1f;
+    background: linear-gradient(180deg, rgba(138, 106, 31, .26), rgba(138, 106, 31, .1));
+    color: #ffe08a;
+}
+
+.account-action--admin a:hover {
+    color: #fff2c2;
+    border-color: #d2a63a;
+    background: linear-gradient(180deg, rgba(210, 166, 58, .32), rgba(138, 106, 31, .18));
+}
+
+.account-action--logout a {
+    border-color: #6b2f44;
+    background: linear-gradient(180deg, rgba(107, 47, 68, .2), rgba(107, 47, 68, .08));
+    color: #ffb5c7;
+}
+
+.account-action--logout a:hover {
+    color: #ffe2ea;
+    border-color: #b84b6d;
+    background: linear-gradient(180deg, rgba(184, 75, 109, .28), rgba(107, 47, 68, .16));
+}
+
+/************************* HOME *************************/
+
+.home-hero {
+    min-height: 548px;
+    padding: 60px 0 36px;
+}
+
+.home-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(320px, 485px) minmax(0, 800px);
+    align-items: center;
+    justify-content: space-between;
+    gap: 99px;
+    padding-top: 100px;
+}
+
+.home-hero-content h1 {
+    color: var(--color-text-primary);
+    font-family: "Crimson Pro", serif;
+    font-size: 64px;
+    line-height: 1.12;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.home-hero-content h1 span,
+.home-hero-content strong {
+    color: var(--color-accent);
+}
+
+.home-hero-content p {
+    color: #9cadff;
+    font-size: 16px;
+    line-height: 1.58;
+    margin-bottom: 18px;
+    font-weight: 500;
+}
+
+.home-hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.home-hero-actions .btn {
+    min-height: 55px;
+    padding: 0 17px;
+    font-size: 17px;
+}
+
+.home-hero-media {
+    position: relative;
+    width: 100%;
+    min-height: 450px;
+    aspect-ratio: 16 / 9;
+    border: 1px solid #2e356d;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.home-hero-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(23, 25, 51, 0) 20%, rgba(38, 69, 135, .42) 62%, rgba(23, 25, 51, .9) 100%);
+    pointer-events: none;
+    transition: opacity .3s;
+}
+
+.home-hero-media:hover::after {
+    opacity: 0;
+}
+
+.home-hero-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.page-hero {
+    padding-top: 150px;
+}
+.page-hero h1 {
+    color: var(--color-text-primary);
+    font-family: "Crimson Pro", serif;
+    font-size: 64px;
+    line-height: 1.05;
+    font-weight: 800;
+    margin: 10px 0 16px;
+}
+
+.page-hero h1 span {
+    color: var(--color-accent);
+}
+
+.page-hero p {
+    color: #aeb8eb;
+    font-size: 17px;
+    line-height: 1.62;
+    font-weight: 400;
+}
+
+.home-overview {
+    padding: 76px 0 96px;
+    background-color: #1b1e3d;
+}
+
+.home-overview-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(400px, .92fr);
+    gap: 56px;
+    align-items: start;
+}
+
+.home-overview .home-almanax,
+.home-overview .home-news {
+    min-width: 0;
+    padding: 0;
+    background: transparent;
+}
+
+.home-overview .home-section-head h2 {
+    font-size: 46px;
+}
+
+.home-overview .almanax-shell,
+.home-overview .guild-news-featured,
+.home-overview .guild-news-card {
+    box-shadow: 10px 10px 0 rgba(20, 23, 49, .55);
+}
+
+.home-overview .almanax-tabs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+    gap: 8px;
+    overflow-x: visible;
+    margin-right: 0;
+    padding-right: 0;
+    scrollbar-width: auto;
+}
+
+.home-overview .almanax-tab {
+    min-width: 0;
+    min-height: 42px;
+    padding: 7px 10px;
+}
+
+.home-overview .almanax-tab span {
+    font-size: 9px;
+}
+
+.home-overview .almanax-tab strong {
+    font-size: 12px;
+}
+
+.home-overview .guild-news-layout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+.home-overview .guild-news-featured {
+    padding: 22px 22px 20px;
+}
+
+.home-overview .guild-news-featured h3 {
+    font-size: 34px;
+}
+
+.home-overview .guild-news-featured p {
+    max-width: none;
+    font-size: 15px;
+}
+
+.home-overview .guild-news-card {
+    padding: 18px 18px 17px;
+}
+
+.home-overview .guild-news-card h3 {
+    font-size: 22px;
+}
+
+.home-overview .guild-news-card p {
+    font-size: 14px;
+}
+
+.home-overview .almanax-panel__layout {
+    grid-template-columns: 1fr;
+}
+
+.home-overview .almanax-panel__description {
+    max-width: none;
+}
+
+.home-overview .almanax-panel {
+    min-height: 410px;
+}
+
+.home-almanax {
+    padding: 64px 0 80px;
+    background-color: #1b1e3d;
+}
+
+.section-kicker {
+    display: inline-block;
+    color: #90a7ff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.home-section-head.home-section-head--compact {
+    margin-bottom: 18px;
+}
+
+.home-section-head--split {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+}
+
+.home-section-copy {
+    max-width: 440px;
+    color: #9cadff;
+    font-size: 15px;
+    line-height: 1.55;
+    font-weight: 500;
+}
+
+.almanax-shell {
+    position: relative;
+    padding: 16px 18px 18px;
+    border: 1px solid #313872;
+    border-radius: 10px;
+    background:
+        radial-gradient(circle at top right, rgba(99, 168, 255, .12), transparent 30%),
+        linear-gradient(180deg, #232652 0%, #1c1f43 100%);
+    box-shadow: 9px 9px 0 rgba(28, 31, 67, .92);
+}
+
+.almanax-shell::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 10px 0 0 10px;
+    background: linear-gradient(180deg, #7cc4ff 0%, #5d79ff 100%);
+}
+
+.almanax-shell__top,
+.almanax-tabs,
+.almanax-panel,
+.almanax-feedback {
+    position: relative;
+    z-index: 1;
+}
+
+.almanax-shell__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.almanax-shell__headline {
+    min-width: 0;
+}
+
+.almanax-shell__headline .guild-news-tag {
+    margin-bottom: 8px;
+}
+
+.almanax-shell__headline h3 {
+    color: var(--color-text-primary);
+    font-family: "Crimson Pro", serif;
+    font-size: 28px;
+    line-height: 1.04;
+    font-weight: 800;
+    margin: 0;
+}
+
+.almanax-shell__status {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 6px;
+    padding: 8px 12px;
+    border: 1px solid rgba(122, 181, 255, .25);
+    border-radius: 999px;
+    background: rgba(16, 20, 45, .62);
+    color: #8ea7ff;
+}
+
+.almanax-shell__status strong {
+    color: #f6f9ff;
+    font-size: 27px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.almanax-shell__status span {
+    font-size: 14px;
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.almanax-tabs {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    min-height: 48px;
+    margin: 0 -4px 12px;
+    padding: 2px 4px 4px;
+    scrollbar-width: none;
+}
+
+.almanax-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.almanax-tab {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 122px;
+    padding: 8px 12px;
+    border: 1px solid #38428a;
+    border-radius: 999px;
+    background: rgba(24, 29, 63, .82);
+    color: #aebcf1;
+    font: inherit;
+    cursor: pointer;
+    transition: border-color .25s, background-color .25s, color .25s, transform .25s, box-shadow .25s;
+}
+
+.almanax-tab span {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.almanax-tab strong {
+    color: #eef2ff;
+    font-size: 13px;
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.almanax-tab:hover,
+.almanax-tab.is-active {
+    border-color: rgba(124, 196, 255, .78);
+    background: linear-gradient(180deg, rgba(99, 168, 255, .24), rgba(79, 108, 214, .26));
+    color: #e4edff;
+}
+
+.almanax-tab:hover {
+    transform: translateY(-1px);
+}
+
+.almanax-tab.is-active {
+    box-shadow: 0 10px 22px rgba(14, 19, 44, .28);
+    transform: translateY(-2px);
+}
+
+.almanax-panel__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(290px, 360px);
+    gap: 18px;
+    align-items: start;
+}
+
+.almanax-panel {
+    min-height: 188px;
+}
+
+.almanax-panel__main,
+.almanax-offering__content,
+.almanax-panel__title-stack {
+    min-width: 0;
+}
+
+.almanax-panel__date {
+    color: #8fa6ff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.almanax-panel__title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.almanax-panel__subtitle {
+    color: #8fa6ff;
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.almanax-bonus-badge {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(122, 181, 255, .2);
+    border-radius: 14px;
+    background: rgba(16, 20, 45, .68);
+    color: #d9e6ff;
+    font-size: 16px;
+}
+
+.almanax-bonus-badge--loot {
+    border-color: rgba(255, 211, 132, .34);
+    background: rgba(101, 73, 29, .34);
+    color: #ffe8b8;
+}
+
+.almanax-bonus-badge--xp {
+    border-color: rgba(124, 196, 255, .34);
+    background: rgba(47, 79, 130, .34);
+    color: #d9f1ff;
+}
+
+.almanax-bonus-badge--harvest {
+    border-color: rgba(132, 222, 194, .34);
+    background: rgba(33, 97, 79, .34);
+    color: #d9fff2;
+}
+
+.almanax-bonus-badge--craft {
+    border-color: rgba(211, 157, 255, .34);
+    background: rgba(87, 53, 129, .34);
+    color: #f0ddff;
+}
+
+.almanax-bonus-badge--challenge {
+    border-color: rgba(255, 158, 124, .34);
+    background: rgba(130, 61, 47, .34);
+    color: #ffe0d6;
+}
+
+.almanax-bonus-badge--anomaly {
+    border-color: rgba(170, 138, 255, .34);
+    background: rgba(63, 54, 122, .34);
+    color: #e4dcff;
+}
+
+.almanax-bonus-badge--quest {
+    border-color: rgba(255, 156, 176, .34);
+    background: rgba(117, 56, 75, .34);
+    color: #ffe3ea;
+}
+
+.almanax-bonus-badge--mount {
+    border-color: rgba(110, 214, 233, .34);
+    background: rgba(33, 95, 112, .34);
+    color: #d7f8ff;
+}
+
+.almanax-panel__title {
+    color: var(--color-text-primary);
+    font-family: "Crimson Pro", serif;
+    font-size: 34px;
+    line-height: 1.02;
+    font-weight: 800;
+    margin: 0;
+}
+
+.almanax-panel__description {
+    max-width: 62ch;
+    color: #c0c8f7;
+    font-size: 14px;
+    line-height: 1.55;
+    font-weight: 500;
+}
+
+.almanax-panel__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    max-width: 540px;
+    margin-top: 14px;
+}
+
+.almanax-stat-card {
+    padding: 10px 12px;
+    border: 1px solid rgba(122, 181, 255, .14);
+    border-radius: 10px;
+    background: rgba(16, 20, 45, .42);
+}
+
+.almanax-stat-card span {
+    display: block;
+    margin-bottom: 4px;
+    color: #8fa6ff;
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.almanax-stat-card strong {
+    display: block;
+    color: #eef3ff;
+    font-size: 16px;
+    line-height: 1.15;
+    font-weight: 800;
+}
+
+.almanax-stat-card--kamas {
+    border-color: rgba(255, 211, 132, .28);
+    background: rgba(101, 73, 29, .24);
+}
+
+.almanax-stat-card--kamas span {
+    color: #ffd99a;
+}
+
+.almanax-stat-card--kamas strong {
+    color: #ffe8b8;
+}
+
+.almanax-stat-card--xp {
+    border-color: rgba(124, 196, 255, .28);
+    background: rgba(47, 79, 130, .24);
+}
+
+.almanax-stat-card--xp strong {
+    color: #d9f1ff;
+}
+
+.almanax-offering {
+    padding: 14px;
+    border: 1px solid #364086;
+    border-radius: 10px;
+    background:
+        radial-gradient(circle at top right, rgba(255, 202, 118, .12), transparent 42%),
+        rgba(19, 24, 50, .78);
+}
+
+.almanax-offering__body {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+}
+
+.almanax-data-label {
+    display: inline-block;
+    margin-bottom: 7px;
+    color: #8fa6ff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.almanax-offering__image {
+    display: block;
+    width: 44px;
+    height: 44px;
+    padding: 6px;
+    border: 1px solid rgba(255, 214, 136, .18);
+    border-radius: 12px;
+    background:
+        linear-gradient(180deg, rgba(255, 201, 109, .18), rgba(90, 135, 255, .18)),
+        rgba(22, 28, 58, .96);
+    object-fit: contain;
+}
+
+.almanax-offering__content strong {
+    display: block;
+    color: #f4f7ff;
+    font-size: 16px;
+    line-height: 1.14;
+    margin-bottom: 3px;
+}
+
+.almanax-offering__content p {
+    color: #aeb9ea;
+    font-size: 13px;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.almanax-offering__recipe {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(122, 181, 255, .14);
+}
+
+.almanax-offering__recipe[open] {
+    padding-bottom: 2px;
+}
+
+.almanax-offering__recipe-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #d9e6ff;
+    font-size: 12px;
+    line-height: 1.3;
+    font-weight: 800;
+    cursor: pointer;
+    list-style: none;
+}
+
+.almanax-offering__recipe-toggle::-webkit-details-marker {
+    display: none;
+}
+
+.almanax-offering__recipe-toggle::after {
+    content: "+";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border: 1px solid rgba(122, 181, 255, .22);
+    border-radius: 999px;
+    color: #8fa6ff;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.almanax-offering__recipe[open] .almanax-offering__recipe-toggle::after {
+    content: "-";
+}
+
+.almanax-offering__recipe-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 10px;
+}
+
+.almanax-recipe-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 9px;
+    border: 1px solid rgba(122, 181, 255, .16);
+    border-radius: 999px;
+    background: rgba(16, 20, 45, .46);
+    color: #c8d8ff;
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.almanax-feedback {
+    margin-top: 10px;
+    color: #9cadff;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.almanax-feedback[hidden] {
+    display: none;
+}
+
+.home-outings {
+    padding: 50px 0 80px;
+}
+
+.guild-vote-shell {
+    position: relative;
+}
+
+.guild-vote-feedback {
+    margin-bottom: 14px;
+    padding: 14px 16px;
+    border: 1px solid rgba(95, 158, 242, .18);
+    border-radius: 10px;
+    background: rgba(32, 49, 92, .52);
+    color: #8fc2ff;
+    font-size: 16px;
+    line-height: 1.45;
+    font-weight: 600;
+}
+
+.guild-vote-feedback.is-success {
+    border-color: rgba(59, 169, 127, .28);
+    background: rgba(27, 77, 61, .38);
+    color: #66e5ac;
+}
+
+.guild-vote-card {
+    position: relative;
+    padding: 22px;
+    border: 1px solid #2a2e5e;
+    border-radius: 12px;
+    background:
+        radial-gradient(circle at top right, rgba(99, 168, 255, .1), transparent 36%),
+        linear-gradient(180deg, rgba(35, 38, 82, .98) 0%, rgba(27, 30, 61, .98) 100%);
+    box-shadow: 0 10px 26px rgba(10, 12, 28, .22);
+}
+
+.guild-vote-card::before {
+    display: none;
+}
+
+.guild-vote-card__head {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: flex-start;
+    margin-bottom: 22px;
+}
+
+.guild-vote-card__intro h2,
+.guild-vote-card__intro h3 {
+    color: var(--color-text-primary);
+    font-family: "Crimson Pro", serif;
+    font-size: 34px;
+    line-height: 1.04;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.guild-vote-card__intro p {
+    color: #9cadff;
+    font-size: 16px;
+    line-height: 1.55;
+    font-weight: 500;
+}
+
+.guild-vote-card__meta {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px 18px;
+    width: min(100%, 470px);
+}
+
+.guild-vote-meta-card {
+    position: relative;
+    min-width: 0;
+    padding-left: 12px;
+}
+
+.guild-vote-meta-card span {
+    display: block;
+    margin-bottom: 4px;
+    color: #8fa6ff;
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.guild-vote-meta-card strong {
+    display: block;
+    color: #eef3ff;
+    font-size: 15px;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+.guild-vote-meta-card::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 0;
+    bottom: 2px;
+    width: 2px;
+    border-radius: 999px;
+    background: rgba(95, 158, 242, .32);
+}
+
+.guild-vote-days {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+}
+
+.guild-vote-days::-webkit-scrollbar {
+    display: none;
+}
+
+.guild-vote-day {
+    display: inline-flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+    min-width: 112px;
+    min-height: 64px;
+    padding: 12px 14px;
+    border: 1px solid rgba(64, 76, 146, .52);
+    border-radius: 12px;
+    background: rgba(23, 27, 59, .4);
+    color: #eef4ff;
+    font: inherit;
+    cursor: pointer;
+    transition: border-color .25s, background-color .25s, color .25s, transform .25s, box-shadow .25s;
+}
+
+.guild-vote-day span {
+    color: #8fa6ff;
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.guild-vote-day strong {
+    color: #eef4ff;
+    font-size: 18px;
+    line-height: 1.05;
+    font-weight: 800;
+}
+
+.guild-vote-day:hover,
+.guild-vote-day.is-active {
+    border-color: rgba(124, 196, 255, .78);
+    background:
+        radial-gradient(circle at top right, rgba(124, 196, 255, .14), transparent 48%),
+        rgba(34, 44, 92, .7);
+    box-shadow: inset 0 0 0 1px rgba(124, 196, 255, .12);
+}
+
+.guild-vote-day:hover {
+    transform: translateY(-1px);
+}
+
+.guild-vote-panels {
+    position: relative;
+    z-index: 1;
+    padding: 0;
+}
+
+.guild-vote-panel {
+    display: grid;
+    gap: 14px;
+    padding: 16px 0 0;
+    border-top: 1px solid rgba(42, 46, 94, .9);
+}
+
+.guild-vote-panel[hidden] {
+    display: none;
+}
+
+.guild-vote-panel__top {
+    display: block;
+}
+
+.guild-vote-panel__eyebrow {
+    display: inline-block;
+    margin-bottom: 8px;
+    color: #8fa6ff;
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.guild-vote-panel__title {
+    color: var(--color-text-primary);
+    font-family: "Crimson Pro", serif;
+    font-size: 24px;
+    line-height: 1.02;
+    font-weight: 800;
+    margin: 0;
+}
+
+.guild-vote-slot-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.guild-vote-slot {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(64, 76, 146, .34);
+    border-radius: 14px;
+    background: rgba(21, 26, 58, .22);
+    transition: border-color .25s, background-color .25s, box-shadow .25s, transform .25s;
+}
+
+.guild-vote-slot:hover {
+    border-color: rgba(124, 196, 255, .52);
+    background: rgba(21, 26, 58, .34);
+    transform: none;
+}
+
+.guild-vote-slot__button {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-height: 136px;
+    padding: 14px 16px;
+    border: 0;
+    background: transparent;
+    color: #f4f7ff;
+    font: inherit;
+    cursor: pointer;
+    transition: color .25s;
+}
+
+.guild-vote-slot__eyebrow {
+    color: #8fa6ff;
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.guild-vote-slot.is-selected .guild-vote-slot__button,
+.guild-vote-slot.is-confirmed .guild-vote-slot__button {
+    color: #ffffff;
+}
+
+.guild-vote-slot.is-selected,
+.guild-vote-slot.is-confirmed {
+    border-color: rgba(124, 196, 255, .62);
+    box-shadow:
+        0 6px 18px rgba(12, 17, 40, .14),
+        inset 0 0 0 1px rgba(124, 196, 255, .18);
+    transform: none;
+}
+
+.guild-vote-slot.is-selected {
+    background:
+        radial-gradient(circle at top right, rgba(124, 196, 255, .1), transparent 44%),
+        rgba(34, 44, 92, .56);
+}
+
+.guild-vote-slot.is-confirmed {
+    background:
+        radial-gradient(circle at top right, rgba(124, 196, 255, .14), transparent 42%),
+        rgba(42, 54, 108, .62);
+}
+
+.guild-vote-slot.is-selected::after,
+.guild-vote-slot.is-confirmed::after {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+.guild-vote-slot.is-selected::after {
+    content: "Choisi";
+    border: 1px solid rgba(124, 196, 255, .34);
+    background: rgba(18, 25, 57, .72);
+    color: #dbe9ff;
+}
+
+.guild-vote-slot.is-confirmed::after {
+    content: "Vote valide";
+    border: 1px solid rgba(124, 196, 255, .42);
+    background: rgba(18, 25, 57, .78);
+    color: #f5f9ff;
+}
+
+.guild-vote-slot__time {
+    font-size: 32px;
+    line-height: 1;
+    font-weight: 800;
+    margin-bottom: auto;
+}
+
+.guild-vote-slot__count {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 0 10px;
+    border: 1px solid rgba(124, 196, 255, .2);
+    border-radius: 999px;
+    background: rgba(17, 22, 48, .56);
+    color: #dbe6ff;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.guild-vote-slot.is-selected .guild-vote-slot__count,
+.guild-vote-slot.is-confirmed .guild-vote-slot__count {
+    border-color: rgba(124, 196, 255, .34);
+    background: rgba(15, 19, 43, .42);
+}
+
+.guild-vote-slot__cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: rgba(24, 31, 69, .82);
+    color: #8fc2ff;
+    font-size: 11px;
+    line-height: 1.3;
+    font-weight: 800;
+}
+
+.guild-vote-slot__cta[hidden] {
+    display: none;
+}
+
+.guild-vote-slot.is-selected .guild-vote-slot__cta,
+.guild-vote-slot.is-confirmed .guild-vote-slot__cta {
+    background: rgba(15, 21, 48, .7);
+    color: #eef4ff;
+}
+
+.guild-vote-slot__members {
+    padding: 0 16px 14px;
+    color: #aebcf1;
+    font-size: 13px;
+    line-height: 1.45;
+    font-weight: 500;
+}
+
+.guild-vote-slot.is-confirmed .guild-vote-slot__members {
+    color: #eef4ff;
+}
+
+.guild-vote-actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(42, 46, 94, .82);
+}
+
+.guild-vote-actions .btn[disabled] {
+    cursor: not-allowed;
+    opacity: .55;
+}
+
+.home-news {
+    padding: 64px 0 80px;
+}
+
+.guild-news-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(330px, .82fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.guild-news-featured,
+.guild-news-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #313872;
+    border-radius: 10px;
+}
+
+.guild-news-featured::before,
+.guild-news-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 10px 0 0 10px;
+    background: linear-gradient(180deg, #7cc4ff 0%, #5d79ff 100%);
+}
+
+.guild-news-featured--priority::before {
+    background: linear-gradient(180deg, #ffcf7d 0%, #b27a2f 100%);
+}
+
+.guild-news-card--event::before {
+    background: linear-gradient(180deg, #8ebeff 0%, #5d79ff 100%);
+}
+
+.guild-news-card--logistique::before {
+    background: linear-gradient(180deg, #d39dff 0%, #7b56c8 100%);
+}
+
+.guild-news-card--info::before {
+    background: linear-gradient(180deg, #84dec2 0%, #2f8d79 100%);
+}
+
+.guild-news-featured {
+    align-self: start;
+    padding: 28px 28px 24px;
+    background:
+        radial-gradient(circle at top right, rgba(99, 168, 255, .18), transparent 36%),
+        linear-gradient(180deg, #232652 0%, #1c1f43 100%);
+    box-shadow: 12px 12px 0 rgba(28, 31, 67, .95);
+}
+
+.guild-news-featured h3,
+.guild-news-featured p,
+.guild-news-meta-row,
+.guild-news-card h3,
+.guild-news-card p {
+    position: relative;
+    z-index: 1;
+}
+
+.guild-news-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.guild-news-meta-row time {
+    color: #8fa6ff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.guild-news-tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.guild-news-tag--priority {
+    border: 1px solid rgba(255, 207, 125, .58);
+    background-color: rgba(127, 88, 34, .36);
+    color: #ffe8b7;
+}
+
+.guild-news-tag--event {
+    border: 1px solid rgba(142, 190, 255, .58);
+    background-color: rgba(59, 95, 161, .34);
+    color: #e4f1ff;
+}
+
+.guild-news-tag--logistique {
+    border: 1px solid rgba(211, 157, 255, .58);
+    background-color: rgba(96, 60, 137, .34);
+    color: #f0ddff;
+}
+
+.guild-news-tag--info {
+    border: 1px solid rgba(132, 222, 194, .56);
+    background-color: rgba(40, 112, 96, .32);
+    color: #dafcf0;
+}
+
+.guild-news-featured h3 {
+    max-width: 660px;
+    color: var(--color-text-primary);
+    font-family: "Crimson Pro", serif;
+    font-size: 46px;
+    line-height: 1;
+    font-weight: 800;
+    margin-bottom: 18px;
+}
+
+.guild-news-featured p {
+    max-width: 92%;
+    color: #c0c8f7;
+    font-size: 17px;
+    line-height: 1.6;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
+.guild-news-stack {
+    display: grid;
+    gap: 18px;
+}
+
+.guild-news-card {
+    padding: 22px 20px 20px;
+    background: linear-gradient(180deg, rgba(36, 38, 80, .98), rgba(25, 28, 60, .98));
+    box-shadow: 8px 8px 0 rgba(27, 30, 61, .95);
+    transition: border-color .25s, box-shadow .25s, transform .25s;
+}
+
+.guild-news-card:hover {
+    border-color: #5f9ef2;
+    box-shadow: 10px 10px 0 rgba(27, 30, 61, .95);
+    transform: translate(-2px, -2px);
+}
+
+.guild-news-featured--priority:hover,
+.guild-news-card--priority:hover {
+    border-color: #d7a44a;
+}
+
+.guild-news-card--event:hover {
+    border-color: #79b7ff;
+}
+
+.guild-news-card--logistique:hover {
+    border-color: #b983ff;
+}
+
+.guild-news-card--info:hover {
+    border-color: #6fd6b3;
+}
+
+.guild-news-card h3 {
+    color: var(--color-text-primary);
+    font-family: "Crimson Pro", serif;
+    font-size: 24px;
+    line-height: 1.18;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.guild-news-card p {
+    color: #aeb8eb;
+    font-size: 15px;
+    line-height: 1.55;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
+.guild-news-link {
+    display: inline-flex;
+    margin-top: 16px;
+    color: #8ac0ff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.guild-news-link:hover {
+    color: #ddebff;
+}
+
+.guild-news-link--button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+}
+
+.news-modal[hidden] {
+    display: none;
+}
+
+.site-toast {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    z-index: 120;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: min(calc(100% - 32px), 480px);
+    min-height: 62px;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 14px;
+    background: #101827;
+    color: #fff;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, .3);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -18px);
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.site-toast.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.site-toast__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, .16);
+    color: #4ade80;
+    font-size: 15px;
+}
+
+.site-toast[data-site-toast-type="warning"] .site-toast__icon {
+    background: rgba(245, 158, 11, .16);
+    color: #fbbf24;
+}
+
+.site-toast[data-site-toast-type="danger"] .site-toast__icon {
+    background: rgba(239, 68, 68, .16);
+    color: #f87171;
+}
+
+.site-toast__content {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+}
+
+.site-toast__content strong {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.site-toast__content span {
+    color: rgba(255, 255, 255, .72);
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.news-modal-open {
+    overflow: hidden;
+}
+
+.news-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+}
+
+.news-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(10, 12, 28, .78);
+    backdrop-filter: blur(8px);
+}
+
+.news-modal__dialog {
+    position: relative;
+    z-index: 1;
+    width: min(calc(100% - 32px), 760px);
+    max-height: calc(100vh - 48px);
+    margin: 24px auto;
+    padding: 28px 28px 24px;
+    overflow-y: auto;
+    border: 1px solid #36408a;
+    border-radius: 14px;
+    background:
+        radial-gradient(circle at top right, rgba(99, 168, 255, .16), transparent 32%),
+        linear-gradient(180deg, #242752 0%, #1b1f42 100%);
+    box-shadow: 18px 18px 0 rgba(20, 23, 49, .95);
+}
+
+.news-modal__dialog::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 14px 0 0 14px;
+    background: linear-gradient(180deg, #7cc4ff 0%, #5d79ff 100%);
+}
+
+.news-modal__close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid #4a5397;
+    border-radius: 999px;
+    background: rgba(24, 28, 60, .76);
+    color: #d9e6ff;
+    cursor: pointer;
+    transition: border-color .25s, color .25s, transform .25s;
+}
+
+.news-modal__close:hover {
+    border-color: #79b7ff;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.news-modal__meta {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+    padding-right: 56px;
+}
+
+.news-modal__meta time {
+    color: #8fa6ff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.news-modal__tag {
+    flex: 0 0 auto;
+}
+
+.news-modal__dialog h3 {
+    position: relative;
+    z-index: 1;
+    max-width: 92%;
+    margin-bottom: 18px;
+    color: var(--color-text-primary);
+    font-family: "Crimson Pro", serif;
+    font-size: 46px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.news-modal__content {
+    position: relative;
+    z-index: 1;
+}
+
+.news-modal__content p,
+.news-modal__content li {
+    color: #c0c8f7;
+    font-size: 17px;
+    line-height: 1.65;
+    font-weight: 400;
+}
+
+.news-modal__content p + p {
+    margin-top: 14px;
+}
+
+.news-modal__content ul {
+    margin-top: 16px;
+    padding-left: 20px;
+}
+
+.home-missions {
+    padding: 64px 0 80px;
+}
+
+.home-section-head {
+    margin-bottom: 28px;
+}
+
+.home-section-head h2 {
+    color: var(--color-text-primary);
+    font-family: "Crimson Pro", serif;
+    font-size: 58px;
+    line-height: 1.08;
+    font-weight: 800;
+}
+
+.home-section-head h2 span {
+    color: var(--color-accent);
+}
+
+.mission-card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px 24px;
+}
+
+.mission-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 260px;
+    padding: 86px 20px 76px;
+    border: 1px solid #313872;
+    border-radius: 10px;
+    background:
+        radial-gradient(circle at top right, rgba(99, 168, 255, .14), transparent 38%),
+        linear-gradient(180deg, #232652 0%, #1c1f43 100%);
+    box-shadow: 12px 12px 0 rgba(28, 31, 67, .95);
+    transition: border-color .25s, box-shadow .25s, transform .25s;
+}
+
+.mission-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 10px 0 0 10px;
+    background: linear-gradient(180deg, #7cc4ff 0%, #5d79ff 100%);
+}
+
+.mission-card--donjon::before {
+    background: linear-gradient(180deg, #8ebeff 0%, #5d79ff 100%);
+}
+
+.mission-card--expedition::before {
+    background: linear-gradient(180deg, #ffcf7d 0%, #b27a2f 100%);
+}
+
+.mission-card--songe::before {
+    background: linear-gradient(180deg, #ff9cb0 0%, #a55a72 100%);
+}
+
+.mission-card--anomalie::before {
+    background: linear-gradient(180deg, #bf84ff 0%, #7d57cb 100%);
+}
+
+.mission-card:hover {
+    border-color: #5799e9;
+    box-shadow: 14px 14px 0 rgba(28, 31, 67, .95);
+    transform: translate(-2px, -2px);
+}
+
+.mission-card--donjon:hover {
+    border-color: #79b7ff;
+}
+
+.mission-card--expedition:hover {
+    border-color: #d7a44a;
+}
+
+.mission-card--songe:hover {
+    border-color: #d77b94;
+}
+
+.mission-card--anomalie:hover {
+    border-color: #b983ff;
+}
+
+.mission-card-badge {
+    position: absolute;
+    top: 0;
+    left: 16px;
+    width: 64px;
+    height: 73px;
+    filter: drop-shadow(0 7px 0 rgba(20, 33, 77, .35));
+}
+
+.mission-card-badge img {
+    display: block;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.mission-card-type {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .02em;
+    backdrop-filter: blur(6px);
+}
+
+.mission-card-type--donjon {
+    border: 1px solid rgba(169, 207, 255, .55);
+    background-color: rgba(71, 101, 156, .48);
+    color: #eaf3ff;
+}
+
+.mission-card-type--regulation {
+    border: 1px solid rgba(235, 159, 235, .58);
+    background-color: rgba(111, 62, 120, .58);
+    color: #ffe4ff;
+}
+
+.mission-card-type--expedition {
+    border: 1px solid rgba(255, 207, 125, .62);
+    background-color: rgba(107, 76, 38, .58);
+    color: #ffe0a2;
+}
+
+.mission-card-type--anomalie {
+    border: 1px solid rgba(191, 132, 255, .62);
+    background-color: rgba(98, 54, 142, .58);
+    color: #ead7ff;
+}
+
+.mission-card-type--songe {
+    border: 1px solid rgba(255, 156, 176, .58);
+    background-color: rgba(117, 56, 75, .58);
+    color: #ffe3ea;
+}
+
+.mission-card h3,
+.mission-card p,
+.mission-card-rewards {
+    position: relative;
+    z-index: 1;
+}
+
+.mission-card h3 {
+    max-width: 98%;
+    color: var(--color-text-primary);
+    font-family: "Crimson Pro", serif;
+    font-size: 24px;
+    line-height: 1.15;
+    font-weight: 800;
+    margin-bottom: 18px;
+}
+
+.mission-card p {
+    max-width: 73%;
+    color: #c0c8f7;
+    font-size: 15px;
+    line-height: 1.5;
+    font-weight: 800;
+}
+
+.mission-card p strong {
+    color: #60a9ff;
+}
+
+.mission-card-rewards {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    display: flex;
+    gap: 8px;
+}
+
+.mission-card-rewards span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 30px;
+    line-height: 1;
+    padding: 0 10px;
+    border: 1px solid rgba(122, 181, 255, .16);
+    border-radius: 8px;
+    background-color: rgba(16, 20, 45, .74);
+    color: #cbd8ff;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.mission-card-rewards img {
+    display: block;
+    flex: 0 0 auto;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.mission-card > img {
+    position: absolute;
+    right: 2px;
+    bottom: 1px;
+    z-index: 1;
+    width: 145px;
+    height: 145px;
+    object-fit: contain;
+    filter: drop-shadow(0 16px 14px rgba(6, 8, 20, .38));
+}
+
+/************************* MOTION *************************/
+
+.motion-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+}
+
+.motion-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+.btn {
+    transition:
+        transform .25s cubic-bezier(.16, 1, .3, 1),
+        box-shadow .25s ease,
+        background-color .25s ease,
+        border-color .25s ease,
+        color .25s ease;
+}
+
+.btn:hover:not([disabled]) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(10, 12, 28, .18);
+}
+
+.btn:active:not([disabled]) {
+    transform: translateY(0) scale(.985);
+    box-shadow: 0 6px 14px rgba(10, 12, 28, .16);
+}
+
+.site-nav-panel.is-open .site-nav-panel-shell,
+.news-modal:not([hidden]) .news-modal__dialog {
+    animation: motionModalIn .34s cubic-bezier(.16, 1, .3, 1);
+}
+
+.news-modal:not([hidden]) .news-modal__backdrop {
+    animation: motionBackdropIn .26s ease;
+}
+
+.home-hero-media::before {
+    display: none;
+}
+
+.home-hero-media:hover::before {
+    display: none;
+}
+
+.home-hero-image {
+    transition: transform .9s cubic-bezier(.16, 1, .3, 1);
+}
+
+.home-hero-media:hover .home-hero-image {
+    transform: scale(1.035);
+}
+
+.almanax-shell,
+.guild-vote-card,
+.guild-news-featured {
+    transition: border-color .25s, box-shadow .25s, transform .25s;
+}
+
+.almanax-shell:hover,
+.almanax-shell:focus-within,
+.guild-vote-card:hover,
+.guild-vote-card:focus-within,
+.guild-news-featured:hover {
+    transform: translate(-2px, -2px);
+}
+
+.almanax-shell:hover,
+.almanax-shell:focus-within {
+    border-color: #3a4894;
+    box-shadow: 11px 11px 0 rgba(28, 31, 67, .92);
+}
+
+.guild-vote-card:hover,
+.guild-vote-card:focus-within {
+    border-color: #36408a;
+    box-shadow: 0 16px 34px rgba(10, 12, 28, .26);
+}
+
+.guild-news-featured:hover {
+    box-shadow: 14px 14px 0 rgba(28, 31, 67, .95);
+}
+
+.almanax-tab:hover,
+.guild-vote-day:hover {
+    box-shadow: 0 10px 20px rgba(12, 17, 40, .2);
+}
+
+.guild-news-link {
+    position: relative;
+    z-index: 1;
+}
+
+.guild-news-link--button {
+    transition: color .25s ease, transform .25s ease, letter-spacing .25s ease;
+}
+
+.guild-news-link--button:hover {
+    transform: translateX(2px);
+    letter-spacing: .08em;
+}
+
+.mission-card-badge,
+.mission-card > img {
+    transition: transform .35s cubic-bezier(.16, 1, .3, 1), filter .35s ease;
+}
+
+.mission-card:hover .mission-card-badge {
+    transform: translateY(-3px);
+}
+
+.mission-card:hover > img {
+    transform: translate(-4px, -4px) scale(1.04);
+    filter: drop-shadow(0 18px 18px rgba(6, 8, 20, .42));
+}
+
+.guild-vote-feedback,
+.guild-vote-slot,
+.almanax-panel,
+.guild-vote-meta-card strong {
+    transform-origin: center;
+}
+
+.is-flash {
+    animation: motionPulseSoft .42s cubic-bezier(.22, 1, .36, 1);
+}
+
+.is-flash-metric {
+    animation: motionMetricPulse .44s cubic-bezier(.22, 1, .36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .motion-reveal,
+    .motion-reveal.is-visible {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .btn,
+    .almanax-shell,
+    .guild-vote-card,
+    .guild-news-featured,
+    .guild-news-card,
+    .mission-card,
+    .almanax-tab,
+    .guild-vote-day,
+    .guild-news-link--button,
+    .site-nav-panel-shell,
+    .news-modal__dialog,
+    .news-modal__backdrop,
+    .home-hero-image,
+    .mission-card-badge,
+    .mission-card > img {
+        animation: none;
+        transition: none;
+    }
+
+    .home-hero-media::before {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .site-header {
+        position: static;
+    }
+
+    .site-header-bar {
+        justify-content: space-between;
+        padding: 12px 0 16px;
+    }
+
+    .site-menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 51;
+    }
+
+    .site-nav-panel {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(10, 12, 28, .56);
+        backdrop-filter: blur(14px);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity .25s ease, visibility .25s ease;
+    }
+
+    .site-nav-panel.is-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .site-nav-panel-shell {
+        width: min(100%, 460px);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
+        padding: 28px 24px;
+        border: 1px solid #30356d;
+        border-radius: 24px;
+        background: linear-gradient(180deg, rgba(24, 27, 59, .84), rgba(27, 30, 61, .96));
+        box-shadow: 16px 16px 0 rgba(20, 23, 49, .72);
+    }
+
+    .site-nav-panel .site-nav {
+        width: 100%;
+        margin: 0;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .site-nav-panel .site-nav ul {
+        width: 100%;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .site-nav-panel .site-nav a {
+        width: 100%;
+        gap: 12px;
+        padding: 4px 0;
+        font-size: 22px;
+    }
+
+    .site-nav-panel .site-nav a i {
+        width: 20px;
+        font-size: 17px;
+        text-align: center;
+    }
+
+    .site-nav-panel .site-nav--account ul {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .site-nav-panel .site-nav--account a {
+        width: auto;
+    }
+
+    .site-nav-panel .account-action--admin {
+        padding-left: 16px;
+    }
+
+    body.is-nav-open .site-menu-toggle {
+        position: fixed;
+        top: 18px;
+        right: 16px;
+    }
+
+    .home-hero {
+        padding-top: 30px;
+    }
+
+    .home-hero-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        padding-top: 32px;
+    }
+
+    .home-hero-content h1 {
+        font-size: 56px;
+    }
+
+    .home-hero-media {
+        min-height: 340px;
+    }
+
+    .page-hero h1 {
+        font-size: 52px;
+    }
+
+    .home-section-head--split {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .home-section-copy {
+        max-width: 100%;
+    }
+
+    .guild-news-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .guild-news-featured h3,
+    .guild-news-featured p {
+        max-width: none;
+    }
+
+    .news-modal__dialog h3 {
+        max-width: none;
+    }
+
+    .home-section-head h2 {
+        font-size: 50px;
+    }
+
+    .mission-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mission-card {
+        min-height: 230px;
+        padding: 86px 18px 68px;
+        box-shadow: 10px 10px 0 rgba(28, 31, 67, .95);
+    }
+
+    .mission-card h3,
+    .mission-card p {
+        max-width: none;
+    }
+
+    .mission-card p {
+        padding-right: 112px;
+    }
+
+}
+
+@media screen and (max-width: 640px) {
+    .site-header-bar {
+        gap: 14px;
+        padding-bottom: 18px;
+    }
+
+    .site-logo img {
+        margin-bottom: 16px;
+    }
+
+    .site-nav-panel {
+        padding: 16px;
+    }
+
+    .site-nav-panel-shell {
+        width: 100%;
+        gap: 20px;
+        padding: 24px 18px 20px;
+        border-radius: 20px;
+        box-shadow: 10px 10px 0 rgba(20, 23, 49, .64);
+    }
+
+    .site-nav-panel .site-nav ul {
+        gap: 12px;
+    }
+
+    .site-nav-panel .site-nav a {
+        font-size: 19px;
+    }
+
+    .home-hero-content h1 {
+        font-size: 40px;
+    }
+
+    .home-hero-content p {
+        font-size: 17px;
+    }
+
+    .home-hero-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .home-hero-media {
+        min-height: 220px;
+    }
+
+    .page-hero {
+        padding: 126px 0 42px;
+    }
+
+    .page-hero h1 {
+        font-size: 42px;
+    }
+
+    .page-hero p {
+        font-size: 15px;
+    }
+
+    .home-almanax {
+        padding: 16px 0 64px;
+        background-color: #1b1e3d;
+    }
+
+    .home-section-head h2 {
+        font-size: 40px;
+    }
+
+    .section-kicker {
+        margin-bottom: 10px;
+        font-size: 11px;
+    }
+
+    .home-section-copy {
+        font-size: 15px;
+    }
+
+    .guild-news-featured,
+    .guild-news-card {
+        box-shadow: 6px 6px 0 rgba(27, 30, 61, .95);
+    }
+
+    .guild-news-featured {
+        padding: 20px 16px 18px;
+    }
+
+    .guild-news-meta-row {
+        margin-bottom: 14px;
+    }
+
+    .guild-news-featured h3 {
+        font-size: 34px;
+    }
+
+    .guild-news-featured p,
+    .guild-news-card p {
+        font-size: 15px;
+    }
+
+    .guild-news-card h3 {
+        font-size: 21px;
+    }
+
+    .news-modal__dialog {
+        width: min(calc(100% - 24px), 760px);
+        max-height: calc(100vh - 24px);
+        margin: 10px auto;
+        padding: 22px 18px 20px;
+        box-shadow: 10px 10px 0 rgba(20, 23, 49, .95);
+    }
+
+    .news-modal__meta {
+        margin-bottom: 14px;
+        padding-right: 50px;
+    }
+
+    .news-modal__close {
+        top: 14px;
+        right: 14px;
+        width: 38px;
+        height: 38px;
+    }
+
+    .news-modal__dialog h3 {
+        max-width: none;
+        font-size: 32px;
+    }
+
+    .news-modal__content p,
+    .news-modal__content li {
+        font-size: 15px;
+    }
+
+    .mission-card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mission-card {
+        min-height: 240px;
+        padding: 84px 16px 60px;
+        box-shadow: 7px 7px 0 rgba(28, 31, 67, .95);
+    }
+
+    .mission-card h3,
+    .mission-card p {
+        max-width: none;
+    }
+
+    .mission-card p {
+        padding-right: 84px;
+        font-size: 15px;
+    }
+
+    .mission-card > img {
+        right: 8px;
+        bottom: 8px;
+        width: 96px;
+        height: 96px;
+    }
+
+}
+
+@media screen and (max-width: 1100px) {
+    .home-overview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .home-overview .home-section-head h2 {
+        font-size: 50px;
+    }
+
+    .home-overview .guild-news-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .home-overview .guild-news-featured h3 {
+        font-size: 42px;
+    }
+
+    .home-overview .almanax-panel {
+        min-height: 256px;
+    }
+
+    .home-almanax {
+        padding: 12px 0 62px;
+    }
+
+    .home-section-head.home-section-head--compact {
+        margin-bottom: 16px;
+    }
+
+    .almanax-shell {
+        padding: 18px;
+    }
+
+    .almanax-panel {
+        min-height: 256px;
+    }
+
+    .almanax-shell__headline h3 {
+        font-size: 28px;
+    }
+
+    .almanax-panel__layout {
+        grid-template-columns: 1fr;
+    }
+
+    .almanax-panel__description {
+        max-width: none;
+    }
+
+    .home-outings {
+        padding: 50px 0 72px;
+    }
+
+    .guild-vote-card {
+        padding: 20px;
+        box-shadow: 0 8px 20px rgba(10, 12, 28, .2);
+    }
+
+    .guild-vote-card__head {
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .guild-vote-card__meta {
+        width: min(100%, 470px);
+    }
+
+    .guild-vote-panel__top {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+}
+
+@media screen and (max-width: 640px) {
+    .home-overview {
+        padding: 42px 0 56px;
+    }
+
+    .home-overview-grid {
+        gap: 42px;
+    }
+
+    .home-overview .home-section-head h2 {
+        font-size: 40px;
+    }
+
+    .home-overview .guild-news-featured h3 {
+        font-size: 32px;
+    }
+
+    .home-overview .almanax-panel {
+        min-height: 320px;
+    }
+
+    .home-almanax {
+        padding: 10px 0 54px;
+    }
+
+    .home-section-head.home-section-head--compact {
+        margin-bottom: 14px;
+    }
+
+    .almanax-shell {
+        padding: 16px 14px;
+        box-shadow: 7px 7px 0 rgba(28, 31, 67, .92);
+    }
+
+    .almanax-tabs {
+        min-height: 44px;
+    }
+
+    .almanax-panel {
+        min-height: 320px;
+    }
+
+    .almanax-shell__top {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 12px;
+    }
+
+    .almanax-shell__headline h3 {
+        font-size: 26px;
+    }
+
+    .almanax-shell__status {
+        padding: 7px 11px;
+    }
+
+    .almanax-tab {
+        min-width: 112px;
+        padding: 8px 11px;
+    }
+
+    .almanax-tab span {
+        font-size: 10px;
+    }
+
+    .almanax-tab strong {
+        font-size: 13px;
+    }
+
+    .almanax-panel__title {
+        font-size: 28px;
+        margin-bottom: 0;
+    }
+
+    .almanax-panel__title-row {
+        gap: 10px;
+        margin-bottom: 7px;
+    }
+
+    .almanax-panel__subtitle {
+        font-size: 11px;
+    }
+
+    .almanax-bonus-badge {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        font-size: 14px;
+    }
+
+    .almanax-panel__description {
+        font-size: 15px;
+    }
+
+    .almanax-panel__stats {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .almanax-stat-card {
+        padding: 10px 11px;
+    }
+
+    .almanax-stat-card strong {
+        font-size: 15px;
+    }
+
+    .almanax-offering {
+        padding: 12px;
+    }
+
+    .almanax-offering__body {
+        grid-template-columns: 40px minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .almanax-offering__image {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+    }
+
+    .almanax-offering__content strong {
+        font-size: 15px;
+    }
+
+    .almanax-offering__recipe-toggle {
+        font-size: 11px;
+    }
+
+    .almanax-recipe-chip {
+        min-height: 23px;
+        font-size: 11px;
+    }
+
+    .home-outings {
+        padding: 54px 0;
+    }
+
+    .guild-vote-feedback {
+        padding: 12px 14px;
+        font-size: 15px;
+    }
+
+    .guild-vote-card {
+        padding: 16px 14px;
+        box-shadow: 0 6px 16px rgba(10, 12, 28, .18);
+    }
+
+    .guild-vote-card__intro h2,
+    .guild-vote-card__intro h3 {
+        font-size: 28px;
+    }
+
+    .guild-vote-card__intro p {
+        font-size: 15px;
+    }
+
+    .guild-vote-card__meta {
+        gap: 10px 14px;
+        width: 100%;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .guild-vote-meta-card {
+        padding-left: 10px;
+    }
+
+    .guild-vote-meta-card strong {
+        font-size: 15px;
+    }
+
+    .guild-vote-days {
+        gap: 8px;
+    }
+
+    .guild-vote-day {
+        min-width: 98px;
+        min-height: 56px;
+        padding: 10px 12px;
+        border-radius: 11px;
+    }
+
+    .guild-vote-day strong {
+        font-size: 16px;
+    }
+
+    .guild-vote-panel {
+        padding-top: 12px;
+        gap: 12px;
+    }
+
+    .guild-vote-panel__title {
+        font-size: 22px;
+    }
+
+    .guild-vote-slot-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .guild-vote-slot__button {
+        min-height: 116px;
+        padding: 14px;
+    }
+
+    .guild-vote-slot__time {
+        font-size: 28px;
+    }
+
+    .guild-vote-slot__count {
+        font-size: 12px;
+    }
+
+    .guild-vote-slot__members {
+        padding: 0 14px 14px;
+        font-size: 13px;
+    }
+
+    .guild-vote-slot.is-selected::after,
+    .guild-vote-slot.is-confirmed::after {
+        top: 10px;
+        right: 10px;
+        min-height: 22px;
+        font-size: 10px;
+    }
+
+    .guild-vote-actions {
+        gap: 10px;
+    }
+
+    .guild-vote-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

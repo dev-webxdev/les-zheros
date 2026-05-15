@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Zheros | Guilde Dofus</title>
+    <meta name="description" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/main.js" defer></script>
+</head>
+<body class="home-page">
+    <header class="site-header">
+        <div class="container">
+            <div class="site-header-bar">
+                <a class="site-logo" href="index.html"><img src="assets/img/logo.png" alt=""></a>
+
+                <button class="site-menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav-panel" aria-label="Ouvrir le menu" data-nav-toggle>
+                    <span class="site-menu-toggle-line"></span>
+                    <span class="site-menu-toggle-line"></span>
+                    <span class="site-menu-toggle-line"></span>
+                </button>
+
+                <div class="site-nav-panel" id="site-nav-panel" data-nav>
+                    <div class="site-nav-panel-shell">
+                        <nav class="site-nav site-nav--main" aria-label="Navigation principale">
+                            <ul>
+                                <li class="is-active"><a href="index.html"><i class="fa-solid fa-house"></i><span>Accueil</span></a></li>
+                                <li><a href="sorties.html"><i class="fa-solid fa-users"></i><span>Sorties</span></a></li>
+                                <li><a href="missions.html"><i class="fa-solid fa-scroll"></i><span>Missions</span></a></li>
+                            </ul>
+                        </nav>
+                        <nav class="site-nav site-nav--account" aria-label="Navigation du compte">
+                            <ul>
+                                <li><a href="profil.html"><i class="fa-solid fa-user"></i><span>Adon</span></a></li>
+                                <li class="account-action account-action--admin"><a href="admin.html" aria-label="Administration du site" title="Administration du site"><i class="fa-solid fa-user-shield"></i></a></li>
+                                <li class="account-action account-action--logout"><a href="login.html" aria-label="Déconnexion" title="Déconnexion"><i class="fa-solid fa-right-from-bracket"></i></a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="home-hero">
+            <div class="container home-hero-grid">
+                <div class="home-hero-content">
+                    <h1>Bienvenue sur le site des <span>Z&#39;Heros</span> !</h1>
+                    <p>Chers mercenaires, l&#39;accueil garde les infos à consulter vite: Almanax et annonces de guilde. Les parties plus pratiques, comme les sorties et les missions, ont maintenant leur propre page pour éviter les grands allers-retours.</p>
+                    <div class="home-hero-actions">
+                        <a class="btn btn--primary" href="sorties.html">Voir les sorties</a>
+                        <a class="btn btn--outline" href="missions.html">Voir les missions</a>
+                    </div>
+                </div>
+
+                <div class="home-hero-media">
+                    <img class="home-hero-image" src="assets/img/divers/hall-guilde.png" alt="Hall de guilde">
+                </div>
+            </div>
+        </section>
+
+        <section class="home-overview">
+            <div class="container home-overview-grid">
+                <section class="home-almanax" id="almanax">
+                    <div class="home-section-head home-section-head--split home-section-head--compact">
+                        <div>
+                            <h2>Almanax des <span>2 semaines</span></h2>
+                        </div>
+                    </div>
+
+                    <section class="almanax-shell" aria-label="Almanax des 2 semaines" data-almanax data-almanax-language="fr" data-almanax-timezone="Europe/Paris" data-almanax-days="14" data-almanax-level="200">
+                        <div class="almanax-shell__top">
+                            <div class="almanax-shell__headline">
+                                <span class="guild-news-tag guild-news-tag--event">Almanax en direct</span>
+                                <h3 data-almanax-range hidden>Semaine en cours</h3>
+                            </div>
+
+                            <div class="almanax-shell__status" aria-live="polite">
+                                <strong data-almanax-current>1</strong>
+                                <span data-almanax-total>/7</span>
+                            </div>
+                        </div>
+
+                        <div class="almanax-tabs" data-almanax-tabs aria-label="Jours de l&#39;almanax"></div>
+                        <div class="almanax-panel" data-almanax-panel aria-live="polite"></div>
+                        <p class="almanax-feedback" data-almanax-feedback hidden>Chargement de l&#39;Almanax...</p>
+                    </section>
+                </section>
+
+                <section class="home-news" id="annonces">
+                    <div class="home-section-head">
+                        <h2>Annonces de <span>guilde</span></h2>
+                    </div>
+
+                    <div class="guild-news-layout">
+                        <article class="guild-news-featured guild-news-featured--priority">
+                            <div class="guild-news-meta-row">
+                                <span class="guild-news-tag guild-news-tag--priority">Prioritaire</span>
+                                <time datetime="2026-05-08">8 mai 2026</time>
+                            </div>
+                            <h3>Briefing de la semaine des mercenaires</h3>
+                            <p>Les capitaines relancent les sorties Frigost et les missions d&#39;exp&eacute;dition. Pensez &agrave; signaler vos disponibilit&eacute;s avant jeudi soir pour former les groupes sans attendre la derni&egrave;re minute.</p>
+                        </article>
+
+                        <div class="guild-news-stack">
+                            <article class="guild-news-card guild-news-card--event">
+                                <div class="guild-news-meta-row">
+                                    <span class="guild-news-tag guild-news-tag--event">Event</span>
+                                    <time datetime="2026-05-10">10 mai 2026</time>
+                                </div>
+                                <h3>Recrutement des &eacute;quipes Songes</h3>
+                                <p>Deux groupes sont en pr&eacute;paration pour le week-end. Il reste des places pour les joueurs disponibles samedi soir.</p>
+                                <button class="guild-news-link guild-news-link--button" type="button" aria-haspopup="dialog" aria-controls="news-modal" data-news-source="news-songes">Voir plus</button>
+                            </article>
+
+                            <article class="guild-news-card guild-news-card--logistique">
+                                <div class="guild-news-meta-row">
+                                    <span class="guild-news-tag guild-news-tag--logistique">Organisation</span>
+                                    <time datetime="2026-05-12">12 mai 2026</time>
+                                </div>
+                                <h3>Rappel sur les preuves de mission</h3>
+                                <p>Les screens et logs doivent &ecirc;tre d&eacute;pos&eacute;s le soir m&ecirc;me pour acc&eacute;l&eacute;rer la validation et le classement hebdomadaire.</p>
+                                <button class="guild-news-link guild-news-link--button" type="button" aria-haspopup="dialog" aria-controls="news-modal" data-news-source="news-preuves">Voir plus</button>
+                            </article>
+
+                            <article class="guild-news-card guild-news-card--info">
+                                <div class="guild-news-meta-row">
+                                    <span class="guild-news-tag guild-news-tag--info">Info</span>
+                                    <time datetime="2026-05-14">14 mai 2026</time>
+                                </div>
+                                <h3>Canal annonces remis au propre</h3>
+                                <p>On garde ici uniquement les sorties, votes, rappels importants et infos utiles pour que la lecture reste rapide.</p>
+                                <button class="guild-news-link guild-news-link--button" type="button" aria-haspopup="dialog" aria-controls="news-modal" data-news-source="news-canal">Voir plus</button>
+                            </article>
+                        </div>
+                    </div>
+
+                    <div class="news-modal-source" id="news-songes" hidden>
+                        <p>Deux groupes sont en pr&eacute;paration pour le week-end. Il reste des places pour les joueurs disponibles samedi soir.</p>
+                        <p>Le d&eacute;part est pr&eacute;vu samedi &agrave; 20h45. Merci de confirmer votre classe, votre r&ocirc;le et votre disponibilit&eacute; avant vendredi 20h pour que le chef de sortie finalise les compositions.</p>
+                        <p>Si vous &ecirc;tes motiv&eacute;s mais encore en pr&eacute;paration de stuff, signalez-vous quand m&ecirc;me. On ajustera les &eacute;quipes selon les besoins du groupe.</p>
+                    </div>
+                    <div class="news-modal-source" id="news-preuves" hidden>
+                        <p>Les screens et logs doivent &ecirc;tre d&eacute;pos&eacute;s le soir m&ecirc;me pour acc&eacute;l&eacute;rer la validation et le classement hebdomadaire.</p>
+                        <p>Le plus simple reste de poster une capture propre avec le r&eacute;sultat de fin, la composition du groupe et le nom de la mission dans le salon pr&eacute;vu sur Discord.</p>
+                        <p>Les preuves envoy&eacute;es tardivement risquent de d&eacute;caler la validation des points et de ralentir la mise &agrave; jour du classement de guilde.</p>
+                    </div>
+                    <div class="news-modal-source" id="news-canal" hidden>
+                        <p>On garde ici uniquement les sorties, votes, rappels importants et infos utiles pour que la lecture reste rapide.</p>
+                        <p>Les discussions g&eacute;n&eacute;rales, demandes ponctuelles et petites questions passent sur les autres salons. Comme &ccedil;a, chaque membre retrouve les vraies annonces en quelques secondes.</p>
+                        <p>Si vous postez une nouvelle information importante, pensez &agrave; la dater clairement et &agrave; donner l&#39;action attendue: r&eacute;pondre, voter, se positionner ou simplement lire.</p>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <div class="news-modal" id="news-modal" hidden>
+        <div class="news-modal__backdrop" data-news-close></div>
+        <div class="news-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="news-modal-title">
+            <button class="news-modal__close" type="button" aria-label="Fermer l'annonce" data-news-close>
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="news-modal__meta">
+                <span class="guild-news-tag news-modal__tag" id="news-modal-tag"></span>
+                <time id="news-modal-date"></time>
+            </div>
+            <h3 id="news-modal-title"></h3>
+            <div class="news-modal__content" id="news-modal-content"></div>
+        </div>
+    </div>
+</body>
+</html>
+
