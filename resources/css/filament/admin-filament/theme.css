@@ -1,0 +1,365 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+@layer base {
+    :root {
+        --font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+        --admin-background: #ffffff;
+        --admin-text: oklch(0.13 0.028 261.692);
+        --admin-card: #ffffff;
+        --admin-primary: #4869ee;
+        --admin-primary-darken: #0e2cb1;
+        --admin-primary-foreground: oklch(0.99 0.02 95);
+        --admin-muted: oklch(0.967 0.003 264.542);
+        --admin-muted-foreground: oklch(0.551 0.027 264.364);
+        --admin-border: oklch(0.928 0.006 264.531);
+        --admin-sidebar: #f7fafb;
+        --admin-sidebar-accent: rgba(213, 228, 237, 0.3);
+        --admin-sidebar-border: #d5e3ec;
+    }
+}
+
+@layer components {
+    .fi-body {
+        background: var(--admin-background);
+        color: var(--admin-text);
+        font-weight: 500;
+    }
+
+    .fi-layout {
+        min-height: 100vh;
+        background: var(--admin-background);
+    }
+
+    .fi-main-sidebar {
+        width: 250px;
+        min-height: 100vh;
+        padding: 18px 14px;
+        background: var(--admin-sidebar);
+        border-inline-end: 1px solid var(--admin-sidebar-border);
+        box-shadow: none;
+    }
+
+    .fi-sidebar-header-ctn {
+        border: 0;
+        background: transparent;
+    }
+
+    .fi-sidebar-header {
+        min-height: 38px;
+        padding: 0 10px;
+        border-bottom: 0;
+        background: transparent;
+    }
+
+    .fi-sidebar-header-logo-ctn {
+        gap: 10px;
+    }
+
+    .lz-filament-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 38px;
+        color: var(--admin-text);
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .lz-filament-brand img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+    }
+
+    .fi-logo,
+    .fi-brand {
+        color: var(--admin-text);
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .fi-sidebar-nav {
+        padding: 24px 0 0;
+    }
+
+    .fi-sidebar-nav-groups {
+        gap: 0;
+    }
+
+    .fi-sidebar-group {
+        gap: 0;
+    }
+
+    .fi-sidebar-group-btn {
+        min-height: auto;
+        margin: 22px 12px 8px;
+        padding: 0;
+        color: var(--admin-muted-foreground);
+        background: transparent;
+    }
+
+    .fi-sidebar-group-btn:hover {
+        background: transparent;
+    }
+
+    .fi-sidebar-group-collapse-btn,
+    .fi-sidebar-group-dropdown-trigger-btn {
+        display: none;
+    }
+
+    .fi-sidebar-group-label {
+        margin: 0;
+        color: var(--admin-muted-foreground);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0;
+        text-transform: none;
+    }
+
+    .fi-sidebar-item-btn {
+        min-height: 34px;
+        padding-inline: 12px;
+        border-radius: 2px;
+        color: color-mix(in oklab, var(--admin-text) 78%, transparent);
+        font-size: 14px;
+        font-weight: 500;
+        transition: background-color 120ms ease, color 120ms ease;
+    }
+
+    .fi-sidebar-item-icon {
+        width: 16px;
+        color: var(--admin-muted-foreground);
+        font-size: 13px;
+    }
+
+    .fi-sidebar-item-btn:hover {
+        background: var(--admin-sidebar-accent);
+        color: color-mix(in oklab, var(--admin-text) 78%, transparent);
+    }
+
+    .fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+        background: var(--admin-sidebar-accent);
+        color: var(--admin-primary);
+        box-shadow: none;
+    }
+
+    .fi-sidebar-item.fi-active .fi-sidebar-item-icon,
+    .fi-sidebar-item-btn:hover .fi-sidebar-item-icon {
+        color: var(--admin-primary);
+    }
+
+    .lz-filament-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        min-height: 57px;
+        padding-inline: 24px 18px;
+        border-bottom: 1px solid var(--admin-border);
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: none;
+        backdrop-filter: blur(10px);
+    }
+
+    .lz-filament-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        min-width: 0;
+        color: var(--admin-muted-foreground);
+        font-size: 14px;
+    }
+
+    .lz-filament-breadcrumb span {
+        width: 1px;
+        height: 20px;
+        background: var(--admin-border);
+    }
+
+    .lz-filament-menu-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border: 0;
+        border-radius: 5px;
+        background: transparent;
+        color: var(--admin-text);
+        cursor: default;
+    }
+
+    .lz-filament-menu-button svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .fi-main-ctn {
+        min-height: 100vh;
+        background: transparent;
+    }
+
+    .fi-main {
+        width: 100%;
+        max-width: none;
+        padding: 42px 34px 48px;
+    }
+
+    .fi-header-heading {
+        color: var(--admin-text);
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: 0;
+    }
+
+    .fi-header-heading::before {
+        color: var(--admin-primary);
+    }
+
+    .fi-breadcrumbs ol li,
+    .fi-header-subheading {
+        color: var(--admin-muted-foreground);
+        font-size: 14px;
+    }
+
+    .fi-section,
+    .fi-ta-ctn {
+        border: 1px solid var(--admin-border);
+        border-radius: 6px;
+        background: var(--admin-card);
+        box-shadow: none;
+    }
+
+    .fi-ta-header,
+    .fi-ta-header-toolbar {
+        background: var(--admin-card);
+    }
+
+    .fi-ta-header-toolbar {
+        min-height: 47px;
+    }
+
+    .fi-ta-table thead {
+        background: var(--admin-muted);
+    }
+
+    .fi-ta-table th {
+        height: 47px;
+        color: var(--admin-text);
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .fi-ta-row {
+        height: 60px;
+    }
+
+    .fi-ta-cell {
+        border-bottom-color: var(--admin-border);
+        color: color-mix(in oklab, var(--admin-text) 78%, transparent);
+        font-size: 14px;
+    }
+
+    .fi-ta-row:hover {
+        background: var(--admin-muted);
+    }
+
+    .fi-ta-text,
+    .fi-ta-text-item-label,
+    .fi-ta-placeholder {
+        font-size: 14px;
+    }
+
+    .fi-ac {
+        gap: 8px;
+    }
+
+    .fi-ta-actions .fi-icon-btn {
+        width: 34px;
+        min-width: 34px;
+        height: 34px;
+        border-radius: 7px;
+        background: #f3f5f9;
+        color: #64748b;
+        box-shadow: none;
+        transition: background-color 120ms ease, color 120ms ease;
+        gap: 21px;
+    }
+
+    .fi-ta-actions .fi-icon-btn:hover {
+        background: #e9eef6;
+        color: var(--admin-primary);
+    }
+
+    .fi-ta-actions .fi-icon-btn.fi-color-danger,
+    .fi-ta-actions .fi-icon-btn.fi-color-danger .fi-icon {
+        color: #64748b;
+    }
+
+    .fi-ta-actions .fi-icon-btn.fi-color-danger:hover,
+    .fi-ta-actions .fi-icon-btn.fi-color-danger:hover .fi-icon {
+        background: #fff1f2;
+        color: #ef4444;
+    }
+
+    .fi-ta-actions .fi-icon-btn .fi-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .fi-btn.fi-color-primary {
+        min-height: 34px;
+        border-radius: 7px;
+        background: var(--admin-primary);
+        color: var(--admin-primary-foreground);
+        font-size: 14px;
+        font-weight: 700;
+        box-shadow: 0 5px 14px color-mix(in srgb, var(--admin-primary) 22%, transparent);
+    }
+
+    .fi-btn.fi-color-primary:hover {
+        background: var(--admin-primary-darken);
+    }
+
+    .fi-input-wrp,
+    .fi-select-input,
+    .fi-fo-field-wrp input,
+    .fi-fo-field-wrp textarea {
+        min-height: 32px;
+        border-radius: 5px;
+        font-size: 13px;
+    }
+
+    .fi-fo-field-wrp-label span {
+        color: color-mix(in oklab, var(--admin-text) 68%, transparent);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    .fi-badge {
+        min-height: 22px;
+        border-radius: 3px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .fi-pagination {
+        color: var(--admin-muted-foreground);
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    @media (max-width: 980px) {
+        .fi-main {
+            padding: 28px 18px 34px;
+        }
+    }
+}
