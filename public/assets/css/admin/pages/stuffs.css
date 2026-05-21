@@ -1,0 +1,104 @@
+.admin-stuffs {
+    display: grid;
+    gap: 16px;
+}
+
+.admin-stuff-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.admin-stuff-form-grid .admin-field--full {
+    grid-column: 1 / -1;
+}
+
+.admin-stuff-form-grid textarea {
+    min-height: 104px;
+}
+
+.admin-check-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: color-mix(in oklab, var(--admin-text) 72%, transparent);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.admin-check-field input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--admin-primary);
+}
+
+.admin-table--stuffs {
+    min-width: 1080px;
+}
+
+.admin-table--stuffs th:nth-child(1),
+.admin-table--stuffs td:nth-child(1) {
+    width: 48px;
+    text-align: center;
+}
+
+.admin-table--stuffs th:nth-child(2),
+.admin-table--stuffs td:nth-child(2),
+.admin-table--stuffs th:nth-child(3),
+.admin-table--stuffs td:nth-child(3),
+.admin-table--stuffs th:nth-child(4),
+.admin-table--stuffs td:nth-child(4),
+.admin-table--stuffs th:nth-child(5),
+.admin-table--stuffs td:nth-child(5),
+.admin-table--stuffs th:nth-child(6),
+.admin-table--stuffs td:nth-child(6) {
+    width: 15%;
+}
+
+.admin-table--stuffs th:nth-child(7),
+.admin-table--stuffs td:nth-child(7) {
+    width: 240px;
+}
+
+.admin-stuff-actions {
+    justify-content: center;
+}
+
+.admin-stuff-publish-card {
+    justify-self: end;
+    width: min(100%, 240px);
+}
+
+.admin-stuff-element-picker {
+    align-content: start;
+}
+
+.admin-stuff-element-picker__choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.admin-stuff-element-picker__choices button {
+    min-height: 34px;
+    padding: 0 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 999px;
+    background: var(--admin-card);
+    color: var(--admin-muted-foreground);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: border-color .18s, background .18s, color .18s;
+}
+
+.admin-stuff-element-picker__choices button:hover,
+.admin-stuff-element-picker__choices button:focus-visible,
+.admin-stuff-element-picker__choices button.is-active {
+    border-color: var(--admin-primary);
+    background: color-mix(in srgb, var(--admin-primary) 12%, var(--admin-card));
+    color: var(--admin-primary);
+}

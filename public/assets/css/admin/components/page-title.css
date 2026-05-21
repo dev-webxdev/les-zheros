@@ -1,0 +1,17 @@
+.admin-secondary-button.is-active {
+    border-color: color-mix(in srgb, var(--admin-primary) 45%, var(--admin-border));
+    background: color-mix(in srgb, var(--admin-primary) 10%, var(--admin-card));
+    color: var(--admin-primary);
+}
+
+.admin-title i {
+    color: var(--admin-primary);
+    font-size: 18px;
+}
+
+.admin-title h1 {
+    color: var(--admin-text);
+    font-size: 24px;
+    font-weight: 800;
+}
+

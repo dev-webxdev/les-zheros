@@ -1,0 +1,36 @@
+.admin-content {
+    padding: 42px 34px 48px;
+}
+
+.admin-content--editor {
+    padding-top: 26px;
+    padding-right: 18px;
+    padding-left: 34px;
+}
+
+.admin-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.admin-title--split {
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 22px;
+}
+
+.admin-title--split > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-title--split > p {
+    max-width: 560px;
+    color: var(--admin-muted-foreground);
+    font-size: 14px;
+    line-height: 1.55;
+}
+

@@ -1,0 +1,58 @@
+.admin-tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    margin: 2px 4px 2px 0;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: var(--admin-muted);
+    color: color-mix(in oklab, var(--admin-text) 62%, transparent);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-tag--primary {
+    background: color-mix(in srgb, var(--admin-primary) 10%, var(--admin-card));
+    color: var(--admin-primary);
+}
+
+.admin-tag--success {
+    background: color-mix(in srgb, var(--admin-success) 14%, var(--admin-card));
+    color: color-mix(in srgb, var(--admin-success) 70%, #047857);
+}
+
+.admin-tag--danger {
+    background: color-mix(in srgb, var(--admin-danger) 10%, var(--admin-card));
+    color: var(--admin-danger);
+}
+
+.admin-tag--warning {
+    background: color-mix(in srgb, var(--admin-warning) 14%, var(--admin-card));
+    color: color-mix(in srgb, var(--admin-warning) 82%, #92400e);
+}
+
+.admin-tag--violet {
+    background: color-mix(in srgb, #7c3aed 10%, var(--admin-card));
+    color: #7c3aed;
+}
+
+.admin-tag--teal {
+    background: color-mix(in srgb, #0f766e 12%, var(--admin-card));
+    color: #0f766e;
+}
+
+.admin-tag--pink {
+    background: color-mix(in srgb, #db2777 10%, var(--admin-card));
+    color: #be185d;
+}
+
+.admin-tag--sky {
+    background: color-mix(in srgb, #0284c7 10%, var(--admin-card));
+    color: #0369a1;
+}
+
+.admin-tag--neutral {
+    background: var(--admin-muted);
+    color: color-mix(in oklab, var(--admin-text) 62%, transparent);
+}
+

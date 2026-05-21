@@ -1,0 +1,364 @@
+.admin-table-card {
+    overflow: hidden;
+    border-radius: 6px;
+    background: var(--admin-card);
+}
+
+.admin-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 14px;
+}
+
+.admin-pagination--pager {
+    gap: 10px;
+}
+
+.admin-pagination__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 28px;
+    border: 0;
+    background: transparent;
+    color: #64748b;
+    font-size: 13px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.admin-pagination__arrow.is-disabled,
+.admin-pagination__arrow:disabled {
+    color: #cbd5e1;
+    cursor: default;
+}
+
+.admin-pagination__current {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 28px;
+    padding: 0 8px;
+    border: 1px solid #d8e0f0;
+    border-radius: 7px;
+    background: #fff;
+    color: #1f2937;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.admin-pagination__meta {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.admin-pagination__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+    height: 30px;
+    padding: 0 9px;
+    border: 1px solid #d8e0f0;
+    border-radius: 7px;
+    background: #fff;
+    color: #42526a;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.admin-pagination__item.is-active {
+    border-color: #4c6fff;
+    background: #4c6fff;
+    color: #fff;
+}
+
+.admin-pagination__item.is-disabled {
+    color: #9aa7bc;
+    background: #f6f8fc;
+    cursor: default;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.admin-table tbody tr {
+    height: 60px;
+}
+
+.admin-table thead tr {
+    height: 47px;
+}
+
+.admin-table thead {
+    background: var(--admin-muted);
+}
+
+.admin-table th,
+.admin-table td {
+    height: 47px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--admin-border);
+    color: color-mix(in oklab, var(--admin-text) 78%, transparent);
+    font-size: 14px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.admin-table th {
+    color: var(--admin-text);
+    font-weight: 700;
+}
+
+.admin-table th:nth-child(1),
+.admin-table td:nth-child(1) {
+    width: 78px;
+}
+
+.admin-table th:nth-child(2),
+.admin-table td:nth-child(2) {
+    width: 31%;
+}
+
+.admin-table th:nth-child(5),
+.admin-table td:nth-child(5) {
+    width: 140px;
+    text-align: center;
+}
+
+.admin-table--users th:nth-child(1),
+.admin-table--users td:nth-child(1) {
+    width: 25%;
+}
+
+.admin-table--users th:nth-child(2),
+.admin-table--users td:nth-child(2) {
+    width: 31%;
+}
+
+.admin-table--users th:nth-child(3),
+.admin-table--users td:nth-child(3),
+.admin-table--users th:nth-child(4),
+.admin-table--users td:nth-child(4) {
+    width: 16%;
+}
+
+.admin-table--announcements th:nth-child(1),
+.admin-table--announcements td:nth-child(1) {
+    width: 42%;
+}
+
+.admin-table--announcements th:nth-child(2),
+.admin-table--announcements td:nth-child(2) {
+    width: 140px;
+}
+
+.admin-table--announcements th:nth-child(3),
+.admin-table--announcements td:nth-child(3),
+.admin-table--announcements th:nth-child(4),
+.admin-table--announcements td:nth-child(4) {
+    width: 170px;
+}
+
+.admin-table--users th:nth-child(5),
+.admin-table--users td:nth-child(5),
+.admin-table--announcements th:nth-child(5),
+.admin-table--announcements td:nth-child(5) {
+    width: 136px;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.admin-table--announcements-trash th:nth-child(1),
+.admin-table--announcements-trash td:nth-child(1) {
+    width: auto;
+}
+
+.admin-table--missions th:nth-child(5),
+.admin-table--missions td:nth-child(5) {
+    width: 156px;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.admin-table--actions-center .admin-row-actions {
+    justify-content: center;
+}
+
+.admin-table--gallery-trash th:nth-child(1),
+.admin-table--gallery-trash td:nth-child(1) {
+    width: 96px;
+}
+
+.admin-table--gallery-trash th:nth-child(3),
+.admin-table--gallery-trash td:nth-child(3) {
+    width: 170px;
+}
+
+.admin-table--gallery-trash th:nth-child(4),
+.admin-table--gallery-trash td:nth-child(4) {
+    width: 112px;
+    text-align: right;
+}
+
+.admin-table--roles th:nth-child(1),
+.admin-table--roles td:nth-child(1) {
+    width: 23%;
+}
+
+.admin-table--roles th:nth-child(2),
+.admin-table--roles td:nth-child(2) {
+    width: 49%;
+}
+
+.admin-table--roles th:nth-child(3),
+.admin-table--roles td:nth-child(3) {
+    width: 120px;
+}
+
+.admin-table--roles th:nth-child(4),
+.admin-table--roles td:nth-child(4) {
+    width: 112px;
+    text-align: right;
+}
+
+.admin-table--activity th,
+.admin-table--activity td {
+    padding-inline: 20px;
+}
+
+.admin-table--activity th:nth-child(1),
+.admin-table--activity td:nth-child(1) {
+    width: 170px;
+    white-space: nowrap;
+}
+
+.admin-table--activity th:nth-child(2),
+.admin-table--activity td:nth-child(2) {
+    width: 220px;
+}
+
+.admin-table--activity th:nth-child(3),
+.admin-table--activity td:nth-child(3) {
+    width: 130px;
+}
+
+.admin-table--activity th:nth-child(4),
+.admin-table--activity td:nth-child(4) {
+    width: 46%;
+}
+
+.admin-table--activity th:nth-child(5),
+.admin-table--activity td:nth-child(5) {
+    width: 24%;
+    text-align: left;
+}
+
+.admin-table--activity td:nth-child(4) span {
+    display: block;
+    margin-top: 3px;
+    color: color-mix(in oklab, var(--admin-text) 62%, transparent);
+    font-size: 12px;
+}
+
+.admin-table--notifications th:nth-child(1),
+.admin-table--notifications td:nth-child(1) {
+    width: 115px;
+}
+
+.admin-table--notifications th:nth-child(2),
+.admin-table--notifications td:nth-child(2) {
+    width: auto;
+}
+
+.admin-table--notifications th:nth-child(3),
+.admin-table--notifications td:nth-child(3) {
+    width: 135px;
+}
+
+.admin-table--notifications th:nth-child(4),
+.admin-table--notifications td:nth-child(4) {
+    width: 180px;
+    white-space: nowrap;
+}
+
+.admin-table--notifications th:nth-child(5),
+.admin-table--notifications td:nth-child(5) {
+    width: 110px;
+    text-align: center;
+}
+
+.admin-table--notifications td:nth-child(2) span {
+    display: block;
+    margin-top: 3px;
+    color: color-mix(in oklab, var(--admin-text) 62%, transparent);
+    font-size: 12px;
+}
+
+.admin-table--notifications tr.is-unread {
+    background: color-mix(in srgb, var(--admin-primary) 5%, transparent);
+}
+
+.admin-ranking-col-rank {
+    width: 82px;
+}
+
+.admin-ranking-col-player {
+    width: 360px;
+}
+
+.admin-ranking-col-small {
+    width: 120px;
+}
+
+.admin-ranking-col-points {
+    width: 190px;
+}
+
+.admin-table--ranking th,
+.admin-table--ranking td {
+    text-align: left;
+}
+
+.admin-table--ranking tbody tr {
+    height: 52px;
+}
+
+.admin-table--ranking .admin-user-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+}
+
+.admin-sort-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    width: auto;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.admin-sort-button span {
+    color: var(--admin-muted-foreground);
+    font-size: 11px;
+}
+
+.admin-sort-button.is-active {
+    color: var(--admin-primary);
+}

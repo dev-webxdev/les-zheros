@@ -1,0 +1,196 @@
+.admin-transfer-board {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(260px, 420px));
+    gap: 14px;
+    max-width: 854px;
+    align-items: start;
+}
+
+.admin-transfer-board--compact {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(240px, max-content));
+    max-width: 760px;
+}
+
+.admin-transfer-board__column {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: var(--admin-card);
+}
+
+.admin-transfer-board--compact .admin-transfer-board__column {
+    width: min(100%, 374px);
+}
+
+.admin-transfer-board__column--available {
+    border-style: dashed;
+    background: color-mix(in srgb, var(--admin-muted) 56%, var(--admin-card));
+}
+
+.admin-transfer-board__column--selected {
+    border-color: color-mix(in srgb, var(--admin-primary) 44%, var(--admin-border));
+    background: color-mix(in srgb, var(--admin-primary) 4%, var(--admin-card));
+    box-shadow: inset 3px 0 0 color-mix(in srgb, var(--admin-primary) 76%, #fff);
+}
+
+.admin-transfer-board__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 44px;
+    padding: 0 13px;
+    border-bottom: 1px solid var(--admin-border);
+    background: var(--admin-muted);
+}
+
+.admin-transfer-board--compact .admin-transfer-board__head {
+    min-height: 42px;
+    padding: 0 12px;
+}
+
+.admin-transfer-board__head h4 {
+    color: var(--admin-text);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.admin-transfer-board--compact .admin-transfer-board__head h4 {
+    font-size: 13px;
+}
+
+.admin-transfer-board__head span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--admin-muted-foreground) 10%, var(--admin-card));
+    color: var(--admin-muted-foreground);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.admin-transfer-board__column--selected .admin-transfer-board__head {
+    border-color: color-mix(in srgb, var(--admin-primary) 22%, var(--admin-border));
+    background: color-mix(in srgb, var(--admin-primary) 8%, var(--admin-card));
+}
+
+.admin-transfer-board__column--selected .admin-transfer-board__head h4,
+.admin-transfer-board__column--selected .admin-transfer-board__chip i {
+    color: var(--admin-primary);
+}
+
+.admin-transfer-board__column--selected .admin-transfer-board__head span {
+    background: color-mix(in srgb, var(--admin-primary) 12%, var(--admin-card));
+    color: var(--admin-primary);
+}
+
+.admin-transfer-board__head span::after {
+    content: "";
+}
+
+@media (pointer: coarse) {
+    .admin-transfer-board__head span::after {
+        content: " ou cliquer";
+    }
+}
+
+.admin-transfer-board__list {
+    display: grid;
+    gap: 8px;
+    min-height: 62px;
+    max-height: 390px;
+    align-content: start;
+    padding: 12px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+}
+
+.admin-transfer-board__list::-webkit-scrollbar {
+    width: 10px;
+}
+
+.admin-transfer-board__list::-webkit-scrollbar-track {
+    background: color-mix(in srgb, var(--admin-muted) 72%, var(--admin-card));
+}
+
+.admin-transfer-board__list::-webkit-scrollbar-thumb {
+    border: 3px solid color-mix(in srgb, var(--admin-muted) 72%, var(--admin-card));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--admin-muted-foreground) 42%, transparent);
+}
+
+.admin-transfer-board__list::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--admin-muted-foreground) 62%, transparent);
+}
+
+.admin-transfer-board--compact .admin-transfer-board__list {
+    min-height: 52px;
+}
+
+.admin-transfer-board__list.is-drag-over {
+    background: color-mix(in srgb, var(--admin-primary) 7%, var(--admin-card));
+}
+
+.admin-transfer-board__chip {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 38px;
+    padding: 0 11px;
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    background: var(--admin-card);
+    color: color-mix(in oklab, var(--admin-text) 76%, transparent);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: left;
+    cursor: grab;
+}
+
+.admin-transfer-board--compact .admin-transfer-board__chip {
+    min-height: 36px;
+    padding: 0 10px;
+    border-radius: 7px;
+    color: var(--admin-text);
+    font-weight: 800;
+}
+
+.admin-transfer-board__chip:active {
+    cursor: grabbing;
+}
+
+.admin-transfer-board__chip.is-dragging {
+    opacity: .55;
+}
+
+.admin-transfer-board__chip i {
+    color: var(--admin-muted-foreground);
+    font-size: 12px;
+}
+
+.admin-transfer-board--compact .admin-transfer-board__chip i {
+    width: 15px;
+    color: var(--admin-primary);
+    text-align: center;
+}
+
+.admin-transfer-board__empty {
+    align-self: center;
+    justify-self: center;
+    color: var(--admin-muted-foreground);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.admin-transfer-board--compact .admin-transfer-board__empty {
+    padding: 10px;
+    border: 1px dashed var(--admin-border);
+    border-radius: 7px;
+    text-align: center;
+}

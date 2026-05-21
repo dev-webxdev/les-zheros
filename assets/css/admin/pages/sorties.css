@@ -1,0 +1,584 @@
+.admin-outings {
+    display: grid;
+    gap: 18px;
+}
+
+.admin-outing-public-meta span,
+.admin-outing-preview-slot span {
+    display: block;
+    color: color-mix(in oklab, var(--admin-text) 60%, transparent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.admin-outing-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 390px;
+    gap: 18px;
+    align-items: start;
+}
+
+.admin-outing-panel {
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: var(--admin-card);
+}
+
+.admin-outing-panel__head {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.admin-outing-panel__head h2 {
+    color: var(--admin-text);
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.admin-outing-panel__head p {
+    margin-top: 4px;
+    color: var(--admin-muted-foreground);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.admin-outing-builder {
+    display: grid;
+    gap: 16px;
+}
+
+.admin-outing-submit {
+    padding: 16px 0 0;
+    border-top: 1px solid var(--admin-border);
+}
+
+.admin-outing-section {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: 22px;
+    padding-top: 16px;
+    border-top: 1px solid var(--admin-border);
+}
+
+.admin-outing-section__title {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.admin-outing-section__title > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: var(--admin-primary);
+    color: var(--admin-primary-foreground);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-outing-section__title h3 {
+    margin-bottom: 5px;
+    color: var(--admin-text);
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.admin-outing-section__title p {
+    max-width: 170px;
+    color: var(--admin-muted-foreground);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.admin-outing-section__body {
+    display: grid;
+    min-width: 0;
+    gap: 14px;
+}
+
+.admin-outing-grid,
+.admin-outing-quick-add {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    align-items: end;
+}
+
+.admin-outing-grid textarea {
+    min-height: 92px;
+}
+
+.admin-outing-slot-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.admin-outing-quick-add {
+    grid-template-columns: minmax(150px, 180px) minmax(0, 1fr) auto;
+    padding: 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--admin-muted) 50%, var(--admin-card));
+}
+
+.admin-outing-days {
+    display: grid;
+    min-width: 0;
+    gap: 10px;
+}
+
+.admin-outing-day-card {
+    display: grid;
+    min-width: 0;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: var(--admin-card);
+}
+
+.admin-outing-day-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.admin-outing-day-card__head strong {
+    color: var(--admin-text);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.admin-outing-day-card__head span {
+    color: var(--admin-muted-foreground);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.admin-outing-slot-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.admin-outing-slot-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 30px;
+    padding: 0 8px 0 10px;
+    border: 1px solid color-mix(in srgb, var(--admin-primary) 20%, var(--admin-border));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--admin-primary) 7%, var(--admin-card));
+    color: var(--admin-primary);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-outing-slot-chip button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: currentColor;
+    cursor: pointer;
+}
+
+.admin-outing-empty {
+    padding: 14px;
+    border: 1px dashed var(--admin-border);
+    border-radius: 7px;
+    color: var(--admin-muted-foreground);
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.admin-outing-aside {
+    position: sticky;
+    top: 76px;
+    display: grid;
+    gap: 12px;
+    align-self: start;
+}
+
+.admin-outing-preview {
+    position: static;
+}
+
+.admin-outing-public-card {
+    display: grid;
+    gap: 14px;
+    padding: 14px;
+    border: 1px solid color-mix(in srgb, var(--admin-primary) 18%, var(--admin-border));
+    border-radius: 8px;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--admin-primary) 7%, var(--admin-card)), var(--admin-card));
+}
+
+.admin-outing-public-card__head {
+    display: grid;
+    gap: 14px;
+}
+
+.admin-outing-public-card h3 {
+    color: var(--admin-text);
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.admin-outing-public-card p {
+    margin-top: 6px;
+    color: var(--admin-muted-foreground);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.admin-outing-public-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.admin-outing-public-meta span {
+    padding: 10px;
+    border-left: 2px solid color-mix(in srgb, var(--admin-primary) 48%, var(--admin-border));
+    background: color-mix(in srgb, var(--admin-muted) 42%, var(--admin-card));
+}
+
+.admin-outing-public-meta strong {
+    display: block;
+    margin-top: 4px;
+    color: var(--admin-text);
+    font-size: 13px;
+    line-height: 1.25;
+    text-transform: none;
+}
+
+.admin-outing-preview-days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.admin-outing-preview-day {
+    display: inline-grid;
+    gap: 2px;
+    min-width: 84px;
+    padding: 9px 12px;
+    border: 1px solid color-mix(in srgb, var(--admin-primary) 28%, var(--admin-border));
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--admin-primary) 8%, var(--admin-card));
+    color: var(--admin-primary);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.admin-outing-preview-day.is-active {
+    border-color: var(--admin-primary);
+    background: color-mix(in srgb, var(--admin-primary) 16%, var(--admin-card));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--admin-primary) 28%, transparent);
+}
+
+.admin-outing-preview-day span {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.admin-outing-preview-day strong {
+    color: var(--admin-text);
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.admin-outing-preview-slots {
+    display: grid;
+    gap: 8px;
+    padding-top: 14px;
+    border-top: 1px solid var(--admin-border);
+}
+
+.admin-outing-preview-slot {
+    display: grid;
+    gap: 6px;
+    min-height: 74px;
+    padding: 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-card);
+}
+
+.admin-outing-preview-slot strong {
+    color: var(--admin-text);
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.admin-outing-confirm-menu > div {
+    width: min(330px, calc(100vw - 20px));
+    gap: 4px;
+}
+
+.admin-outing-confirm-menu__title {
+    padding: 7px 9px 8px;
+    border-bottom: 1px solid var(--admin-border);
+    color: var(--admin-muted-foreground);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.admin-outing-confirm-menu__empty {
+    padding: 10px 9px;
+    color: var(--admin-muted-foreground);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.admin-outing-confirm-menu form {
+    margin: 0;
+}
+
+.admin-outing-confirm-menu button {
+    width: 100%;
+    min-height: 48px;
+}
+
+.admin-outing-confirm-menu button span {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+}
+
+.admin-outing-confirm-menu button strong {
+    color: var(--admin-text);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-outing-confirm-menu button small {
+    overflow: hidden;
+    color: var(--admin-muted-foreground);
+    font-size: 12px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-outing-confirm-menu button.is-active {
+    background: color-mix(in srgb, var(--admin-success) 12%, var(--admin-card));
+    color: color-mix(in srgb, var(--admin-success) 72%, #047857);
+}
+
+.admin-outing-confirmed-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 138px;
+    grid-template-areas:
+        "intro slot"
+        "players slot";
+    width: min(100%, 780px);
+    justify-self: start;
+    gap: 0;
+    align-items: stretch;
+    padding: 0;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-card);
+    overflow: hidden;
+}
+
+.admin-outing-confirmed-card__eyebrow {
+    display: block;
+    margin-bottom: 8px;
+    color: color-mix(in srgb, var(--admin-success) 70%, #047857);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.admin-outing-confirmed-card h2 {
+    color: var(--admin-text);
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.admin-outing-confirmed-card p {
+    margin-top: 6px;
+    color: var(--admin-muted-foreground);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.admin-outing-confirmed-card__intro,
+.admin-outing-confirmed-card__players {
+    padding: 18px;
+}
+
+.admin-outing-confirmed-card__intro {
+    grid-area: intro;
+    border-left: 3px solid color-mix(in srgb, var(--admin-success) 72%, #047857);
+}
+
+.admin-outing-confirmed-card__slot {
+    grid-area: slot;
+    display: grid;
+    place-content: center;
+    gap: 8px;
+    border-left: 1px solid var(--admin-border);
+    background: color-mix(in srgb, var(--admin-success) 6%, var(--admin-card));
+    text-align: center;
+}
+
+.admin-outing-confirmed-card__slot span {
+    color: var(--admin-muted-foreground);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.admin-outing-confirmed-card__slot strong {
+    color: var(--admin-text);
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.admin-outing-confirmed-card__players {
+    grid-area: players;
+    display: grid;
+    gap: 8px;
+    align-content: center;
+}
+
+.admin-outing-confirmed-card__players > strong {
+    color: var(--admin-text);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-outing-confirmed-card__players div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.admin-outing-confirmed-card__players span {
+    min-height: 26px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--admin-success) 10%, var(--admin-card));
+    color: color-mix(in srgb, var(--admin-success) 72%, #047857);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.admin-table--outings th:nth-child(1),
+.admin-table--outings td:nth-child(1) {
+    width: 32%;
+}
+
+.admin-table--outings th:nth-child(2),
+.admin-table--outings td:nth-child(2),
+.admin-table--outings th:nth-child(3),
+.admin-table--outings td:nth-child(3) {
+    width: 100px;
+    text-align: center;
+}
+
+.admin-table--outings th:nth-child(6),
+.admin-table--outings td:nth-child(6) {
+    width: 310px;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.admin-table--outings .admin-table-empty-row td {
+    height: 170px;
+    padding: 0;
+    text-align: center;
+}
+
+.admin-table--outings .admin-empty-state {
+    min-height: 170px;
+}
+
+.admin-table--outings-trash th:nth-child(1),
+.admin-table--outings-trash td:nth-child(1) {
+    width: auto;
+}
+
+.admin-table--outings-trash th:nth-child(2),
+.admin-table--outings-trash td:nth-child(2) {
+    width: 140px;
+    text-align: center;
+}
+
+.admin-table--outings-trash th:nth-child(3),
+.admin-table--outings-trash td:nth-child(3) {
+    width: 170px;
+}
+
+.admin-table--outings-trash th:nth-child(4),
+.admin-table--outings-trash td:nth-child(4) {
+    width: 120px;
+    text-align: center;
+}
+
+.admin-table--outings-trash th:nth-child(5),
+.admin-table--outings-trash td:nth-child(5) {
+    width: 136px;
+    padding-right: 24px;
+    text-align: center;
+}
+
+@media screen and (max-width: 1280px) {
+    .admin-outing-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .admin-outing-preview {
+        position: static;
+    }
+
+    .admin-outing-aside {
+        position: static;
+    }
+
+    .admin-outing-confirmed-card {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "intro"
+            "slot"
+            "players";
+    }
+
+    .admin-outing-confirmed-card__slot {
+        min-height: 110px;
+        border-left: 0;
+        border-right: 0;
+        border-top: 1px solid var(--admin-border);
+        border-bottom: 1px solid var(--admin-border);
+    }
+}

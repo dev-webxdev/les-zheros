@@ -1,0 +1,219 @@
+.admin-field-action {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-field-action input {
+    min-width: 0;
+}
+
+.admin-field-action .admin-secondary-button {
+    flex: 0 0 auto;
+}
+
+.admin-image-main {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+    max-width: 980px;
+}
+
+.admin-image-mode {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 0;
+}
+
+.admin-image-mode label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 32px;
+    padding: 0 10px;
+    border: 1px solid var(--admin-border);
+    border-radius: 999px;
+    background: var(--admin-card);
+    color: color-mix(in oklab, var(--admin-text) 72%, transparent);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.admin-image-mode label:has(input:checked:not(:disabled)) {
+    border-color: var(--admin-primary);
+    background: color-mix(in srgb, var(--admin-primary) 9%, var(--admin-card));
+    color: var(--admin-primary);
+}
+
+.admin-image-mode label:has(input:disabled) {
+    cursor: not-allowed;
+    opacity: .58;
+}
+
+.admin-image-mode input {
+    accent-color: var(--admin-primary);
+}
+
+.admin-media-choice {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-media-choice > span {
+    color: color-mix(in oklab, var(--admin-text) 62%, transparent);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.admin-image-preview {
+    overflow: hidden;
+}
+
+.admin-image-preview img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.admin-media-picker {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: grid;
+    place-items: center;
+    padding: 28px;
+}
+
+.admin-media-picker[hidden] {
+    display: none;
+}
+
+.admin-media-picker__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, .54);
+    backdrop-filter: blur(2px);
+}
+
+.admin-media-picker__dialog {
+    position: relative;
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    width: min(1040px, 100%);
+    max-height: min(720px, 86vh);
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--admin-card);
+    box-shadow: 0 24px 60px rgba(15, 23, 42, .25);
+}
+
+.admin-media-picker__side {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+    min-width: 0;
+    padding: 16px;
+    border-right: 1px solid var(--admin-border);
+}
+
+.admin-media-picker__side .admin-search,
+.admin-media-picker__side .admin-create-button {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.admin-media-picker__side .admin-search input {
+    min-width: 0;
+}
+
+.admin-media-picker__main {
+    min-width: 0;
+    overflow: auto;
+}
+
+.admin-media-picker__head,
+.admin-media-picker__row {
+    display: grid;
+    grid-template-columns: 170px minmax(0, 1fr) 90px 110px;
+    align-items: center;
+    gap: 16px;
+}
+
+.admin-media-picker__head {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    min-height: 48px;
+    padding: 0 18px;
+    border-bottom: 1px solid var(--admin-border);
+    background: var(--admin-muted);
+    color: var(--admin-text);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-media-picker__list {
+    display: grid;
+}
+
+.admin-media-picker__row {
+    min-height: 128px;
+    padding: 16px 18px;
+    border: 0;
+    border-bottom: 1px solid var(--admin-border);
+    background: transparent;
+    color: var(--admin-text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.admin-media-picker__row:hover,
+.admin-media-picker__row:focus-visible {
+    background: color-mix(in srgb, var(--admin-primary) 6%, transparent);
+    outline: none;
+}
+
+.admin-media-picker__row img {
+    width: 150px;
+    height: 88px;
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    background: #fff;
+    object-fit: contain;
+}
+
+.admin-media-picker__row strong,
+.admin-media-picker__row span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-media-picker__row span {
+    color: color-mix(in oklab, var(--admin-text) 62%, transparent);
+    font-size: 12px;
+}
+
+.admin-media-picker__empty {
+    padding: 34px;
+    color: color-mix(in oklab, var(--admin-text) 64%, transparent);
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.admin-media-picker__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+}

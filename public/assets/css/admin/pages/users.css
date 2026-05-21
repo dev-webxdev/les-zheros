@@ -1,0 +1,176 @@
+.admin-role-select {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+.admin-role-select__tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+}
+
+.admin-role-select__tags .admin-tag {
+    margin: 2px 0;
+}
+
+.admin-role-select i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    color: var(--admin-muted-foreground);
+    font-size: 12px;
+}
+
+.admin-role-select:hover > i,
+.admin-role-select.is-open > i {
+    background: var(--admin-muted);
+    color: var(--admin-text);
+}
+
+.admin-role-select:hover .admin-tag,
+.admin-role-select.is-open .admin-tag {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--admin-primary) 13%, transparent);
+}
+
+.admin-role-menu {
+    position: fixed;
+    z-index: 40;
+    display: grid;
+    gap: 4px;
+    min-width: 170px;
+    padding: 6px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-card);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, .14);
+}
+
+.admin-role-menu[hidden] {
+    display: none;
+}
+
+.admin-role-menu button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 32px;
+    padding: 0 9px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--admin-text);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.admin-role-menu button:hover,
+.admin-role-menu button.is-active {
+    background: var(--admin-muted);
+}
+
+.admin-role-menu button i {
+    opacity: 0;
+    color: var(--admin-primary);
+    font-size: 12px;
+}
+
+.admin-role-menu button.is-active i {
+    opacity: 1;
+}
+
+.admin-user-cell {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+}
+
+.admin-user-cell strong {
+    overflow: hidden;
+    color: var(--admin-text);
+    font-size: 14px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-user-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--admin-primary) 12%, var(--admin-card));
+    color: var(--admin-primary);
+    font-size: 12px;
+    font-weight: 800;
+    overflow: hidden;
+}
+
+.admin-user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.admin-user-avatar--large {
+    width: 58px;
+    height: 58px;
+    font-size: 18px;
+}
+
+.admin-user-avatar-editor {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.admin-user-avatar-editor .admin-field {
+    flex: 1 1 auto;
+}
+
+.admin-user-avatar-remove {
+    flex: 0 0 auto;
+}
+
+.admin-announcement-cell {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+}
+
+.admin-announcement-cell strong {
+    overflow: hidden;
+    color: var(--admin-text);
+    font-size: 14px;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-announcement-cell span {
+    overflow: hidden;
+    color: var(--admin-muted-foreground);
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

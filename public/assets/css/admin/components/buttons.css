@@ -1,0 +1,18 @@
+.admin-secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 34px;
+    padding: 0 13px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: var(--admin-card);
+    color: color-mix(in oklab, var(--admin-text) 72%, transparent);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+}
+

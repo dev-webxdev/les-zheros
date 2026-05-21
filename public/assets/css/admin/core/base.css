@@ -1,0 +1,27 @@
+body.admin-body {
+    --admin-background: #ffffff;
+    --admin-text: oklch(0.13 0.028 261.692);
+    --admin-card: #ffffff;
+    --admin-primary: #4869ee;
+    --admin-primary-darken: #0e2cb1;
+    --admin-primary-foreground: oklch(0.99 0.02 95);
+    --admin-muted: oklch(0.967 0.003 264.542);
+    --admin-muted-foreground: oklch(0.551 0.027 264.364);
+    --admin-border: oklch(0.928 0.006 264.531);
+    --admin-sidebar: #f7fafb;
+    --admin-sidebar-accent: rgba(213, 228, 237, .3);
+    --admin-sidebar-border: #d5e3ec;
+    --admin-success: oklch(79.2% 0.209 151.711);
+    --admin-danger: #ef4444;
+    --admin-warning: #f59e0b;
+    min-height: 100vh;
+    background: var(--admin-background);
+    color: var(--admin-text);
+    font-family: "Inter", Arial, sans-serif;
+    font-weight: 500;
+}
+
+[hidden] {
+    display: none !important;
+}
+

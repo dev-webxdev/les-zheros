@@ -1,0 +1,217 @@
+.admin-app {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    background: var(--admin-background);
+}
+
+.admin-app.is-sidebar-collapsed {
+    grid-template-columns: 72px minmax(0, 1fr);
+}
+
+.admin-sidebar {
+    min-height: 100vh;
+    padding: 18px 14px;
+    border-right: 1px solid var(--admin-sidebar-border);
+    background: var(--admin-sidebar);
+}
+
+.admin-app.is-sidebar-collapsed .admin-sidebar {
+    padding: 14px 10px;
+}
+
+.admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 38px;
+    padding: 0 10px;
+    color: var(--admin-text);
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.admin-brand img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.admin-nav {
+    display: grid;
+    gap: 4px;
+    margin-top: 24px;
+}
+
+.admin-nav__label {
+    margin: 22px 12px 8px;
+    color: var(--admin-muted-foreground);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-nav__link {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 2px;
+    color: color-mix(in oklab, var(--admin-text) 78%, transparent);
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.admin-nav__link i {
+    width: 16px;
+    color: var(--admin-muted-foreground);
+    font-size: 13px;
+    text-align: center;
+}
+
+.admin-nav__link:hover {
+    background: var(--admin-sidebar-accent);
+}
+
+.admin-nav__link.is-active {
+    background: var(--admin-sidebar-accent);
+    color: var(--admin-primary);
+}
+
+.admin-nav__link.is-active i {
+    color: var(--admin-primary);
+}
+
+.admin-nav__badge {
+    margin-left: auto;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 20px;
+    text-align: center;
+}
+
+.admin-app.is-sidebar-collapsed .admin-brand span,
+.admin-app.is-sidebar-collapsed .admin-nav__label,
+.admin-app.is-sidebar-collapsed .admin-nav__link span {
+    display: none;
+}
+
+.admin-app.is-sidebar-collapsed .admin-brand,
+.admin-app.is-sidebar-collapsed .admin-nav__link {
+    justify-content: center;
+    padding: 0;
+}
+
+.admin-main {
+    min-width: 0;
+}
+
+.admin-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 57px;
+    padding: 0 18px 0 24px;
+    border-bottom: 1px solid var(--admin-border);
+    background: rgba(255, 255, 255, .94);
+    backdrop-filter: blur(10px);
+}
+
+.admin-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+    color: var(--admin-muted-foreground);
+    font-size: 14px;
+}
+
+.admin-breadcrumb span {
+    width: 1px;
+    height: 20px;
+    background: var(--admin-border);
+}
+
+.admin-breadcrumb p {
+    color: var(--admin-muted-foreground);
+}
+
+.admin-menu-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--admin-text);
+    cursor: pointer;
+}
+
+.admin-menu-button:hover {
+    background: var(--admin-muted);
+}
+
+.admin-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 220px;
+    height: 34px;
+    padding: 0 11px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: var(--admin-card);
+    color: var(--admin-muted-foreground);
+    box-shadow: 0 1px 2px rgba(18, 22, 28, .04);
+}
+
+.admin-search input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    color: var(--admin-text);
+    font: inherit;
+    font-size: 14px;
+}
+
+.admin-search input::placeholder {
+    color: var(--admin-muted-foreground);
+}
+
+.admin-create-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 34px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 7px;
+    background: var(--admin-primary);
+    color: var(--admin-primary-foreground);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 5px 14px color-mix(in srgb, var(--admin-primary) 22%, transparent);
+}

@@ -1,0 +1,42 @@
+.admin-rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 46px;
+    min-height: 26px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: var(--admin-muted);
+    color: color-mix(in oklab, var(--admin-text) 64%, transparent);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.admin-rank-badge--gold {
+    background: #fff5cc;
+    color: #9a6a00;
+}
+
+.admin-rank-badge--silver {
+    background: #eef4ff;
+    color: #42638f;
+}
+
+.admin-rank-badge--bronze {
+    background: #fff0e3;
+    color: #9a551f;
+}
+
+.admin-ranking-row--gold {
+    background: color-mix(in srgb, #facc15 10%, var(--admin-card));
+}
+
+.admin-ranking-row--silver {
+    background: color-mix(in srgb, #93c5fd 10%, var(--admin-card));
+}
+
+.admin-ranking-row--bronze {
+    background: color-mix(in srgb, #fb923c 10%, var(--admin-card));
+}
+

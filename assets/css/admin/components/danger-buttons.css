@@ -1,0 +1,47 @@
+.admin-danger-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 34px;
+    padding: 0 13px;
+    border: 1px solid var(--admin-danger);
+    border-radius: 7px;
+    background: var(--admin-danger);
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.admin-danger-button:hover {
+    background: color-mix(in srgb, var(--admin-danger) 88%, #000);
+}
+
+.admin-no-delete .admin-action-button--delete,
+.admin-no-delete [data-confirm-trash],
+.admin-no-delete [data-confirm-action="delete"],
+.admin-no-delete form[action*="corbeille"][method="post"] button.admin-action-button--delete {
+    display: none;
+}
+
+.admin-warning-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 13px;
+    border: 1px solid var(--admin-warning);
+    border-radius: 7px;
+    background: var(--admin-warning);
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.admin-warning-button:hover {
+    background: color-mix(in srgb, var(--admin-warning) 86%, #000);
+}

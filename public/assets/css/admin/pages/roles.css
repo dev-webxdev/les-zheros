@@ -1,0 +1,104 @@
+.admin-muted-text {
+    color: var(--admin-muted-foreground);
+}
+
+.admin-score {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+    font-weight: 800;
+}
+
+.admin-score--up {
+    color: #b45309;
+}
+
+.admin-role-cell {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+}
+
+.admin-role-cell strong {
+    overflow: hidden;
+    color: var(--admin-text);
+    font-size: 14px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-role-dot {
+    width: 10px;
+    height: 10px;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: var(--admin-muted-foreground);
+}
+
+.admin-role-dot--primary {
+    background: var(--admin-primary);
+}
+
+.admin-role-color-select {
+    display: grid;
+    grid-template-columns: minmax(180px, 260px) auto;
+    gap: 12px;
+    align-items: end;
+}
+
+.admin-role-color-preview {
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+    padding-bottom: 1px;
+}
+
+.admin-role-locked-note {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    max-width: 720px;
+    padding: 14px;
+    border: 1px solid color-mix(in srgb, var(--admin-warning) 34%, var(--admin-border));
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--admin-warning) 9%, var(--admin-card));
+    color: var(--admin-text);
+}
+
+.admin-role-locked-note > i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--admin-warning) 16%, var(--admin-card));
+    color: color-mix(in srgb, var(--admin-warning) 75%, #92400e);
+    flex: 0 0 auto;
+}
+
+.admin-role-locked-note strong,
+.admin-role-locked-note span {
+    display: block;
+}
+
+.admin-role-locked-note strong {
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.admin-role-locked-note span {
+    color: var(--admin-muted-foreground);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+@media screen and (max-width: 640px) {
+    .admin-role-color-select {
+        grid-template-columns: 1fr;
+    }
+}

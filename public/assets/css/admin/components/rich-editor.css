@@ -1,0 +1,163 @@
+.admin-field--editor {
+    max-width: 980px;
+}
+
+.admin-rich-editor {
+    overflow: hidden;
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    background: var(--admin-card);
+}
+
+.admin-rich-editor:focus-within {
+    border-color: var(--admin-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--admin-primary) 14%, transparent);
+}
+
+.admin-rich-editor__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 40px;
+    padding: 0 8px;
+    border-bottom: 1px solid var(--admin-border);
+    background: var(--admin-muted);
+}
+
+.admin-rich-editor__toolbar button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: color-mix(in oklab, var(--admin-text) 72%, transparent);
+    cursor: pointer;
+}
+
+.admin-rich-editor__toolbar button:hover {
+    background: var(--admin-card);
+    color: var(--admin-primary);
+}
+
+.admin-rich-editor__toolbar button.is-active {
+    background: color-mix(in srgb, var(--admin-text) 12%, var(--admin-card));
+    color: var(--admin-text);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--admin-text) 18%, transparent);
+}
+
+.admin-rich-editor__surface {
+    min-height: 230px;
+    padding: 12px;
+    color: var(--admin-text);
+    font-size: 14px;
+    line-height: 1.6;
+    outline: 0;
+}
+
+.admin-rich-editor--compact .admin-rich-editor__surface {
+    min-height: 128px;
+}
+
+.admin-rich-editor__surface--guide {
+    min-height: 120px;
+}
+
+.admin-rich-editor__surface:empty::before {
+    content: attr(data-placeholder);
+    color: var(--admin-muted-foreground);
+}
+
+.admin-rich-editor__surface b,
+.admin-rich-editor__surface strong {
+    font-weight: 800;
+}
+
+.admin-rich-editor__surface i,
+.admin-rich-editor__surface em {
+    font-style: italic;
+}
+
+.admin-rich-editor__surface u {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
+
+.admin-rich-editor__surface blockquote {
+    margin: 8px 0;
+    padding: 8px 12px;
+    border-left: 3px solid var(--admin-primary);
+    background: var(--admin-muted);
+    color: color-mix(in oklab, var(--admin-text) 76%, transparent);
+}
+
+.admin-rich-editor__surface ul {
+    margin: 8px 0 8px 18px;
+}
+
+.admin-rich-editor__surface li {
+    list-style: disc;
+}
+
+.admin-rich-editor--document {
+    border-radius: 8px;
+}
+
+.admin-rich-editor--document .admin-rich-editor__toolbar {
+    min-height: 46px;
+    background: var(--admin-card);
+}
+
+.admin-rich-editor__surface--document {
+    min-height: 640px;
+    padding: 26px 30px;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.admin-rich-editor__surface--document h2 {
+    margin: 28px 0 12px;
+    color: var(--admin-text);
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.admin-rich-editor__surface--document p {
+    margin: 0 0 18px;
+}
+
+.admin-rich-editor__surface--document ul,
+.admin-rich-editor__surface--document ol {
+    margin: 0 0 22px 22px;
+}
+
+.admin-rich-editor__surface--document ol li {
+    list-style: decimal;
+}
+
+.admin-rich-editor__surface--document pre {
+    margin: 18px 0;
+    padding: 14px;
+    border-radius: 7px;
+    background: var(--admin-muted);
+    color: var(--admin-text);
+    font-family: "Consolas", monospace;
+    font-size: 14px;
+    white-space: pre-wrap;
+}
+
+.admin-rich-editor__surface--document img {
+    display: block;
+    max-width: 100%;
+    margin: 18px 0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.admin-rich-editor__surface--document img.is-selected {
+    outline: 3px solid color-mix(in srgb, var(--admin-primary) 42%, transparent);
+    outline-offset: 3px;
+}

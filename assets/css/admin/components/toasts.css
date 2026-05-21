@@ -1,0 +1,98 @@
+.admin-toast {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: min(calc(100% - 32px), 460px);
+    min-height: 58px;
+    padding: 11px 14px;
+    border: 1px solid color-mix(in srgb, var(--admin-success) 38%, var(--admin-border));
+    border-radius: 8px;
+    background: var(--admin-card);
+    color: var(--admin-text);
+    box-shadow: 0 18px 38px rgba(15, 23, 42, .14);
+    transform: translate(-50%, -18px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+}
+
+.admin-toast[data-admin-toast-type="warning"] {
+    border-color: color-mix(in srgb, var(--admin-warning) 42%, var(--admin-border));
+}
+
+.admin-toast[data-admin-toast-type="error"] {
+    border-color: color-mix(in srgb, var(--admin-danger) 42%, var(--admin-border));
+}
+
+.admin-toast[data-admin-toast-type="info"] {
+    border-color: color-mix(in srgb, var(--admin-primary) 36%, var(--admin-border));
+}
+
+.admin-toast.is-visible {
+    transform: translate(-50%, 0);
+    opacity: 1;
+}
+
+.admin-toast__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--admin-success) 16%, var(--admin-card));
+}
+
+.admin-toast__icon i,
+.admin-toast > i {
+    color: var(--admin-success);
+}
+
+.admin-toast[data-admin-toast-type="warning"] .admin-toast__icon {
+    background: color-mix(in srgb, var(--admin-warning) 16%, var(--admin-card));
+}
+
+.admin-toast[data-admin-toast-type="warning"] .admin-toast__icon i {
+    color: var(--admin-warning);
+}
+
+.admin-toast[data-admin-toast-type="error"] .admin-toast__icon {
+    background: color-mix(in srgb, var(--admin-danger) 12%, var(--admin-card));
+}
+
+.admin-toast[data-admin-toast-type="error"] .admin-toast__icon i {
+    color: var(--admin-danger);
+}
+
+.admin-toast[data-admin-toast-type="info"] .admin-toast__icon {
+    background: color-mix(in srgb, var(--admin-primary) 12%, var(--admin-card));
+}
+
+.admin-toast[data-admin-toast-type="info"] .admin-toast__icon i {
+    color: var(--admin-primary);
+}
+
+.admin-toast__content {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+}
+
+.admin-toast__content strong {
+    color: var(--admin-text);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.admin-toast__content span {
+    color: var(--admin-muted-foreground);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+

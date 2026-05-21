@@ -1,0 +1,637 @@
+.admin-lottery {
+    display: grid;
+    gap: 18px;
+    padding-top: 18px;
+}
+
+.admin-lottery-week {
+    display: grid;
+    min-width: 360px;
+}
+
+.admin-lottery-week span {
+    color: var(--admin-muted-foreground);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.admin-create-button[data-lottery-locked="true"] {
+    border-color: #fecaca;
+    background: #fee2e2;
+    color: #b91c1c;
+    box-shadow: none;
+}
+
+.admin-create-button[data-lottery-locked="true"]:hover {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.admin-create-button[data-lottery-locked="true"],
+.admin-create-button[data-lottery-locked="true"] * {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Ccircle cx='14' cy='14' r='10' fill='white' stroke='%23dc2626' stroke-width='3'/%3E%3Cpath d='M8 20 20 8' stroke='%23dc2626' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") 14 14, not-allowed;
+}
+
+.admin-lottery-panel {
+    padding: 16px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: var(--admin-card);
+    box-shadow: none;
+}
+
+.admin-lottery-panel__head {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.admin-lottery-cycle-bar {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 2px;
+}
+
+.admin-lottery-cycle-bar .admin-lottery-status {
+    margin-bottom: 1px;
+}
+
+.admin-lottery-panel__head h2 {
+    color: var(--admin-text);
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.admin-lottery-panel__head p {
+    margin-top: 4px;
+    color: var(--admin-muted-foreground);
+    font-size: 13px;
+}
+
+.admin-lottery-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: var(--admin-muted);
+    color: var(--admin-muted-foreground);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.admin-lottery-status[data-lottery-status]:not(:empty) {
+    border: 1px solid color-mix(in srgb, var(--admin-primary) 14%, var(--admin-border));
+    background: color-mix(in srgb, var(--admin-primary) 7%, var(--admin-card));
+    color: color-mix(in srgb, var(--admin-primary) 78%, var(--admin-text));
+}
+
+.admin-lottery-status[data-lottery-state="done"] {
+    border-color: color-mix(in srgb, var(--admin-success) 24%, var(--admin-border));
+    background: color-mix(in srgb, var(--admin-success) 10%, var(--admin-card));
+    color: color-mix(in srgb, var(--admin-success) 72%, #047857);
+}
+
+.admin-lottery-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.admin-lottery-stats article {
+    min-height: 74px;
+    padding: 14px 16px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--admin-muted) 36%, var(--admin-card));
+}
+
+.admin-lottery-stats span,
+.admin-lottery-winner small {
+    display: block;
+    color: color-mix(in oklab, var(--admin-text) 60%, transparent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.admin-lottery-stats strong {
+    display: block;
+    margin-top: 7px;
+    color: var(--admin-text);
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.admin-lottery-settings {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(140px, 1fr));
+    gap: 12px;
+    align-items: end;
+    padding: 14px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: #fbfcfd;
+}
+
+.admin-lottery-money-field {
+    position: relative;
+    display: block;
+}
+
+.admin-lottery-money-field input {
+    padding-right: 36px;
+}
+
+.admin-lottery-money-field i {
+    position: absolute;
+    top: 50%;
+    right: 11px;
+    color: #b45309;
+    transform: translateY(-50%);
+}
+
+.admin-lottery-test-mode {
+    align-self: end;
+}
+
+.admin-lottery-save {
+    justify-self: end;
+    grid-column: 4 / -1;
+}
+
+.admin-lottery-result {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 14px;
+    padding: 12px;
+    border: 1px solid color-mix(in srgb, var(--admin-success) 30%, var(--admin-border));
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--admin-success) 8%, var(--admin-card));
+}
+
+.admin-lottery-result > div span {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--admin-muted-foreground);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.admin-lottery-result > div strong {
+    color: var(--admin-text);
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.admin-lottery-result ol {
+    display: flex;
+    gap: 8px;
+}
+
+.admin-lottery-result li {
+    display: grid;
+    grid-template-columns: auto minmax(80px, 1fr);
+    gap: 2px 8px;
+    min-width: 150px;
+    padding: 9px 10px;
+    border-radius: 7px;
+    background: var(--admin-card);
+}
+
+.admin-lottery-result li span {
+    grid-row: span 2;
+    color: var(--admin-primary);
+    font-weight: 800;
+}
+
+.admin-lottery-result li strong {
+    color: var(--admin-text);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-lottery-result li em,
+.admin-lottery-winner em {
+    color: var(--admin-muted-foreground);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+}
+
+.admin-table--lottery th:first-child,
+.admin-table--lottery td:first-child {
+    width: 92px;
+}
+
+.admin-table--lottery th:nth-child(3),
+.admin-table--lottery td:nth-child(3),
+.admin-table--lottery th:nth-child(4),
+.admin-table--lottery td:nth-child(4),
+.admin-table--lottery th:nth-child(5),
+.admin-table--lottery td:nth-child(5),
+.admin-table--lottery th:nth-child(6),
+.admin-table--lottery td:nth-child(6) {
+    text-align: center;
+}
+
+.admin-table--lottery td:nth-child(4) strong {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--admin-primary) 10%, var(--admin-card));
+    color: var(--admin-primary);
+    font-size: 12px;
+}
+
+.admin-table--lottery tbody tr {
+    height: auto;
+}
+
+.admin-table--lottery td {
+    height: auto;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    vertical-align: top;
+}
+
+.admin-table--lottery .admin-empty-state {
+    min-height: 128px;
+}
+
+.admin-lottery-table-empty {
+    place-content: center start;
+    justify-items: start;
+    text-align: left;
+}
+
+.admin-lottery-pagination {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 12px;
+}
+
+.admin-table--lottery-history {
+    min-width: 1360px;
+}
+
+.admin-table--lottery-participant-history {
+    min-width: 1040px;
+}
+
+.admin-lottery-panel .admin-table-card {
+    overflow-x: auto;
+}
+
+.admin-table--lottery-participant-history th:first-child,
+.admin-table--lottery-participant-history td:first-child {
+    width: 280px;
+}
+
+.admin-table--lottery-participant-history td {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    vertical-align: middle;
+}
+
+.admin-table--lottery-participant-history th:nth-child(3),
+.admin-table--lottery-participant-history td:nth-child(3),
+.admin-table--lottery-participant-history th:nth-child(4),
+.admin-table--lottery-participant-history td:nth-child(4),
+.admin-table--lottery-participant-history th:nth-child(5),
+.admin-table--lottery-participant-history td:nth-child(5),
+.admin-table--lottery-participant-history th:nth-child(6),
+.admin-table--lottery-participant-history td:nth-child(6) {
+    width: 130px;
+    text-align: center;
+}
+
+.admin-lottery-player-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 720px;
+}
+
+.admin-lottery-player-chip {
+    position: relative;
+    width: auto;
+    min-height: 30px;
+    padding: 4px 9px 4px 4px;
+    border: 1px solid var(--admin-border);
+    border-radius: 999px;
+    background: var(--admin-card);
+}
+
+.admin-lottery-more-chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 0 10px;
+    border: 1px dashed color-mix(in srgb, var(--admin-primary) 34%, var(--admin-border));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--admin-primary) 7%, var(--admin-card));
+    color: var(--admin-primary);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.admin-lottery-player-chip::after,
+.admin-lottery-more-chip::after {
+    content: attr(data-lottery-tooltip);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 8px);
+    z-index: 4;
+    width: max-content;
+    max-width: 360px;
+    padding: 7px 9px;
+    border: 1px solid #d8e0f0;
+    border-radius: 7px;
+    background: #111827;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.35;
+    white-space: normal;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 4px);
+    transition: opacity .16s ease, transform .16s ease;
+}
+
+.admin-lottery-player-chip:hover::after,
+.admin-lottery-more-chip:hover::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.admin-table--lottery-history th:nth-child(1),
+.admin-table--lottery-history td:nth-child(1) {
+    width: 136px;
+    white-space: nowrap;
+}
+
+.admin-table--lottery-history tbody tr {
+    height: auto;
+}
+
+.admin-table--lottery-history td {
+    height: auto;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    vertical-align: middle;
+}
+
+.admin-table--lottery-history .admin-empty-state {
+    min-height: 128px;
+}
+
+.admin-lottery-history-empty {
+    place-content: center start;
+    justify-items: start;
+    text-align: left;
+}
+
+.admin-table--lottery-history th:nth-child(2),
+.admin-table--lottery-history td:nth-child(2) {
+    width: 280px;
+    white-space: nowrap;
+}
+
+.admin-table--lottery-history th:nth-child(3),
+.admin-table--lottery-history td:nth-child(3),
+.admin-table--lottery-history th:nth-child(4),
+.admin-table--lottery-history td:nth-child(4),
+.admin-table--lottery-history th:nth-child(5),
+.admin-table--lottery-history td:nth-child(5) {
+    width: 170px;
+    text-align: left;
+}
+
+.admin-table--lottery-history th:nth-child(6),
+.admin-table--lottery-history td:nth-child(6) {
+    width: 180px;
+    white-space: nowrap;
+}
+
+.admin-table--lottery-history th:nth-child(7),
+.admin-table--lottery-history td:nth-child(7) {
+    width: 100px;
+    white-space: nowrap;
+}
+
+.admin-table--lottery-history th:nth-child(8),
+.admin-table--lottery-history td:nth-child(8) {
+    width: 150px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.admin-lottery-winner {
+    display: grid;
+    gap: 3px;
+    padding-left: 9px;
+    border-left: 3px solid var(--admin-primary);
+}
+
+.admin-lottery-winner--1 {
+    border-color: #eab308;
+}
+
+.admin-lottery-winner--2 {
+    border-color: #94a3b8;
+}
+
+.admin-lottery-winner--3 {
+    border-color: #c08457;
+}
+
+.admin-lottery-winner strong {
+    color: var(--admin-text);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-lottery-history-delete {
+    min-height: 30px;
+    padding: 0 10px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.admin-lottery-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+}
+
+.admin-lottery-modal[hidden] {
+    display: none;
+}
+
+.admin-lottery-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, .55);
+    backdrop-filter: blur(6px);
+}
+
+.admin-lottery-modal__dialog {
+    position: relative;
+    width: min(860px, 100%);
+    padding: 22px;
+    border: 1px solid color-mix(in srgb, var(--admin-primary) 18%, var(--admin-border));
+    border-radius: 10px;
+    background: #fbfcff;
+    box-shadow: 0 24px 64px rgba(15, 23, 42, .32);
+}
+
+.admin-lottery-modal__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.admin-lottery-modal__eyebrow {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--admin-primary);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.admin-lottery-modal__head h2 {
+    color: var(--admin-text);
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.admin-lottery-modal__head p {
+    margin-top: 4px;
+    color: color-mix(in srgb, var(--admin-text) 72%, var(--admin-muted-foreground));
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.admin-lottery-draw-slots {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.admin-lottery-draw-card {
+    position: relative;
+    min-height: 132px;
+    padding: 16px;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--admin-primary) 34%, var(--admin-border));
+    border-radius: 10px;
+    background: var(--admin-card);
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+
+.admin-lottery-draw-card::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--admin-primary) 4%, transparent);
+    pointer-events: none;
+}
+
+.admin-lottery-draw-card > * {
+    position: relative;
+}
+
+.admin-lottery-draw-card span {
+    display: block;
+    margin-bottom: 12px;
+    color: #101f3d;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.admin-lottery-draw-card strong {
+    display: block;
+    color: var(--admin-text);
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.admin-lottery-draw-card em {
+    display: block;
+    margin-top: 8px;
+    color: #065f46;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 800;
+}
+
+.admin-lottery-draw-card.is-spinning {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--admin-primary) 38%, var(--admin-border));
+    box-shadow: 0 14px 30px rgba(72, 105, 238, .12);
+}
+
+.admin-lottery-draw-card--gold.is-final {
+    border-color: #eab308;
+    background: #fff8d8;
+}
+
+.admin-lottery-draw-card--silver.is-final {
+    border-color: #9db2d4;
+    background: #eef5ff;
+}
+
+.admin-lottery-draw-card--bronze.is-final {
+    border-color: #d79b69;
+    background: #fff0e5;
+}
+
+.admin-lottery-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+@media screen and (max-width: 820px) {
+    .admin-lottery-modal__dialog {
+        padding: 18px;
+    }
+
+    .admin-lottery-draw-slots {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-lottery-draw-card {
+        min-height: 112px;
+    }
+
+    .admin-lottery-modal__actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}

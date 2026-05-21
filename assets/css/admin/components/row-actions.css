@@ -1,0 +1,186 @@
+.admin-mission-thumb {
+    display: block;
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+}
+
+.admin-row-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.admin-action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--admin-muted);
+    color: var(--admin-muted-foreground);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.admin-action-button:hover {
+    background: var(--admin-sidebar-accent);
+    color: var(--admin-text);
+}
+
+.admin-action-button--edit:hover,
+.admin-action-button--guide:hover {
+    background: color-mix(in srgb, var(--admin-primary) 10%, var(--admin-card));
+    color: var(--admin-primary);
+}
+
+.admin-action-button--delete:hover {
+    background: color-mix(in srgb, var(--admin-danger) 10%, var(--admin-card));
+    color: var(--admin-danger);
+}
+
+.admin-action-button--restore:hover {
+    background: color-mix(in srgb, var(--admin-success) 16%, var(--admin-card));
+    color: color-mix(in srgb, var(--admin-success) 72%, #047857);
+}
+
+.admin-action-button--confirm:hover {
+    background: color-mix(in srgb, var(--admin-success) 16%, var(--admin-card));
+    color: color-mix(in srgb, var(--admin-success) 72%, #047857);
+}
+
+.admin-action-button:disabled {
+    cursor: not-allowed;
+    opacity: .45;
+}
+
+.admin-action-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.admin-action-menu summary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 30px;
+    padding: 0 10px;
+    border-radius: 6px;
+    background: var(--admin-muted);
+    color: var(--admin-muted-foreground);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+}
+
+.admin-action-menu summary::-webkit-details-marker {
+    display: none;
+}
+
+.admin-action-menu[open] summary,
+.admin-action-menu summary:hover {
+    color: var(--admin-text);
+    background: var(--admin-sidebar-accent);
+}
+
+.admin-action-menu > div {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 20;
+    display: grid;
+    padding: 6px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-card);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, .12);
+}
+
+.admin-action-menu[open] > div {
+    position: fixed;
+    top: var(--action-menu-top, 0);
+    left: var(--action-menu-left, 0);
+    right: auto;
+}
+
+.admin-action-menu button,
+.admin-action-menu a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    padding: 0 9px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--admin-text);
+    font: inherit;
+    font-size: 13px;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.admin-action-menu button:hover,
+.admin-action-menu a:hover {
+    background: var(--admin-muted);
+}
+
+.admin-action-menu button.is-danger,
+.admin-action-menu a.is-danger {
+    color: var(--admin-danger);
+}
+
+.admin-empty-state {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 6px;
+    min-height: 150px;
+    padding: 24px;
+    text-align: center;
+}
+
+.admin-empty-state--panel {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 8px;
+    min-height: 220px;
+    padding: 34px;
+    border: 1px dashed var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-card);
+}
+
+.admin-empty-state--panel i {
+    color: var(--admin-muted-foreground);
+    font-size: 28px;
+}
+
+.admin-empty-state strong,
+.admin-empty-state span {
+    display: block;
+}
+
+.admin-empty-state > i {
+    margin-bottom: 4px;
+    color: var(--admin-muted-foreground);
+    font-size: 24px;
+}
+
+.admin-empty-state strong {
+    margin-bottom: 6px;
+    color: var(--admin-text);
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.admin-empty-state span {
+    color: var(--admin-muted-foreground);
+}
