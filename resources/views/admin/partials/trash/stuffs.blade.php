@@ -2,6 +2,7 @@
     <table class="admin-table admin-table--stuffs">
         <thead>
             <tr>
+                <th class="admin-bulk-check"><input type="checkbox" data-bulk-check-all="stuffs-trash-bulk-form" aria-label="Tout sélectionner"></th>
                 <th>Classe</th>
                 <th>Build</th>
                 <th>Elements</th>
@@ -14,6 +15,7 @@
         <tbody>
             @forelse($stuffs as $stuff)
                 <tr>
+                    <td class="admin-bulk-check"><input type="checkbox" name="ids[]" value="{{ $stuff->id }}" form="stuffs-trash-bulk-form" data-bulk-item aria-label="Sélectionner {{ $stuff->title }}"></td>
                     <td><span class="admin-tag">{{ $stuff->class_label }}</span></td>
                     <td><strong>{{ $stuff->title }}</strong></td>
                     <td>{{ implode(' / ', $stuff->elements ?? []) }}</td>
@@ -37,7 +39,7 @@
                 </tr>
             @empty
                 <tr class="admin-table-empty-row">
-                    <td colspan="7">
+                    <td colspan="8">
                         <div class="admin-empty-state">
                             <i class="fa-regular fa-trash-can"></i>
                             <strong>Corbeille vide</strong>

@@ -37,13 +37,11 @@ const getMissionFromRow = (row) => {
     const image = row?.querySelector(".admin-mission-thumb");
     const title = row?.querySelector("td:nth-child(2)")?.textContent?.trim() || "Mission";
     const type = row?.querySelector("td:nth-child(3)")?.textContent?.trim() || "";
-    const rewards = row?.querySelector("td:nth-child(4)")?.innerHTML || "";
 
     return {
         id: normalizeMissionId(title),
         title,
         type,
-        rewards,
         imageSrc: image?.getAttribute("src") || "",
         imageAlt: image?.getAttribute("alt") || title,
     };
@@ -205,7 +203,6 @@ const renderTrashList = () => {
                 <td><img class="admin-mission-thumb" src="${mission.imageSrc}" alt="${mission.imageAlt}"></td>
                 <td>${mission.title}</td>
                 <td><span class="admin-tag">${mission.type}</span></td>
-                <td>${mission.rewards}</td>
                 <td>
                     <div class="admin-row-actions">
                         <button class="admin-action-button admin-action-button--restore" type="button" data-restore-mission="${mission.id}" data-restore-title="${mission.title}" aria-label="Restaurer ${mission.title}" title="Restaurer">
@@ -272,7 +269,6 @@ if (missionForm) {
     const missionTitle = missionForm.querySelector('input[name="title"]');
     const missionCategory = missionForm.querySelector("[data-mission-category]");
     const missionImageSection = missionForm.querySelector("[data-mission-image-section]");
-    const missionRewardFields = missionForm.querySelectorAll("[data-mission-reward-field]");
     const songeFields = missionForm.querySelectorAll("[data-songe-field]");
     const songeType = missionForm.querySelector("[data-songe-type]");
     const songeFloor = missionForm.querySelector("[data-songe-floor]");
@@ -380,20 +376,6 @@ if (missionForm) {
         const category = missionCategory?.value || "";
         const isAnomaly = category === "anomalie";
         const isSonge = category === "songe";
-
-        missionRewardFields.forEach((field) => {
-            const input = field.querySelector("input, select, textarea");
-            field.hidden = isAnomaly;
-
-            if (input) {
-                input.disabled = isAnomaly;
-                input.required = !isAnomaly;
-
-                if (isAnomaly) {
-                    input.value = "";
-                }
-            }
-        });
 
         songeFields.forEach((field) => {
             field.hidden = !isSonge;

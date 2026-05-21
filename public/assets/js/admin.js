@@ -463,7 +463,7 @@ document.addEventListener("invalid", (event) => {
 }, true);
 
 document.querySelectorAll("form").forEach((form) => {
-    if (form.matches("[data-lottery-settings], [data-real-form]")) {
+    if (form.matches("[data-filter-form], [data-lottery-settings], [data-real-form]")) {
         return;
     }
 
@@ -852,9 +852,20 @@ const normalizeAdminSearchText = (value) => String(value || "")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
 
+document.querySelectorAll("[data-server-search]").forEach((searchInput) => {
+    let serverSearchTimeout = 0;
+
+    searchInput.addEventListener("input", () => {
+        window.clearTimeout(serverSearchTimeout);
+        serverSearchTimeout = window.setTimeout(() => {
+            searchInput.form?.requestSubmit();
+        }, 350);
+    });
+});
+
 document.querySelectorAll(".admin-search input").forEach((searchInput) => {
     if (
-        searchInput.matches("[data-gallery-search], [data-stuff-search], [data-validation-filter], [data-monster-search]")
+        searchInput.matches("[data-gallery-search], [data-server-search], [data-stuff-search], [data-validation-filter], [data-monster-search]")
     ) {
         return;
     }
@@ -877,4 +888,46 @@ document.querySelectorAll(".admin-search input").forEach((searchInput) => {
 
     searchInput.addEventListener("input", applySearch);
     applySearch();
+});
+
+document.querySelectorAll("[data-bulk-form]").forEach((form) => {
+    const checkboxes = Array.from(document.querySelectorAll(`[form="${form.id}"][data-bulk-item]`));
+    const masters = Array.from(document.querySelectorAll(`[data-bulk-check-all="${form.id}"]`));
+    const count = form.querySelector("[data-bulk-count]");
+    const submit = form.querySelector("[data-bulk-submit]");
+
+    if (!checkboxes.length) {
+        form.hidden = true;
+        return;
+    }
+
+    const sync = () => {
+        const selected = checkboxes.filter((checkbox) => checkbox.checked);
+        form.hidden = selected.length < 2;
+
+        if (count) {
+            count.textContent = `${selected.length} sélectionné${selected.length > 1 ? "s" : ""}`;
+        }
+
+        if (submit) {
+            submit.disabled = selected.length === 0;
+        }
+
+        masters.forEach((master) => {
+            master.checked = selected.length > 0 && selected.length === checkboxes.length;
+            master.indeterminate = selected.length > 0 && selected.length < checkboxes.length;
+        });
+    };
+
+    masters.forEach((master) => {
+        master.addEventListener("change", () => {
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = master.checked;
+            });
+            sync();
+        });
+    });
+
+    checkboxes.forEach((checkbox) => checkbox.addEventListener("change", sync));
+    sync();
 });

@@ -29,17 +29,6 @@ generatePasswordButton?.addEventListener("click", () => {
     passwordInput.focus();
 });
 
-const userSearchInput = document.querySelector("[data-user-search]");
-
-userSearchInput?.addEventListener("input", () => {
-    const query = userSearchInput.value.trim().toLowerCase();
-    const rows = document.querySelectorAll(".admin-table--users tbody tr");
-
-    rows.forEach((row) => {
-        row.hidden = query !== "" && !row.textContent.toLowerCase().includes(query);
-    });
-});
-
 const roleConfig = {
     admin: {
         label: "Administrateur",

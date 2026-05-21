@@ -4,6 +4,10 @@
 @section('description', 'Administration des utilisateurs de la guilde Les Zheros.')
 @php($activeAdmin = 'admin-users')
 @php($canDeleteUsers = auth()->user()?->canDeleteInAdminArea('users'))
+@php($filters = $filters ?? ['search' => ''])
+@push('scripts')
+<script src="{{ asset('assets/js/admin-users.js') }}?v={{ filemtime(public_path('assets/js/admin-users.js')) }}" defer></script>
+@endpush
 
 @section('admin')
 <main class="admin-main">
@@ -16,10 +20,10 @@
             <p>Utilisateurs</p>
         </div>
 
-        <div class="admin-actions">
+        <form class="admin-actions" action="{{ route('admin.utilisateurs.index') }}" method="get" data-filter-form>
             <label class="admin-search">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="search" placeholder="Rechercher..." data-user-search>
+                <input type="search" name="search" value="{{ $filters['search'] }}" placeholder="Rechercher..." data-user-search data-server-search>
             </label>
             <a class="admin-secondary-button" href="{{ route('admin.utilisateurs.trash') }}">
                 <i class="fa-regular fa-trash-can"></i>
@@ -29,7 +33,7 @@
                 <i class="fa-solid fa-user-plus"></i>
                 <span>Creer un utilisateur</span>
             </a>
-        </div>
+        </form>
     </header>
 
     <section class="admin-content">
@@ -38,10 +42,20 @@
             <h1>Utilisateurs</h1>
         </div>
 
+        @include('admin.partials.bulk-actions', [
+            'id' => 'users-bulk-form',
+            'action' => route('admin.utilisateurs.bulk'),
+            'actions' => array_filter([
+                'approve' => 'Valider',
+                $canDeleteUsers ? 'trash' : null => $canDeleteUsers ? 'Mettre en corbeille' : null,
+            ]),
+        ])
+
         <div class="admin-table-card">
             <table class="admin-table admin-table--users admin-table--actions-center">
                 <thead>
                     <tr>
+                        <th class="admin-bulk-check"><input type="checkbox" data-bulk-check-all="users-bulk-form" aria-label="Tout sélectionner"></th>
                         <th>Pseudo</th>
                         <th>Email</th>
                         <th>Rôles</th>
@@ -53,6 +67,7 @@
                 <tbody>
                     @forelse ($users as $user)
                         <tr>
+                            <td class="admin-bulk-check"><input type="checkbox" name="ids[]" value="{{ $user->id }}" form="users-bulk-form" data-bulk-item aria-label="Sélectionner {{ $user->name }}"></td>
                             <td>
                                 <div class="admin-user-cell">
                                     <span class="admin-user-avatar">
@@ -106,7 +121,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">
+                            <td colspan="7">
                                 <div class="admin-empty-state">
                                     <strong>Aucun utilisateur</strong>
                                     <span>Les comptes crees apparaitront ici.</span>
@@ -121,4 +136,3 @@
     </section>
 </main>
 @endsection
-

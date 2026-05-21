@@ -14,8 +14,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     'anomaly_level',
     'dream_type',
     'dream_floor',
-    'guildatons',
-    'activity_points',
     'image_mode',
     'image_path',
     'monster_id',
@@ -68,8 +66,6 @@ class Mission extends Model
         return [
             'dream_floor' => 'integer',
             'anomaly_level' => 'integer',
-            'guildatons' => 'integer',
-            'activity_points' => 'integer',
         ];
     }
 

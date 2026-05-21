@@ -15,6 +15,14 @@
     'canEmptyTrash' => $canDeleteUsers,
     'emptyButtonFirst' => true,
     'titleIcon' => 'fa-solid fa-users',
+    'bulk' => [
+        'id' => 'users-trash-bulk-form',
+        'action' => route('admin.utilisateurs.bulk'),
+        'actions' => array_filter([
+            'restore' => 'Restaurer',
+            $canDeleteUsers ? 'force_delete' : null => $canDeleteUsers ? 'Supprimer définitivement' : null,
+        ]),
+    ],
     'tableView' => 'admin.partials.trash.users',
 ])
 @endsection

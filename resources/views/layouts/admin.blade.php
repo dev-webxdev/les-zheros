@@ -17,7 +17,7 @@
         <meta name="admin-toast-text" content="{{ session('admin_toast.text') }}">
         <meta name="admin-toast-type" content="{{ session('admin_toast.type', 'success') }}">
     @endif
-    <script src="{{ asset('assets/js/admin.js') }}" defer></script>
+    <script src="{{ asset('assets/js/admin.js') }}?v={{ filemtime(public_path('assets/js/admin.js')) }}" defer></script>
     @stack('scripts')
 </head>
 <body @class(['admin-body', 'admin-no-delete' => auth()->user()?->hasAdminRole(\App\Support\AdminAccess::MODERATOR) && ! auth()->user()?->hasAdminRole(\App\Support\AdminAccess::ADMIN)])>

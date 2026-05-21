@@ -55,7 +55,7 @@
                                 <span>1</span>
                                 <div>
                                     <h3>Informations</h3>
-                                    <p>Commence par le titre, la catégorie et les récompenses.</p>
+                                    <p>Commence par le titre et la catégorie.</p>
                                 </div>
                             </div>
 
@@ -117,15 +117,6 @@
                                     </select>
                                 </label>
 
-                                <label class="admin-field" for="m-guildatons" data-mission-reward-field>
-                                    <span>Guildatons</span>
-                                    <input id="m-guildatons" name="guildatons" type="number" min="0" step="1" value="{{ old('guildatons', $mission->guildatons) }}" placeholder="600" required>
-                                </label>
-
-                                <label class="admin-field" for="m-activity-points" data-mission-reward-field>
-                                    <span>Points d'activité</span>
-                                    <input id="m-activity-points" name="activity_points" type="number" min="0" step="1" value="{{ old('activity_points', $mission->activity_points) }}" placeholder="50" required>
-                                </label>
                             </div>
                         </section>
 

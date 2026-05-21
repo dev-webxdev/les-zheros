@@ -70,6 +70,37 @@ class StuffController extends Controller
         ]);
     }
 
+    public function bulk(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'action' => ['required', 'in:trash,restore,force_delete'],
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer'],
+        ]);
+
+        if (in_array($data['action'], ['trash', 'force_delete'], true)) {
+            abort_unless($request->user()?->canDeleteInAdminArea('stuffs'), 403);
+        }
+
+        $stuffs = $data['action'] === 'trash'
+            ? Stuff::whereKey($data['ids'])->get()
+            : Stuff::onlyTrashed()->whereKey($data['ids'])->get();
+
+        if ($data['action'] === 'trash') {
+            $stuffs->each->delete();
+        } elseif ($data['action'] === 'restore') {
+            $stuffs->each->restore();
+        } else {
+            $stuffs->each->forceDelete();
+        }
+
+        return back()->with('admin_toast', [
+            'title' => 'Action groupÃ©e terminÃ©e',
+            'text' => $stuffs->count().' stuff(s) traitÃ©(s).',
+            'type' => $data['action'] === 'force_delete' ? 'warning' : 'success',
+        ]);
+    }
+
     public function trash(): View
     {
         return view('admin.admin-stuffs-trash', [

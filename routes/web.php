@@ -93,6 +93,7 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin/galerie', [AdminGalleryController::class, 'index'])->middleware('admin:gallery')->name('admin.galerie.index');
     Route::get('/admin/galerie/creer', [AdminGalleryController::class, 'create'])->middleware('admin:gallery')->name('admin.galerie.create');
     Route::post('/admin/galerie', [AdminGalleryController::class, 'store'])->middleware('admin:gallery')->name('admin.galerie.store');
+    Route::post('/admin/galerie/actions', [AdminGalleryController::class, 'bulk'])->middleware('admin:gallery')->name('admin.galerie.bulk');
     Route::get('/admin/galerie/corbeille', [AdminGalleryController::class, 'trash'])->middleware('admin:gallery')->name('admin.galerie.trash');
     Route::delete('/admin/galerie/corbeille', [AdminGalleryController::class, 'emptyTrash'])->middleware('admin:gallery,delete')->name('admin.galerie.empty-trash');
     Route::patch('/admin/galerie/corbeille/{image}/restaurer', [AdminGalleryController::class, 'restore'])->middleware('admin:gallery')->name('admin.galerie.restore');
@@ -114,6 +115,7 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin/missions', [AdminMissionController::class, 'index'])->middleware('admin:missions')->name('admin.missions.index');
     Route::get('/admin/missions/creer', [AdminMissionController::class, 'create'])->middleware('admin:missions')->name('admin.missions.create');
     Route::post('/admin/missions', [AdminMissionController::class, 'store'])->middleware('admin:missions')->name('admin.missions.store');
+    Route::post('/admin/missions/actions', [AdminMissionController::class, 'bulk'])->middleware('admin:missions')->name('admin.missions.bulk');
     Route::get('/admin/missions/corbeille', [AdminMissionController::class, 'trash'])->middleware('admin:missions')->name('admin.missions.trash');
     Route::delete('/admin/missions/corbeille', [AdminMissionController::class, 'emptyTrash'])->middleware('admin:missions,delete')->name('admin.missions.empty-trash');
     Route::patch('/admin/missions/corbeille/{mission}/restaurer', [AdminMissionController::class, 'restore'])->middleware('admin:missions')->name('admin.missions.restore');
@@ -141,6 +143,7 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin/parametres/sauvegardes/{backup}', [BackupController::class, 'download'])->middleware('admin:settings,backups')->name('admin.parametres.backups.download');
     Route::post('/admin/parametres/sauvegardes/{backup}/restaurer', [BackupController::class, 'restore'])->middleware('admin:settings,backups')->name('admin.parametres.backups.restore');
     Route::delete('/admin/parametres/sauvegardes/{backup}', [BackupController::class, 'destroy'])->middleware('admin:settings,backups')->name('admin.parametres.backups.destroy');
+    Route::post('/admin/mediatheque/actions', [MediaController::class, 'bulk'])->middleware('admin:media')->name('admin.mediatheque.bulk');
     Route::get('/admin/sorties', [AdminOutingController::class, 'index'])->middleware('admin:outings')->name('admin.sorties.index');
     Route::get('/admin/sorties/creer', [AdminOutingController::class, 'create'])->middleware('admin:outings')->name('admin.sorties.create');
     Route::post('/admin/sorties', [AdminOutingController::class, 'store'])->middleware('admin:outings')->name('admin.sorties.store');
@@ -155,6 +158,7 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin/stuffs', [AdminStuffController::class, 'index'])->middleware('admin:stuffs')->name('admin.stuffs.index');
     Route::get('/admin/stuffs/creer', [AdminStuffController::class, 'create'])->middleware('admin:stuffs')->name('admin.stuffs.create');
     Route::post('/admin/stuffs', [AdminStuffController::class, 'store'])->middleware('admin:stuffs')->name('admin.stuffs.store');
+    Route::post('/admin/stuffs/actions', [AdminStuffController::class, 'bulk'])->middleware('admin:stuffs')->name('admin.stuffs.bulk');
     Route::get('/admin/stuffs/corbeille', [AdminStuffController::class, 'trash'])->middleware('admin:stuffs')->name('admin.stuffs.trash');
     Route::delete('/admin/stuffs/corbeille', [AdminStuffController::class, 'emptyTrash'])->middleware('admin:stuffs,delete')->name('admin.stuffs.empty-trash');
     Route::patch('/admin/stuffs/corbeille/{stuff}/restaurer', [AdminStuffController::class, 'restore'])->middleware('admin:stuffs')->name('admin.stuffs.restore');
@@ -165,6 +169,7 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin/utilisateurs', [UserController::class, 'index'])->middleware('admin:users')->name('admin.utilisateurs.index');
     Route::get('/admin/utilisateurs/creer', [UserController::class, 'create'])->middleware('admin:users')->name('admin.utilisateurs.create');
     Route::post('/admin/utilisateurs', [UserController::class, 'store'])->middleware('admin:users')->name('admin.utilisateurs.store');
+    Route::post('/admin/utilisateurs/actions', [UserController::class, 'bulk'])->middleware('admin:users')->name('admin.utilisateurs.bulk');
     Route::get('/admin/utilisateurs/corbeille', [UserController::class, 'trash'])->middleware('admin:users')->name('admin.utilisateurs.trash');
     Route::delete('/admin/utilisateurs/corbeille', [UserController::class, 'emptyTrash'])->middleware('admin:users,delete')->name('admin.utilisateurs.empty-trash');
     Route::patch('/admin/utilisateurs/corbeille/{user}/restaurer', [UserController::class, 'restore'])->middleware('admin:users')->name('admin.utilisateurs.restore');
@@ -176,6 +181,7 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin/validations', [ValidationController::class, 'index'])->middleware('admin:validations')->name('admin.validations.index');
     Route::get('/admin/validations/creer', [ValidationController::class, 'create'])->middleware('admin:validations')->name('admin.validations.create');
     Route::post('/admin/validations', [ValidationController::class, 'store'])->middleware('admin:validations')->name('admin.validations.store');
+    Route::post('/admin/validations/actions', [ValidationController::class, 'bulk'])->middleware('admin:validations')->name('admin.validations.bulk');
     Route::get('/admin/validations/corbeille', [ValidationController::class, 'trash'])->middleware('admin:validations')->name('admin.validations.trash');
     Route::delete('/admin/validations/corbeille', [ValidationController::class, 'emptyTrash'])->middleware('admin:validations,delete')->name('admin.validations.empty-trash');
     Route::patch('/admin/validations/corbeille/{validation}/restaurer', [ValidationController::class, 'restore'])->middleware('admin:validations')->name('admin.validations.restore');

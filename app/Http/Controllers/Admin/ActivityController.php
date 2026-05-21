@@ -61,7 +61,7 @@ class ActivityController extends Controller
                 });
             })
             ->latest()
-            ->paginate(20)
+            ->paginate(16)
             ->withQueryString();
 
         return view('admin.admin-activity', [

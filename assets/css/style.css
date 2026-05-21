@@ -2674,8 +2674,7 @@ body.home-page {
 }
 
 .mission-card h3,
-.mission-card p,
-.mission-card-rewards {
+.mission-card p {
     position: relative;
     z-index: 2;
 }
@@ -2701,37 +2700,6 @@ body.home-page {
 
 .mission-card p strong {
     color: #60a9ff;
-}
-
-.mission-card-rewards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 9px;
-    margin-top: auto;
-    padding-top: 12px;
-}
-
-.mission-card-rewards span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 34px;
-    line-height: 1;
-    padding: 0 12px;
-    border: 1px solid rgba(122, 181, 255, .2);
-    border-radius: 999px;
-    background-color: rgba(16, 20, 45, .66);
-    color: #d5e2ff;
-    font-size: 14px;
-    font-weight: 900;
-}
-
-.mission-card-rewards img {
-    display: block;
-    flex: 0 0 auto;
-    object-fit: contain;
-    image-rendering: pixelated;
 }
 
 .mission-card > img {

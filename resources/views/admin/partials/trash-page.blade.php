@@ -49,6 +49,10 @@
             <h1>{{ $titleText }}</h1>
         </div>
 
+        @isset($bulk)
+            @include('admin.partials.bulk-actions', $bulk)
+        @endisset
+
         @include($tableView)
         @include('partials.admin-pagination', ['paginator' => $items])
     </section>

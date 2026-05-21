@@ -40,10 +40,17 @@
             <h1>Catalogue stuffs</h1>
         </div>
 
+        @include('admin.partials.bulk-actions', [
+            'id' => 'stuffs-bulk-form',
+            'action' => route('admin.stuffs.bulk'),
+            'actions' => $canDeleteStuffs ? ['trash' => 'Mettre en corbeille'] : [],
+        ])
+
         <div class="admin-table-card">
             <table class="admin-table admin-table--stuffs">
                 <thead>
                     <tr>
+                        @if($canDeleteStuffs)<th class="admin-bulk-check"><input type="checkbox" data-bulk-check-all="stuffs-bulk-form" aria-label="Tout sélectionner"></th>@endif
                         <th>Classe</th>
                         <th>Build</th>
                         <th>Éléments</th>
@@ -56,6 +63,7 @@
                 <tbody>
                     @forelse($stuffs as $stuff)
                         <tr data-stuff-row data-search="{{ strtolower($stuff->class_label.' '.$stuff->title.' '.implode(' ', $stuff->elements ?? []).' '.$stuff->mode) }}">
+                            @if($canDeleteStuffs)<td class="admin-bulk-check"><input type="checkbox" name="ids[]" value="{{ $stuff->id }}" form="stuffs-bulk-form" data-bulk-item aria-label="Sélectionner {{ $stuff->title }}"></td>@endif
                             <td><span class="admin-tag">{{ $stuff->class_label }}</span></td>
                             <td>
                                 <div class="admin-announcement-cell">
@@ -82,7 +90,7 @@
                         </tr>
                     @empty
                         <tr class="admin-table-empty-row">
-                            <td colspan="7">
+                            <td colspan="{{ $canDeleteStuffs ? 8 : 7 }}">
                                 <div class="admin-empty-state">
                                     <i class="fa-solid fa-shield-halved"></i>
                                     <strong>Aucun stuff</strong>

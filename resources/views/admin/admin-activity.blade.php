@@ -16,10 +16,10 @@
         </div>
 
         <div class="admin-actions">
-            <form class="admin-actions" action="{{ route('admin.activite.index', ['area' => $filters['area'] === 'all' ? null : $filters['area']]) }}" method="get">
+            <form class="admin-actions" action="{{ route('admin.activite.index', ['area' => $filters['area'] === 'all' ? null : $filters['area']]) }}" method="get" data-filter-form>
                 <label class="admin-search">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="search" name="search" value="{{ $filters['search'] }}" placeholder="Rechercher...">
+                    <input type="search" name="search" value="{{ $filters['search'] }}" placeholder="Rechercher..." data-server-search>
                 </label>
                 <select class="admin-filter-select" data-activity-area-filter onchange="const next = this.value === 'all' ? '{{ route('admin.activite.index') }}' : '{{ url('/admin/activite') }}/' + encodeURIComponent(this.value); const search = this.form.search.value.trim(); window.location.href = search ? next + '?search=' + encodeURIComponent(search) : next;">
                     <option value="all">Toutes les sections</option>

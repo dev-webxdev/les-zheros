@@ -9,6 +9,7 @@
         <table class="admin-table admin-table--users admin-table--actions-center">
             <thead>
                 <tr>
+                    <th class="admin-bulk-check"><input type="checkbox" data-bulk-check-all="users-trash-bulk-form" aria-label="Tout sélectionner"></th>
                     <th>Pseudo</th>
                     <th>Email</th>
                     <th>Roles</th>
@@ -19,6 +20,7 @@
             <tbody>
                 @foreach ($users as $user)
                     <tr>
+                        <td class="admin-bulk-check"><input type="checkbox" name="ids[]" value="{{ $user->id }}" form="users-trash-bulk-form" data-bulk-item aria-label="Sélectionner {{ $user->name }}"></td>
                         <td>
                             <div class="admin-user-cell">
                                 <span class="admin-user-avatar">

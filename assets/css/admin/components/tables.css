@@ -4,6 +4,58 @@
     background: var(--admin-card);
 }
 
+.admin-bulk-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 16px;
+    padding: 10px;
+    border: 1px solid color-mix(in srgb, var(--admin-primary) 22%, var(--admin-border));
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--admin-primary) 5%, var(--admin-card));
+}
+
+.admin-bulk-actions[hidden] {
+    display: none;
+}
+
+.admin-bulk-actions span,
+.admin-bulk-actions__check {
+    color: #5f6b7a;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-bulk-actions__check {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-bulk-actions select {
+    min-width: 180px;
+    height: 36px;
+    border: 1px solid #d8deea;
+    border-radius: 8px;
+    background: #fff;
+    color: #111827;
+    font-weight: 800;
+}
+
+.admin-bulk-check input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.admin-table:has(.admin-bulk-check) th.admin-bulk-check,
+.admin-table:has(.admin-bulk-check) td.admin-bulk-check {
+    width: 44px !important;
+    min-width: 44px;
+    padding: 0 10px !important;
+    text-align: center;
+}
+
 .admin-pagination {
     display: flex;
     flex-wrap: wrap;
@@ -361,4 +413,142 @@
 
 .admin-sort-button.is-active {
     color: var(--admin-primary);
+}
+
+.admin-table--users:has(.admin-bulk-check) th:nth-child(2),
+.admin-table--users:has(.admin-bulk-check) td:nth-child(2) {
+    width: 25%;
+}
+
+.admin-table--users:has(.admin-bulk-check) th:nth-child(3),
+.admin-table--users:has(.admin-bulk-check) td:nth-child(3) {
+    width: 31%;
+}
+
+.admin-table--users:has(.admin-bulk-check) th:nth-child(4),
+.admin-table--users:has(.admin-bulk-check) td:nth-child(4),
+.admin-table--users:has(.admin-bulk-check) th:nth-child(5),
+.admin-table--users:has(.admin-bulk-check) td:nth-child(5) {
+    width: 16%;
+}
+
+.admin-table--users:has(.admin-bulk-check) th:nth-child(6),
+.admin-table--users:has(.admin-bulk-check) td:nth-child(6),
+.admin-table--users:has(.admin-bulk-check) th:nth-child(7),
+.admin-table--users:has(.admin-bulk-check) td:nth-child(7) {
+    width: 136px;
+    text-align: center;
+}
+
+.admin-table--missions:has(.admin-bulk-check) th:nth-child(2),
+.admin-table--missions:has(.admin-bulk-check) td:nth-child(2) {
+    width: 78px;
+}
+
+.admin-table--missions:has(.admin-bulk-check) th:nth-child(3),
+.admin-table--missions:has(.admin-bulk-check) td:nth-child(3) {
+    width: auto;
+}
+
+.admin-table--missions:has(.admin-bulk-check) th:nth-child(4),
+.admin-table--missions:has(.admin-bulk-check) td:nth-child(4) {
+    width: 31%;
+}
+
+.admin-table--missions:has(.admin-bulk-check) th:nth-child(5),
+.admin-table--missions:has(.admin-bulk-check) td:nth-child(5) {
+    width: 156px;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.admin-table--missions:has(.admin-bulk-check) th:nth-child(6),
+.admin-table--missions:has(.admin-bulk-check) td:nth-child(6) {
+    width: 120px;
+    text-align: center;
+}
+
+.admin-table--gallery-trash:has(.admin-bulk-check) th:nth-child(2),
+.admin-table--gallery-trash:has(.admin-bulk-check) td:nth-child(2) {
+    width: 96px;
+}
+
+.admin-table--gallery-trash:has(.admin-bulk-check) th:nth-child(4),
+.admin-table--gallery-trash:has(.admin-bulk-check) td:nth-child(4) {
+    width: 170px;
+}
+
+.admin-table--gallery-trash:has(.admin-bulk-check) th:nth-child(5),
+.admin-table--gallery-trash:has(.admin-bulk-check) td:nth-child(5) {
+    width: 112px;
+    text-align: right;
+}
+
+.admin-table--users:has(.admin-bulk-check) th:nth-child(2),
+.admin-table--users:has(.admin-bulk-check) td:nth-child(2) {
+    width: 25%;
+}
+
+.admin-table--users:has(.admin-bulk-check) th:nth-child(3),
+.admin-table--users:has(.admin-bulk-check) td:nth-child(3) {
+    width: 31%;
+}
+
+.admin-table--users:has(.admin-bulk-check) th:nth-child(4),
+.admin-table--users:has(.admin-bulk-check) td:nth-child(4),
+.admin-table--users:has(.admin-bulk-check) th:nth-child(5),
+.admin-table--users:has(.admin-bulk-check) td:nth-child(5) {
+    width: 16%;
+}
+
+.admin-table--users:has(.admin-bulk-check) th:nth-child(6),
+.admin-table--users:has(.admin-bulk-check) td:nth-child(6),
+.admin-table--users:has(.admin-bulk-check) th:nth-child(7),
+.admin-table--users:has(.admin-bulk-check) td:nth-child(7) {
+    width: 136px;
+    text-align: center;
+}
+
+.admin-table--missions:has(.admin-bulk-check) th:nth-child(2),
+.admin-table--missions:has(.admin-bulk-check) td:nth-child(2) {
+    width: 78px;
+}
+
+.admin-table--missions:has(.admin-bulk-check) th:nth-child(3),
+.admin-table--missions:has(.admin-bulk-check) td:nth-child(3) {
+    width: auto;
+}
+
+.admin-table--missions:has(.admin-bulk-check) th:nth-child(4),
+.admin-table--missions:has(.admin-bulk-check) td:nth-child(4) {
+    width: 31%;
+}
+
+.admin-table--missions:has(.admin-bulk-check) th:nth-child(5),
+.admin-table--missions:has(.admin-bulk-check) td:nth-child(5) {
+    width: 156px;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.admin-table--missions:has(.admin-bulk-check) th:nth-child(6),
+.admin-table--missions:has(.admin-bulk-check) td:nth-child(6) {
+    width: 120px;
+    text-align: center;
+}
+
+.admin-table--gallery-trash:has(.admin-bulk-check) th:nth-child(2),
+.admin-table--gallery-trash:has(.admin-bulk-check) td:nth-child(2) {
+    width: 96px;
+}
+
+.admin-table--gallery-trash:has(.admin-bulk-check) th:nth-child(4),
+.admin-table--gallery-trash:has(.admin-bulk-check) td:nth-child(4) {
+    width: 170px;
+}
+
+.admin-table--gallery-trash:has(.admin-bulk-check) th:nth-child(5),
+.admin-table--gallery-trash:has(.admin-bulk-check) td:nth-child(5) {
+    width: 112px;
+    text-align: right;
 }

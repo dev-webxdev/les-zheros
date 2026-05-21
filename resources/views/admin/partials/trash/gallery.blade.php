@@ -2,6 +2,7 @@
     <table class="admin-table admin-table--gallery-trash">
         <thead>
             <tr>
+                <th class="admin-bulk-check"><input type="checkbox" data-bulk-check-all="gallery-trash-bulk-form" aria-label="Tout sélectionner"></th>
                 <th>Apercu</th>
                 <th>Image</th>
                 <th>Supprimee</th>
@@ -11,6 +12,7 @@
         <tbody>
             @forelse($images as $image)
                 <tr>
+                    <td class="admin-bulk-check"><input type="checkbox" name="ids[]" value="{{ $image->id }}" form="gallery-trash-bulk-form" data-bulk-item aria-label="Sélectionner {{ $image->title }}"></td>
                     <td><img class="admin-gallery-thumb" src="{{ $image->imageUrl() }}" alt="{{ $image->title }}"></td>
                     <td><div class="admin-announcement-cell"><strong>{{ $image->title }}</strong><span>{{ $image->description ?: 'Aucune description ajoutee.' }}</span></div></td>
                     <td>{{ $image->deleted_at?->translatedFormat('d M Y') }}</td>
@@ -30,7 +32,7 @@
                     </td>
                 </tr>
             @empty
-                <tr class="admin-table-empty-row"><td colspan="4"><div class="admin-empty-state"><strong>Aucune image supprimee</strong><span>La corbeille est vide.</span></div></td></tr>
+                <tr class="admin-table-empty-row"><td colspan="5"><div class="admin-empty-state"><strong>Aucune image supprimee</strong><span>La corbeille est vide.</span></div></td></tr>
             @endforelse
         </tbody>
     </table>

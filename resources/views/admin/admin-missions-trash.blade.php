@@ -14,6 +14,14 @@
     'items' => $missions,
     'canEmptyTrash' => $canDeleteMissions,
     'titleIcon' => 'fa-solid fa-scroll',
+    'bulk' => [
+        'id' => 'missions-trash-bulk-form',
+        'action' => route('admin.missions.bulk'),
+        'actions' => array_filter([
+            'restore' => 'Restaurer',
+            $canDeleteMissions ? 'force_delete' : null => $canDeleteMissions ? 'Supprimer définitivement' : null,
+        ]),
+    ],
     'tableView' => 'admin.partials.trash.missions',
 ])
 @endsection

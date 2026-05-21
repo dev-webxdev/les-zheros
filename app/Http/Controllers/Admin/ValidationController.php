@@ -207,6 +207,47 @@ class ValidationController extends Controller
         ]);
     }
 
+    public function bulk(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'action' => ['required', Rule::in(['pending', 'validated', 'refused', 'trash', 'restore', 'force_delete'])],
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer'],
+        ]);
+
+        if (in_array($data['action'], ['trash', 'force_delete'], true)) {
+            abort_unless($request->user()?->canDeleteInAdminArea('validations'), 403);
+        }
+
+        $count = 0;
+
+        if (in_array($data['action'], array_keys(MissionValidation::STATUSES), true)) {
+            $count = MissionValidation::whereKey($data['ids'])->update([
+                'status' => $data['action'],
+                'reviewed_at' => now(),
+                'reviewed_by' => $request->user()?->id,
+            ]);
+        } elseif ($data['action'] === 'trash') {
+            $validations = MissionValidation::whereKey($data['ids'])->get();
+            $validations->each->delete();
+            $count = $validations->count();
+        } elseif ($data['action'] === 'restore') {
+            $validations = MissionValidation::onlyTrashed()->whereKey($data['ids'])->get();
+            $validations->each->restore();
+            $count = $validations->count();
+        } else {
+            $validations = MissionValidation::onlyTrashed()->whereKey($data['ids'])->get();
+            $validations->each->forceDelete();
+            $count = $validations->count();
+        }
+
+        return back()->with('admin_toast', [
+            'title' => 'Action groupÃ©e terminÃ©e',
+            'text' => $count.' validation(s) traitÃ©e(s).',
+            'type' => $data['action'] === 'force_delete' ? 'warning' : 'success',
+        ]);
+    }
+
     public function trash(): View
     {
         return view('admin.admin-validations-trash', [

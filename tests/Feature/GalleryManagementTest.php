@@ -7,11 +7,20 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
 class GalleryManagementTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function tearDown(): void
+    {
+        collect(File::glob(public_path('assets/uploads/gallery/gallery_*')) ?: [])
+            ->each(fn (string $path) => File::delete($path));
+
+        parent::tearDown();
+    }
 
     public function test_gallery_create_form_prefills_today_and_card_truncates_description(): void
     {

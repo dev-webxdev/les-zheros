@@ -3,6 +3,7 @@
 @section('title', 'Corbeille stuffs | Les Z-heros')
 @section('description', 'Corbeille du catalogue de stuffs Les Z-heros.')
 @php($activeAdmin = 'admin-stuffs')
+@php($canDeleteStuffs = auth()->user()?->canDeleteInAdminArea('stuffs'))
 
 @section('admin')
 @include('admin.partials.trash-page', [
@@ -14,6 +15,15 @@
     'contentClass' => 'admin-stuffs',
     'titleIcon' => 'fa-regular fa-trash-can',
     'titleText' => 'Corbeille stuffs',
+    'canEmptyTrash' => $canDeleteStuffs,
+    'bulk' => [
+        'id' => 'stuffs-trash-bulk-form',
+        'action' => route('admin.stuffs.bulk'),
+        'actions' => array_filter([
+            'restore' => 'Restaurer',
+            $canDeleteStuffs ? 'force_delete' : null => $canDeleteStuffs ? 'Supprimer définitivement' : null,
+        ]),
+    ],
     'tableView' => 'admin.partials.trash.stuffs',
 ])
 @endsection

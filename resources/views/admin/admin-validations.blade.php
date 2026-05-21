@@ -78,11 +78,23 @@
             </label>
         </form>
 
+        @include('admin.partials.bulk-actions', [
+            'id' => 'validations-bulk-form',
+            'action' => route('admin.validations.bulk'),
+            'actions' => [
+                \App\Models\MissionValidation::VALIDATED => 'Valider',
+                \App\Models\MissionValidation::REFUSED => 'Refuser',
+                \App\Models\MissionValidation::PENDING => 'Remettre en attente',
+                'trash' => 'Mettre en corbeille',
+            ],
+        ])
+
         <section class="admin-validation-layout">
             <div class="admin-table-card admin-validation-table-card">
                 <table class="admin-table admin-table--validations">
                     <thead>
                         <tr>
+                            <th class="admin-bulk-check"><input type="checkbox" data-bulk-check-all="validations-bulk-form" aria-label="Tout sélectionner"></th>
                             <th>Joueur</th>
                             <th>Mission</th>
                             <th>Aide</th>
@@ -98,6 +110,7 @@
                         @forelse ($validations as $validation)
                             @php($proofSource = $validation->proof_path ?: ($validation->proof_text && filter_var($validation->proof_text, FILTER_VALIDATE_URL) ? $validation->proof_text : ''))
                             <tr data-validation-row data-player="{{ $validation->user?->name }}" data-status="{{ $validation->status }}" data-search="{{ $validation->user?->name }} {{ $validation->mission?->title }}">
+                                <td class="admin-bulk-check"><input type="checkbox" name="ids[]" value="{{ $validation->id }}" form="validations-bulk-form" data-bulk-item aria-label="Sélectionner la validation de {{ $validation->user?->name }}"></td>
                                 <td>
                                     <div class="admin-user-cell">
                                         <span class="admin-user-avatar">
@@ -154,7 +167,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9">
+                                <td colspan="10">
                                     <div class="admin-empty-state">
                                         <strong>Aucune validation</strong>
                                         <span>Les déclarations envoyées depuis le profil apparaîtront ici.</span>

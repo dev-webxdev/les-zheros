@@ -13,7 +13,7 @@
             <p>Médiathèque</p>
         </div>
 
-        <form class="admin-actions" action="{{ route('admin.mediatheque.index') }}" method="get">
+        <form class="admin-actions" action="{{ route('admin.mediatheque.index') }}" method="get" data-filter-form>
             <label class="admin-search">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input type="search" name="search" placeholder="Rechercher..." value="{{ $filters['search'] }}">
@@ -32,10 +32,17 @@
             <p>{{ $stats['total'] }} image(s) · {{ $stats['size'] }} · {{ $stats['unused'] }} supprimable(s)</p>
         </div>
 
+        @include('admin.partials.bulk-actions', [
+            'id' => 'media-bulk-form',
+            'action' => route('admin.mediatheque.bulk'),
+            'actions' => ['delete' => 'Supprimer'],
+        ])
+
         <div class="admin-table-card">
             <table class="admin-table admin-table--media">
                 <thead>
                     <tr>
+                        <th class="admin-bulk-check"><input type="checkbox" data-bulk-check-all="media-bulk-form" aria-label="Tout sélectionner"></th>
                         <th>Aperçu</th>
                         <th>Fichier</th>
                         <th>Dossier</th>
@@ -47,6 +54,11 @@
                 <tbody>
                     @forelse($images as $image)
                         <tr>
+                            <td class="admin-bulk-check">
+                                @if($image['deletable'])
+                                    <input type="checkbox" name="ids[]" value="{{ $image['path'] }}" form="media-bulk-form" data-bulk-item aria-label="Sélectionner {{ $image['name'] }}">
+                                @endif
+                            </td>
                             <td>
                                 <a class="admin-media-thumb" href="{{ $image['url'] }}" target="_blank" rel="noopener">
                                     <img src="{{ $image['url'] }}" alt="">
@@ -84,7 +96,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">
+                            <td colspan="7">
                                 <div class="admin-empty-state"><i class="fa-regular fa-image"></i><strong>Aucune image</strong><span>Aucune image uploadée ne correspond aux filtres.</span></div>
                             </td>
                         </tr>

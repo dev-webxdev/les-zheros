@@ -40,17 +40,24 @@
                 <i class="fa-solid fa-scroll"></i>
                 <h1>Missions</h1>
             </div>
-            <p>Gère les objectifs hebdomadaires, leurs récompenses et les visuels visibles côté joueurs.</p>
+            <p>Gère les objectifs hebdomadaires et les visuels visibles côté joueurs.</p>
         </div>
+
+        @php($canDeleteMissions = auth()->user()?->canDeleteInAdminArea('missions'))
+        @include('admin.partials.bulk-actions', [
+            'id' => 'missions-bulk-form',
+            'action' => route('admin.missions.bulk'),
+            'actions' => $canDeleteMissions ? ['trash' => 'Mettre en corbeille'] : [],
+        ])
 
         <div class="admin-table-card">
             <table class="admin-table admin-table--missions admin-table--actions-center">
                 <thead>
                     <tr>
+                        @if($canDeleteMissions)<th class="admin-bulk-check"><input type="checkbox" data-bulk-check-all="missions-bulk-form" aria-label="Tout sélectionner"></th>@endif
                         <th>Image</th>
                         <th>Titre</th>
                         <th>Type</th>
-                        <th>Récompenses</th>
                         <th>Création</th>
                         <th>Actions</th>
                     </tr>
@@ -58,6 +65,7 @@
                 <tbody>
                     @forelse ($missions as $mission)
                         <tr>
+                            @if($canDeleteMissions)<td class="admin-bulk-check"><input type="checkbox" name="ids[]" value="{{ $mission->id }}" form="missions-bulk-form" data-bulk-item aria-label="Sélectionner {{ $mission->title }}"></td>@endif
                             <td><img class="admin-mission-thumb" src="{{ $mission->imageUrl() }}" alt="{{ $mission->title }}"></td>
                             <td>{{ $mission->title }}</td>
                             <td>
@@ -65,13 +73,6 @@
                                 @if ($mission->category === 'songe')
                                     <span class="admin-tag">{{ $mission->dreamTypeLabel() }}</span>
                                     <span class="admin-tag">Palier {{ $mission->dream_floor }}</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if ($mission->category === 'anomalie')
-                                    <span class="admin-muted-text">Titre seul</span>
-                                @else
-                                    {{ $mission->guildatons }} guildatons / {{ $mission->activity_points }} points
                                 @endif
                             </td>
                             <td>{{ $mission->created_at?->translatedFormat('d M Y') }}</td>
@@ -97,7 +98,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">
+                            <td colspan="{{ $canDeleteMissions ? 6 : 5 }}">
                                 <div class="admin-empty-state">
                                     <strong>Aucune mission</strong>
                                     <span>Les missions créées apparaîtront ici et sur le front.</span>

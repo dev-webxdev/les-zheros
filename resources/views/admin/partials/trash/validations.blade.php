@@ -9,6 +9,7 @@
         <table class="admin-table admin-table--validations">
             <thead>
                 <tr>
+                    <th class="admin-bulk-check"><input type="checkbox" data-bulk-check-all="validations-trash-bulk-form" aria-label="Tout sélectionner"></th>
                     <th>Joueur</th>
                     <th>Mission</th>
                     <th>Persos</th>
@@ -20,6 +21,7 @@
             <tbody>
                 @foreach ($validations as $validation)
                     <tr>
+                        <td class="admin-bulk-check"><input type="checkbox" name="ids[]" value="{{ $validation->id }}" form="validations-trash-bulk-form" data-bulk-item aria-label="Sélectionner la validation de {{ $validation->user?->name }}"></td>
                         <td>
                             <div class="admin-user-cell">
                                 <span class="admin-user-avatar">

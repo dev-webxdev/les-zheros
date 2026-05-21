@@ -172,6 +172,42 @@ class MediaController extends Controller
         ]);
     }
 
+    public function bulk(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'action' => ['required', 'in:delete'],
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['string'],
+        ]);
+        $usedReferences = $this->usedReferences();
+        $deleted = 0;
+
+        foreach ($data['ids'] as $rawPath) {
+            $path = $this->normalizePublicPath($rawPath);
+            $fullPath = public_path($path);
+            $uploadsRoot = realpath(public_path('assets/uploads'));
+            $target = realpath($fullPath);
+
+            if (! $uploadsRoot || ! $target || ! Str::startsWith($target, $uploadsRoot) || ! File::isFile($target)) {
+                continue;
+            }
+
+            if (! in_array(Str::lower(File::extension($target)), self::IMAGE_EXTENSIONS, true) || $this->isUsed($path, $usedReferences)) {
+                continue;
+            }
+
+            File::delete($target);
+            AdminActivity::log('media', 'deleted', 'Image supprimÃ©e', $path);
+            $deleted++;
+        }
+
+        return back()->with('admin_toast', [
+            'title' => 'Suppression groupÃ©e terminÃ©e',
+            'text' => $deleted.' image(s) supprimÃ©e(s).',
+            'type' => 'warning',
+        ]);
+    }
+
     /**
      * @param list<string> $usedReferences
      * @return list<array<string, mixed>>

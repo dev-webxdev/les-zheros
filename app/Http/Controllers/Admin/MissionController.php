@@ -69,6 +69,41 @@ class MissionController extends Controller
         ]);
     }
 
+    public function bulk(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'action' => ['required', Rule::in(['trash', 'restore', 'force_delete'])],
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer'],
+        ]);
+
+        if (in_array($data['action'], ['trash', 'force_delete'], true)) {
+            abort_unless($request->user()?->canDeleteInAdminArea('missions'), 403);
+        }
+
+        $count = 0;
+
+        if ($data['action'] === 'trash') {
+            $missions = Mission::whereKey($data['ids'])->get();
+            $missions->each->delete();
+            $count = $missions->count();
+        } elseif ($data['action'] === 'restore') {
+            $missions = Mission::onlyTrashed()->whereKey($data['ids'])->get();
+            $missions->each->restore();
+            $count = $missions->count();
+        } else {
+            $missions = Mission::onlyTrashed()->whereKey($data['ids'])->get();
+            $missions->each->forceDelete();
+            $count = $missions->count();
+        }
+
+        return back()->with('admin_toast', [
+            'title' => 'Action groupÃ©e terminÃ©e',
+            'text' => $count.' mission(s) traitÃ©e(s).',
+            'type' => $data['action'] === 'force_delete' ? 'warning' : 'success',
+        ]);
+    }
+
     public function trash(): View
     {
         return view('admin.admin-missions-trash', [
@@ -123,8 +158,6 @@ class MissionController extends Controller
             'anomaly_level' => ['nullable', Rule::requiredIf($request->input('category') === 'anomalie'), Rule::in(Mission::ANOMALY_LEVELS)],
             'dream_type' => ['nullable', Rule::requiredIf($request->input('category') === 'songe'), Rule::in(array_keys(Mission::DREAM_TYPES))],
             'dream_floor' => ['nullable', Rule::requiredIf($request->input('category') === 'songe'), 'integer', 'between:1,5'],
-            'guildatons' => ['nullable', Rule::requiredIf($request->input('category') !== 'anomalie'), 'integer', 'min:0'],
-            'activity_points' => ['nullable', Rule::requiredIf($request->input('category') !== 'anomalie'), 'integer', 'min:0'],
             'image_mode' => ['nullable', Rule::in(['api', 'upload', 'url'])],
             'selected_image' => ['nullable', 'string', 'max:1000'],
             'image_url' => ['nullable', 'url', 'max:1000'],
@@ -163,8 +196,6 @@ class MissionController extends Controller
             'anomaly_level' => $category === 'anomalie' ? $validated['anomaly_level'] : null,
             'dream_type' => $category === 'songe' ? $validated['dream_type'] : null,
             'dream_floor' => $category === 'songe' ? $validated['dream_floor'] : null,
-            'guildatons' => $category === 'anomalie' ? null : $validated['guildatons'],
-            'activity_points' => $category === 'anomalie' ? null : $validated['activity_points'],
             'image_mode' => $category === 'anomalie' ? null : ($validated['image_mode'] ?? null),
             'image_path' => $imagePath,
             'monster_id' => $category === 'anomalie' ? null : ($validated['monster_id'] ?? null),

@@ -31,9 +31,20 @@
             <div><i class="fa-regular fa-images"></i><h1>Galerie</h1></div>
         </div>
 
+        @include('admin.partials.bulk-actions', [
+            'id' => 'gallery-bulk-form',
+            'action' => route('admin.galerie.bulk'),
+            'actions' => $canDeleteGallery ? ['trash' => 'Mettre en corbeille'] : [],
+        ])
+
         <div class="admin-gallery-grid" data-gallery-list>
             @forelse($images as $image)
                 <article class="admin-gallery-card" data-gallery-item data-title="{{ $image->title }}">
+                    @if($canDeleteGallery)
+                        <label class="admin-gallery-card__check">
+                            <input type="checkbox" name="ids[]" value="{{ $image->id }}" form="gallery-bulk-form" data-bulk-item aria-label="Sélectionner {{ $image->title }}">
+                        </label>
+                    @endif
                     <button class="admin-gallery-card__media" type="button" data-gallery-preview="{{ $image->imageUrl() }}" data-gallery-title="{{ $image->title }}">
                         <img src="{{ $image->imageUrl() }}" alt="{{ $image->title }}" loading="lazy">
                     </button>

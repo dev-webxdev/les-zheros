@@ -69,6 +69,37 @@ class GalleryController extends Controller
         ]);
     }
 
+    public function bulk(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'action' => ['required', 'in:trash,restore,force_delete'],
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer'],
+        ]);
+
+        if (in_array($data['action'], ['trash', 'force_delete'], true)) {
+            abort_unless($request->user()?->canDeleteInAdminArea('gallery'), 403);
+        }
+
+        $images = $data['action'] === 'trash'
+            ? GalleryImage::whereKey($data['ids'])->get()
+            : GalleryImage::onlyTrashed()->whereKey($data['ids'])->get();
+
+        if ($data['action'] === 'trash') {
+            $images->each->delete();
+        } elseif ($data['action'] === 'restore') {
+            $images->each->restore();
+        } else {
+            $images->each->forceDelete();
+        }
+
+        return back()->with('admin_toast', [
+            'title' => 'Action groupÃ©e terminÃ©e',
+            'text' => $images->count().' image(s) traitÃ©e(s).',
+            'type' => $data['action'] === 'force_delete' ? 'warning' : 'success',
+        ]);
+    }
+
     public function trash(): View
     {
         return view('admin.admin-gallery-trash', [

@@ -19,12 +19,29 @@ use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View|RedirectResponse
     {
+        $search = trim((string) $request->query('search', ''));
+
+        if ($request->has('search') && $search === '') {
+            return redirect()->route('admin.utilisateurs.index');
+        }
+
         return view('admin.admin-users', [
             'users' => User::query()
+                ->when($search !== '', function ($query) use ($search): void {
+                    $query->where(function ($innerQuery) use ($search): void {
+                        $innerQuery
+                            ->where('name', 'like', '%'.$search.'%')
+                            ->orWhere('email', 'like', '%'.$search.'%');
+                    });
+                })
                 ->latest()
-                ->paginate(12),
+                ->paginate(16)
+                ->withQueryString(),
+            'filters' => [
+                'search' => $search,
+            ],
         ]);
     }
 
@@ -173,6 +190,50 @@ class UserController extends Controller
             'title' => 'Utilisateur valide',
             'text' => 'Le compte peut maintenant se connecter.',
             'type' => 'success',
+        ]);
+    }
+
+    public function bulk(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'action' => ['required', Rule::in(['approve', 'trash', 'restore', 'force_delete'])],
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer'],
+        ]);
+
+        if (in_array($data['action'], ['trash', 'force_delete'], true)) {
+            abort_unless($request->user()?->canDeleteInAdminArea('users'), 403);
+        }
+
+        $count = 0;
+
+        if ($data['action'] === 'approve') {
+            $count = User::whereKey($data['ids'])->update(['is_approved' => true]);
+        } elseif ($data['action'] === 'trash') {
+            $users = User::whereKey($data['ids'])
+                ->whereKeyNot($request->user()?->id)
+                ->get();
+            $users->each->delete();
+            $count = $users->count();
+        } elseif ($data['action'] === 'restore') {
+            $users = User::onlyTrashed()->whereKey($data['ids'])->get();
+            $users->each->restore();
+            $count = $users->count();
+        } else {
+            $users = User::onlyTrashed()->whereKey($data['ids'])->get();
+            $users->each(function (User $user): void {
+                $this->deleteAvatar($user->avatar_path);
+                $user->forceDelete();
+            });
+            $count = $users->count();
+        }
+
+        AdminActivity::log('users', 'bulk_action', 'Action groupÃ©e utilisateurs', $count.' compte(s) traitÃ©(s).');
+
+        return back()->with('admin_toast', [
+            'title' => 'Action groupÃ©e terminÃ©e',
+            'text' => $count.' utilisateur(s) traitÃ©(s).',
+            'type' => $data['action'] === 'force_delete' ? 'warning' : 'success',
         ]);
     }
 

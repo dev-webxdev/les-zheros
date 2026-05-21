@@ -15,6 +15,14 @@
     'canEmptyTrash' => $canDeleteValidations,
     'emptyButtonFirst' => true,
     'titleIcon' => 'fa-solid fa-circle-check',
+    'bulk' => [
+        'id' => 'validations-trash-bulk-form',
+        'action' => route('admin.validations.bulk'),
+        'actions' => array_filter([
+            'restore' => 'Restaurer',
+            $canDeleteValidations ? 'force_delete' : null => $canDeleteValidations ? 'Supprimer définitivement' : null,
+        ]),
+    ],
     'tableView' => 'admin.partials.trash.validations',
 ])
 @endsection

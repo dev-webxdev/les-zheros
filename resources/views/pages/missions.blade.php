@@ -9,7 +9,7 @@
 <section class="page-hero">
     <div class="container page-hero__content">
         <h1>Missions de <span>guilde</span></h1>
-        <p>Les missions disponibles sont séparées de l'accueil pour comparer les objectifs et récompenses plus tranquillement.</p>
+        <p>Les missions disponibles sont séparées de l'accueil pour comparer les objectifs plus tranquillement.</p>
     </div>
 </section>
 
@@ -23,12 +23,6 @@
                     <h3>{{ $mission->title }}</h3>
                     @if ($mission->description() !== '')
                         <p>{!! $mission->description() !!}</p>
-                    @endif
-                    @if ($mission->category !== 'anomalie')
-                        <div class="mission-card-rewards">
-                            <span><img src="{{ asset('assets/img/card-mission/guildaton.png') }}" alt="">{{ $mission->guildatons }}</span>
-                            <span><img src="{{ asset('assets/img/card-mission/point-activiter.png') }}" alt="">{{ $mission->activity_points }}</span>
-                        </div>
                     @endif
                     <img src="{{ $mission->imageUrl() }}" alt="{{ $mission->title }}">
                 </article>

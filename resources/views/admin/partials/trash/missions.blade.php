@@ -9,6 +9,7 @@
         <table class="admin-table admin-table--missions admin-table--actions-center">
             <thead>
                 <tr>
+                    <th class="admin-bulk-check"><input type="checkbox" data-bulk-check-all="missions-trash-bulk-form" aria-label="Tout sélectionner"></th>
                     <th>Image</th>
                     <th>Titre</th>
                     <th>Type</th>
@@ -19,6 +20,7 @@
             <tbody>
                 @foreach ($missions as $mission)
                     <tr>
+                        <td class="admin-bulk-check"><input type="checkbox" name="ids[]" value="{{ $mission->id }}" form="missions-trash-bulk-form" data-bulk-item aria-label="Sélectionner {{ $mission->title }}"></td>
                         <td><img class="admin-mission-thumb" src="{{ $mission->imageUrl() }}" alt="{{ $mission->title }}"></td>
                         <td>{{ $mission->title }}</td>
                         <td>
