@@ -53,13 +53,6 @@ class AnnouncementResource extends Resource
         return AnnouncementsTable::configure($table);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
@@ -80,50 +73,60 @@ class AnnouncementResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->canAccessAdminArea('announcements') ?? false;
+        return self::canAccessAnnouncements();
     }
 
     public static function canCreate(): bool
     {
-        return auth()->user()?->canAccessAdminArea('announcements') ?? false;
+        return self::canAccessAnnouncements();
     }
 
     public static function canView(Model $record): bool
     {
-        return auth()->user()?->canAccessAdminArea('announcements') ?? false;
+        return self::canAccessAnnouncements();
     }
 
     public static function canEdit(Model $record): bool
     {
-        return auth()->user()?->canAccessAdminArea('announcements') ?? false;
+        return self::canAccessAnnouncements();
     }
 
     public static function canDelete(Model $record): bool
     {
-        return auth()->user()?->canDeleteInAdminArea('announcements') ?? false;
+        return self::canDeleteAnnouncements();
     }
 
     public static function canDeleteAny(): bool
     {
-        return auth()->user()?->canDeleteInAdminArea('announcements') ?? false;
+        return self::canDeleteAnnouncements();
     }
 
     public static function canRestore(Model $record): bool
     {
-        return auth()->user()?->canAccessAdminArea('announcements') ?? false;
+        return self::canDeleteAnnouncements();
     }
 
     public static function canRestoreAny(): bool
     {
-        return auth()->user()?->canAccessAdminArea('announcements') ?? false;
+        return self::canDeleteAnnouncements();
     }
 
     public static function canForceDelete(Model $record): bool
     {
-        return auth()->user()?->canDeleteInAdminArea('announcements') ?? false;
+        return self::canDeleteAnnouncements();
     }
 
     public static function canForceDeleteAny(): bool
+    {
+        return self::canDeleteAnnouncements();
+    }
+
+    private static function canAccessAnnouncements(): bool
+    {
+        return auth()->user()?->canAccessAdminArea('announcements') ?? false;
+    }
+
+    private static function canDeleteAnnouncements(): bool
     {
         return auth()->user()?->canDeleteInAdminArea('announcements') ?? false;
     }

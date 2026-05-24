@@ -151,58 +151,20 @@
         color: var(--admin-primary);
     }
 
+    .fi-main-ctn {
+        min-height: 100vh;
+        background: transparent;
+    }
+
     .lz-filament-topbar {
         position: sticky;
         top: 0;
         z-index: 20;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
         min-height: 57px;
-        padding-inline: 24px 18px;
         border-bottom: 1px solid var(--admin-border);
         background: rgba(255, 255, 255, 0.92);
         box-shadow: none;
         backdrop-filter: blur(10px);
-    }
-
-    .lz-filament-breadcrumb {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        min-width: 0;
-        color: var(--admin-muted-foreground);
-        font-size: 14px;
-    }
-
-    .lz-filament-breadcrumb span {
-        width: 1px;
-        height: 20px;
-        background: var(--admin-border);
-    }
-
-    .lz-filament-menu-button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 34px;
-        height: 34px;
-        border: 0;
-        border-radius: 5px;
-        background: transparent;
-        color: var(--admin-text);
-        cursor: default;
-    }
-
-    .lz-filament-menu-button svg {
-        width: 16px;
-        height: 16px;
-    }
-
-    .fi-main-ctn {
-        min-height: 100vh;
-        background: transparent;
     }
 
     .fi-main {
@@ -323,8 +285,185 @@
         box-shadow: 0 5px 14px color-mix(in srgb, var(--admin-primary) 22%, transparent);
     }
 
+    .fi-ta-actions {
+        gap: calc(var(--spacing) * 5)!important;
+    }
+
     .fi-btn.fi-color-primary:hover {
         background: var(--admin-primary-darken);
+    }
+
+    .lz-image-source-mode.fi-fo-radio {
+        align-items: center;
+        gap: 10px;
+    }
+
+    .lz-image-source-mode .fi-fo-radio-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 32px;
+        padding: 0 14px;
+        border: 1px solid var(--admin-border);
+        border-radius: 999px;
+        background: #ffffff;
+        cursor: pointer;
+        transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
+    }
+
+    .lz-image-source-mode .fi-radio-input,
+    .lz-image-source-mode .fi-fo-radio-label-text,
+    .lz-image-source-mode .fi-fo-radio-label-text p {
+        cursor: pointer;
+    }
+
+    .lz-image-source-mode .fi-fo-radio-label-text,
+    .lz-image-source-mode .fi-fo-radio-label-text p {
+        display: flex;
+        align-items: center;
+        min-height: 0;
+        line-height: 1;
+    }
+
+    .lz-image-source-mode .fi-radio-input:checked {
+        border-color: var(--admin-primary);
+        background-color: var(--admin-primary);
+    }
+
+    .lz-image-source-mode .fi-fo-radio-label:has(.fi-radio-input:checked) {
+        border-color: var(--admin-primary);
+        background: color-mix(in srgb, var(--admin-primary) 8%, #ffffff);
+        color: var(--admin-primary);
+        font-weight: 700;
+    }
+
+    .lz-image-source-mode .fi-fo-radio-label:has(.fi-radio-input:disabled) {
+        border-color: #e5e7eb;
+        background: #f8fafc;
+        color: #9ca3af;
+        cursor: not-allowed;
+    }
+
+    .lz-image-source-mode .fi-fo-radio-label:has(.fi-radio-input:disabled) *,
+    .lz-image-source-mode .fi-radio-input:disabled {
+        cursor: not-allowed;
+    }
+
+    .lz-role-board {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 16px;
+        max-width: 760px;
+    }
+
+    .lz-role-board__column {
+        min-height: 186px;
+        border: 1px solid var(--admin-border);
+        border-radius: 7px;
+        background: #f8fafc;
+        overflow: hidden;
+    }
+
+    .lz-role-board__column--selected {
+        border-color: color-mix(in srgb, var(--admin-primary) 52%, var(--admin-border));
+        background: color-mix(in srgb, var(--admin-primary) 5%, #ffffff);
+    }
+
+    .lz-role-board__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 42px;
+        padding: 0 14px;
+        border-bottom: 1px solid var(--admin-border);
+        background: #ffffff;
+    }
+
+    .lz-role-board__head strong {
+        color: var(--admin-text);
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .lz-role-board__head span {
+        color: var(--admin-primary);
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .lz-role-board__list {
+        display: grid;
+        gap: 8px;
+        min-height: 142px;
+        padding: 12px;
+        align-content: start;
+    }
+
+    .lz-role-chip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        min-height: 34px;
+        padding: 0 12px;
+        border: 1px solid var(--admin-border);
+        border-radius: 6px;
+        background: #ffffff;
+        color: var(--admin-text);
+        font-size: 13px;
+        font-weight: 700;
+        text-align: left;
+        cursor: grab;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+        transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+    }
+
+    .lz-role-chip:hover {
+        border-color: color-mix(in srgb, var(--admin-primary) 58%, var(--admin-border));
+        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+    }
+
+    .lz-role-chip:active {
+        cursor: grabbing;
+        transform: scale(0.99);
+    }
+
+    .lz-role-chip.is-selected {
+        border-color: color-mix(in srgb, var(--admin-primary) 40%, var(--admin-border));
+    }
+
+    .lz-role-chip__grip {
+        color: var(--admin-primary);
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: -1px;
+    }
+
+    .lz-role-board__empty {
+        margin: 0;
+        color: var(--admin-muted-foreground);
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .lz-password-generate-action {
+        align-self: start;
+        padding-top: 29px;
+    }
+
+    .lz-password-generate-action .fi-ac {
+        justify-content: flex-start;
+    }
+
+    .fi-fo-file-upload,
+    .fi-fo-file-upload *,
+    .filepond--root,
+    .filepond--root *,
+    .filepond--drop-label,
+    .filepond--drop-label *,
+    .filepond--label-action,
+    .filepond--browser {
+        cursor: pointer;
     }
 
     .fi-input-wrp,

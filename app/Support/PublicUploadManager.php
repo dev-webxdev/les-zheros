@@ -9,32 +9,42 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class PublicUploadManager
 {
-    public static function store(UploadedFile $file, string $directory, string $prefix, bool $includeOriginalName = false, ?string $name = null, bool $cleanNameOnly = false): string
-    {
+    public static function store(
+        UploadedFile $file,
+        string $directory,
+        string $prefix,
+        bool $includeOriginalName = false,
+        ?string $name = null,
+        bool $cleanNameOnly = false
+    ): string {
+        $directory = trim($directory, '/');
         $target = public_path('assets/uploads/'.$directory);
-        File::ensureDirectoryExists($target);
+
+        File::ensureDirectoryExists($target, 0755, true);
+
+        $extension = $file->getClientOriginalExtension()
+            ?: $file->extension()
+            ?: 'png';
+
         $baseName = Str::slug($name ?: '');
 
         if ($cleanNameOnly) {
-            $filename = self::uniqueFilename($target, $baseName ?: $prefix, $file->extension());
-            try {
-                $file->move($target, $filename);
-            } catch (FileException) {
-                $filename = self::uniqueFilename($target, $baseName ?: $prefix, $file->extension(), 2);
-                $file->move($target, $filename);
-            }
-
-            return asset('assets/uploads/'.$directory.'/'.$filename);
+            $filename = self::uniqueFilename($target, $baseName ?: $prefix, $extension);
         } else {
             $nameParts = array_filter([
                 $baseName ?: ($includeOriginalName ? Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) : $prefix),
                 now()->format('Ymd_His'),
                 bin2hex(random_bytes(4)),
             ]);
-            $filename = implode('_', $nameParts).'.'.$file->extension();
+
+            $filename = implode('_', $nameParts).'.'.$extension;
         }
 
-        $file->move($target, $filename);
+        try {
+            $file->move($target, $filename);
+        } catch (FileException) {
+            File::copy($file->getRealPath(), $target.DIRECTORY_SEPARATOR.$filename);
+        }
 
         return asset('assets/uploads/'.$directory.'/'.$filename);
     }

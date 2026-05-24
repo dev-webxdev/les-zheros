@@ -43,15 +43,15 @@ class EditAnnouncement extends EditRecord
      */
     private function normalizeAnnouncementData(array $data): array
     {
-        return [
-            ...$data,
-            'user_id' => auth()->id(),
-            'excerpt' => null,
-            'published_at' => match ($data['status']) {
-                'scheduled' => $data['published_at'],
-                'published' => $data['published_at'] ?? now(),
-                default => null,
-            },
+         return [
+             ...$data,
+             'user_id' => $this->record->user_id ?? auth()->id(),
+             'excerpt' => null,
+             'published_at' => match ($data['status']) {
+                 'scheduled' => $data['published_at'],
+                 'published' => $data['published_at'] ?? $this->record->published_at ?? now(),
+                 default => null,
+                },
         ];
     }
 }
