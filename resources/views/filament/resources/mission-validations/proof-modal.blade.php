@@ -1,24 +1,29 @@
-<div class="space-y-4">
-    <div class="grid gap-3 text-sm sm:grid-cols-2">
+<div class="lz-proof-modal">
+    <div class="lz-proof-modal__meta">
         <div>
-            <span class="block text-xs font-semibold uppercase text-gray-500">Joueur</span>
+            <span>Joueur</span>
             <strong>{{ $record->user?->name ?? 'Utilisateur supprime' }}</strong>
         </div>
 
         <div>
-            <span class="block text-xs font-semibold uppercase text-gray-500">Mission</span>
+            <span>Mission</span>
             <strong>{{ $record->mission?->title ?? 'Mission supprimee' }}</strong>
+        </div>
+
+        <div>
+            <span>Statut</span>
+            <strong>{{ $record->statusLabel() }}</strong>
         </div>
     </div>
 
     @if ($proofUrl)
-        <a href="{{ $proofUrl }}" target="_blank" rel="noopener" class="block overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
-            <img src="{{ $proofUrl }}" alt="Preuve de validation" class="mx-auto max-h-[72vh] w-auto max-w-full object-contain">
+        <a href="{{ $proofUrl }}" target="_blank" rel="noopener" class="lz-proof-modal__image-link" title="Ouvrir dans un nouvel onglet">
+            <img src="{{ $proofUrl }}" alt="Preuve de validation">
         </a>
     @endif
 
     @if ($record->proof_text && $record->proof_text !== $proofUrl)
-        <div class="rounded-lg border border-gray-200 bg-white p-3 text-sm">
+        <div class="lz-proof-modal__text">
             {{ $record->proof_text }}
         </div>
     @endif

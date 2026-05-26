@@ -53,6 +53,8 @@ class MissionsTable
                     ->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
+            ->defaultPaginationPageOption(12)
+            ->paginationPageOptions([12, 25, 50])
             ->filters([
                 SelectFilter::make('category')
                     ->label('Categorie')

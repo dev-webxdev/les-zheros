@@ -59,6 +59,8 @@ class UsersTable
                     ->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
+            ->defaultPaginationPageOption(12)
+            ->paginationPageOptions([12, 25, 50])
             ->filters([
                 SelectFilter::make('is_approved')
                     ->label('Statut')

@@ -5,8 +5,9 @@ namespace App\Filament\Resources\MissionValidations\Pages;
 use App\Filament\Resources\MissionValidations\MissionValidationResource;
 use App\Models\MissionValidation;
 use App\Models\User;
-use App\Support\AdminActivity;
+use App\Support\MissionValidationAdminWorkflow;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Filament\Resources\Pages\CreateRecord;
@@ -53,17 +54,17 @@ class CreateMissionValidation extends CreateRecord
             'characters' => $teammate['characters'],
         ]))->values();
 
-        $created = $groupMembers->map(fn (array $member): MissionValidation => MissionValidation::create([
-            ...$payload,
-            'user_id' => $member['user_id'],
-            'characters' => $member['characters'],
-            'teammates' => $groupMembers
-                ->reject(fn (array $teammate): bool => $teammate['user_id'] === $member['user_id'])
-                ->values()
-                ->all(),
-        ]));
+        $created = DB::transaction(fn (): Collection => $groupMembers->map(fn (array $member): MissionValidation => MissionValidation::create([
+                ...$payload,
+                'user_id' => $member['user_id'],
+                'characters' => $member['characters'],
+                'teammates' => $groupMembers
+                    ->reject(fn (array $teammate): bool => $teammate['user_id'] === $member['user_id'])
+                    ->values()
+                    ->all(),
+            ])));
 
-        AdminActivity::log('validations', 'created', 'Validation ajoutee', 'Declaration ajoutee depuis Filament.');
+        MissionValidationAdminWorkflow::logCreated();
 
         return $created->first();
     }

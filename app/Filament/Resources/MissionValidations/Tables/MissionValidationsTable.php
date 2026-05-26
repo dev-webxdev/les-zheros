@@ -3,15 +3,19 @@
 namespace App\Filament\Resources\MissionValidations\Tables;
 
 use App\Filament\Resources\MissionValidations\MissionValidationResource;
+use App\Models\Mission;
 use App\Models\MissionValidation;
 use App\Models\User;
+use App\Support\MissionValidationAdminWorkflow;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ImageColumn;
@@ -38,6 +42,12 @@ class MissionValidationsTable
                     ->label('Mission')
                     ->searchable()
                     ->sortable(),
+
+                TextColumn::make('has_teammates')
+                    ->label('Aide')
+                    ->state(fn (MissionValidation $record): string => filled($record->teammates) ? 'Oui' : 'Non')
+                    ->badge()
+                    ->color(fn (string $state): string => $state === 'Oui' ? 'success' : 'gray'),
 
                 TextColumn::make('characters')
                     ->label('Persos')
@@ -74,6 +84,8 @@ class MissionValidationsTable
                     ->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
+            ->defaultPaginationPageOption(12)
+            ->paginationPageOptions([12, 25, 50])
             ->filters([
                 SelectFilter::make('status')
                     ->label('Statut')
@@ -82,6 +94,11 @@ class MissionValidationsTable
                 SelectFilter::make('user_id')
                     ->label('Joueur')
                     ->options(fn (): array => User::query()->orderBy('name')->pluck('name', 'id')->all())
+                    ->searchable(),
+
+                SelectFilter::make('mission_id')
+                    ->label('Mission')
+                    ->options(fn (): array => Mission::query()->orderBy('title')->pluck('title', 'id')->all())
                     ->searchable(),
 
                 TrashedFilter::make(),
@@ -96,7 +113,7 @@ class MissionValidationsTable
                     ->modalHeading('Preuve de validation')
                     ->modalWidth('5xl')
                     ->modalSubmitAction(false)
-                    ->modalCancelActionLabel('Fermer')
+                    ->modalCancelAction(false)
                     ->modalContent(fn (MissionValidation $record) => view('filament.resources.mission-validations.proof-modal', [
                         'record' => $record,
                         'proofUrl' => self::proofUrl($record),
@@ -127,7 +144,20 @@ class MissionValidationsTable
                 DeleteAction::make()
                     ->icon(Heroicon::OutlinedTrash)
                     ->iconButton()
-                    ->tooltip('Supprimer'),
+                    ->tooltip('Supprimer')
+                    ->after(fn (MissionValidation $record): null => self::logTrashed($record)),
+
+                RestoreAction::make()
+                    ->icon(Heroicon::OutlinedArrowUturnLeft)
+                    ->iconButton()
+                    ->tooltip('Restaurer')
+                    ->after(fn (MissionValidation $record): null => self::logRestored($record)),
+
+                ForceDeleteAction::make()
+                    ->icon(Heroicon::OutlinedXMark)
+                    ->iconButton()
+                    ->tooltip('Supprimer definitivement')
+                    ->before(fn (MissionValidation $record): null => self::logForceDeleted($record)),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
@@ -146,25 +176,66 @@ class MissionValidationsTable
                         ->icon(Heroicon::OutlinedClock)
                         ->color('info')
                         ->action(fn (Collection $records): null => self::bulkStatus($records, MissionValidation::PENDING)),
-                    DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->after(fn (Collection $records): null => self::bulkLogTrashed($records)),
+                    ForceDeleteBulkAction::make()
+                        ->before(fn (Collection $records): null => self::bulkLogForceDeleted($records)),
+                    RestoreBulkAction::make()
+                        ->after(fn (Collection $records): null => self::bulkLogRestored($records)),
                 ]),
             ]);
     }
 
     private static function setStatus(MissionValidation $record, string $status): bool
     {
-        return $record->forceFill([
-            'status' => $status,
-            'reviewed_at' => now(),
-            'reviewed_by' => auth()->id(),
-        ])->save();
+        return MissionValidationAdminWorkflow::setStatus($record, $status, auth()->user());
     }
 
     private static function bulkStatus(Collection $records, string $status): null
     {
         $records->each(fn (MissionValidation $record): bool => self::setStatus($record, $status));
+
+        return null;
+    }
+
+    private static function logTrashed(MissionValidation $record): null
+    {
+        MissionValidationAdminWorkflow::logTrashed($record);
+
+        return null;
+    }
+
+    private static function bulkLogTrashed(Collection $records): null
+    {
+        $records->each(fn (MissionValidation $record): null => self::logTrashed($record));
+
+        return null;
+    }
+
+    private static function bulkLogRestored(Collection $records): null
+    {
+        $records->each(fn (MissionValidation $record): null => self::logRestored($record));
+
+        return null;
+    }
+
+    private static function bulkLogForceDeleted(Collection $records): null
+    {
+        $records->each(fn (MissionValidation $record): null => self::logForceDeleted($record));
+
+        return null;
+    }
+
+    private static function logRestored(MissionValidation $record): null
+    {
+        MissionValidationAdminWorkflow::logRestored($record);
+
+        return null;
+    }
+
+    private static function logForceDeleted(MissionValidation $record): null
+    {
+        MissionValidationAdminWorkflow::logForceDeleted($record);
 
         return null;
     }
@@ -175,7 +246,7 @@ class MissionValidationsTable
             ->modalHeading('Preuve de validation')
             ->modalWidth('5xl')
             ->modalSubmitAction(false)
-            ->modalCancelActionLabel('Fermer')
+            ->modalCancelAction(false)
             ->modalContent(fn (MissionValidation $record) => view('filament.resources.mission-validations.proof-modal', [
                 'record' => $record,
                 'proofUrl' => self::proofUrl($record),

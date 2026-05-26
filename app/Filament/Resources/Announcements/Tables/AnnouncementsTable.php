@@ -56,6 +56,8 @@ class AnnouncementsTable
                     ->toggleable(),
             ])
             ->defaultSort('created_at', 'desc')
+            ->defaultPaginationPageOption(12)
+            ->paginationPageOptions([12, 25, 50])
             ->filters([
                 TrashedFilter::make(),
             ])
