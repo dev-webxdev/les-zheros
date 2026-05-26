@@ -463,7 +463,7 @@ document.addEventListener("invalid", (event) => {
 }, true);
 
 document.querySelectorAll("form").forEach((form) => {
-    if (form.matches("[data-filter-form], [data-lottery-settings], [data-real-form]")) {
+    if (form.matches("[data-filter-form], [data-lottery-settings], [data-real-form], [data-bulk-form]")) {
         return;
     }
 
@@ -929,5 +929,21 @@ document.querySelectorAll("[data-bulk-form]").forEach((form) => {
     });
 
     checkboxes.forEach((checkbox) => checkbox.addEventListener("change", sync));
+
+    form.addEventListener("submit", () => {
+        form.querySelectorAll("[data-bulk-generated]").forEach((input) => input.remove());
+
+        checkboxes
+            .filter((checkbox) => checkbox.checked)
+            .forEach((checkbox) => {
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = checkbox.name;
+                input.value = checkbox.value;
+                input.dataset.bulkGenerated = "true";
+                form.appendChild(input);
+            });
+    });
+
     sync();
 });

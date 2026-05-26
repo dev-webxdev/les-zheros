@@ -144,6 +144,19 @@ class AdminMediaLibraryTest extends TestCase
         File::delete(public_path('assets/uploads/gallery/chaloeil-gallery.png'));
     }
 
+    public function test_media_library_hides_mission_uploads_from_main_listing(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $this->putFakeImage('assets/uploads/missions/chaloeil-mission.png');
+        $this->putFakeImage('assets/uploads/test-media/chaloeil-reference.png');
+
+        $this->actingAs($admin)
+            ->get(route('admin.mediatheque.index', ['search' => 'chaloeil']))
+            ->assertOk()
+            ->assertSee('chaloeil-reference.png')
+            ->assertDontSee('chaloeil-mission.png');
+    }
+
     public function test_mission_uploaded_image_is_named_from_mission_title(): void
     {
         $admin = User::factory()->create(['is_admin' => true]);

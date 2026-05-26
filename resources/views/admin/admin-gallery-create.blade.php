@@ -14,16 +14,11 @@
 
 @section('admin')
 <main class="admin-main">
-    <header class="admin-topbar">
-        <div class="admin-breadcrumb">
-            <button class="admin-menu-button" type="button" aria-label="Ouvrir la navigation"><i class="fa-solid fa-table-columns"></i></button>
-            <span></span>
-            <p>Galerie / {{ $isEdit ? 'Modifier' : 'Ajouter' }}</p>
-        </div>
-        <div class="admin-actions">
-            <a class="admin-secondary-button" href="{{ route('admin.galerie.index') }}"><i class="fa-solid fa-arrow-left"></i><span>Retour à la galerie</span></a>
-        </div>
-    </header>
+    @component('admin.components.page-header', ['breadcrumb' => 'Galerie / '.($isEdit ? 'Modifier' : 'Ajouter')])
+        @slot('actions')
+            @component('admin.components.button', ['href' => route('admin.galerie.index'), 'class' => 'admin-secondary-button', 'icon' => 'fa-solid fa-arrow-left', 'label' => 'Retour à la galerie'])@endcomponent
+        @endslot
+    @endcomponent
 
     <section class="admin-content admin-content--editor">
         <form id="gallery-form" class="admin-gallery-editor admin-gallery-editor--cms" action="{{ $isEdit ? route('admin.galerie.update', $image) : route('admin.galerie.store') }}" method="post" enctype="multipart/form-data" data-real-form>
@@ -33,15 +28,26 @@
             @endif
 
             <section class="admin-gallery-compose">
-                <label class="admin-guide-title-field" for="gallery-title">
-                    <span>Titre de l'image</span>
-                    <input id="gallery-title" name="title" type="text" value="{{ old('title', $image->title) }}" placeholder="Ex: Sortie Frigost" required>
-                </label>
+                @component('admin.components.text-input', [
+                    'id' => 'gallery-title',
+                    'name' => 'title',
+                    'label' => 'Titre de l\'image',
+                    'value' => old('title', $image->title),
+                    'placeholder' => 'Ex: Sortie Frigost',
+                    'required' => true,
+                    'baseClass' => false,
+                    'class' => 'admin-guide-title-field',
+                ])@endcomponent
 
-                <label class="admin-guide-summary admin-gallery-description" for="gallery-description">
-                    <span>Description</span>
-                    <textarea id="gallery-description" name="description" placeholder="Contexte, participants, souvenir...">{{ old('description', $image->description) }}</textarea>
-                </label>
+                @component('admin.components.textarea', [
+                    'id' => 'gallery-description',
+                    'name' => 'description',
+                    'label' => 'Description',
+                    'value' => old('description', $image->description),
+                    'placeholder' => 'Contexte, participants, souvenir...',
+                    'baseClass' => false,
+                    'class' => 'admin-guide-summary admin-gallery-description',
+                ])@endcomponent
             </section>
 
             <aside class="admin-gallery-editor__aside admin-gallery-editor__aside--cms" data-gallery-form>
@@ -69,20 +75,26 @@
                 </section>
 
                 <section class="admin-guide-side-card">
-                    <label class="admin-field" for="gallery-url">
-                        <span>URL image</span>
-                        <input id="gallery-url" name="image_url" type="url" value="{{ old('image_url') }}" placeholder="https://..." data-gallery-url>
-                    </label>
-                    <label class="admin-field" for="gallery-date">
-                        <span>Date</span>
-                        <input id="gallery-date" name="taken_at" type="date" value="{{ old('taken_at', $image->taken_at?->toDateString()) }}">
-                    </label>
+                    @component('admin.components.text-input', [
+                        'id' => 'gallery-url',
+                        'name' => 'image_url',
+                        'type' => 'url',
+                        'label' => 'URL image',
+                        'value' => old('image_url'),
+                        'placeholder' => 'https://...',
+                        'inputAttributes' => 'data-gallery-url',
+                    ])@endcomponent
+
+                    @component('admin.components.text-input', [
+                        'id' => 'gallery-date',
+                        'name' => 'taken_at',
+                        'type' => 'date',
+                        'label' => 'Date',
+                        'value' => old('taken_at', $image->taken_at?->toDateString()),
+                    ])@endcomponent
                 </section>
 
-                <button class="admin-create-button admin-guide-save-button" type="submit">
-                    <i class="fa-solid fa-floppy-disk"></i>
-                    <span>Enregistrer</span>
-                </button>
+                @component('admin.components.button', ['type' => 'submit', 'class' => 'admin-create-button admin-guide-save-button', 'icon' => 'fa-solid fa-floppy-disk', 'label' => 'Enregistrer'])@endcomponent
             </aside>
         </form>
     </section>

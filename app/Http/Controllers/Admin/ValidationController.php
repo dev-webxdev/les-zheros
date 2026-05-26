@@ -82,7 +82,7 @@ class ValidationController extends Controller
             ],
         ])->merge($teammates->map(fn (array $teammate): array => [
             'user_id' => $teammate['user_id'],
-            'name' => (string) ($players[$teammate['user_id']] ?? 'CoÃ©quipier'),
+            'name' => (string) ($players[$teammate['user_id']] ?? 'Coéquipier'),
             'characters' => $teammate['characters'],
         ]))->values();
 
@@ -101,7 +101,7 @@ class ValidationController extends Controller
         AdminActivity::log('validations', 'created', 'Validation ajoutee', 'Declaration ajoutee depuis l administration.');
 
         return redirect()->route('admin.validations.index')->with('admin_toast', [
-            'title' => 'DÃ©claration ajoutÃ©e',
+            'title' => 'Déclaration ajoutée',
             'text' => 'La validation est maintenant dans la liste.',
             'type' => 'success',
         ]);
@@ -188,8 +188,8 @@ class ValidationController extends Controller
         );
 
         return back()->with('admin_toast', [
-            'title' => 'Statut mis Ã  jour',
-            'text' => 'La validation est passÃ©e en '.$freshValidation->statusLabel().'.',
+            'title' => 'Statut mis à jour',
+            'text' => 'La validation est passée en '.$freshValidation->statusLabel().'.',
             'type' => 'success',
         ]);
     }
@@ -202,7 +202,7 @@ class ValidationController extends Controller
 
         return redirect()->route('admin.validations.index')->with('admin_toast', [
             'title' => 'Validation en corbeille',
-            'text' => 'La dÃ©claration a Ã©tÃ© dÃ©placÃ©e dans la corbeille.',
+            'text' => 'La déclaration a été déplacée dans la corbeille.',
             'type' => 'success',
         ]);
     }
@@ -242,8 +242,8 @@ class ValidationController extends Controller
         }
 
         return back()->with('admin_toast', [
-            'title' => 'Action groupÃ©e terminÃ©e',
-            'text' => $count.' validation(s) traitÃ©e(s).',
+            'title' => 'Action groupée terminée',
+            'text' => $count.' validation(s) traitée(s).',
             'type' => $data['action'] === 'force_delete' ? 'warning' : 'success',
         ]);
     }
@@ -266,8 +266,8 @@ class ValidationController extends Controller
         AdminActivity::log('validations', 'restored', 'Validation restauree', 'Declaration restauree depuis la corbeille.', $trashedValidation);
 
         return redirect()->route('admin.validations.trash')->with('admin_toast', [
-            'title' => 'Validation restaurÃ©e',
-            'text' => 'La dÃ©claration est de retour dans la liste.',
+            'title' => 'Validation restaurée',
+            'text' => 'La déclaration est de retour dans la liste.',
             'type' => 'success',
         ]);
     }
@@ -279,8 +279,8 @@ class ValidationController extends Controller
         $trashedValidation->forceDelete();
 
         return redirect()->route('admin.validations.trash')->with('admin_toast', [
-            'title' => 'Validation supprimÃ©e',
-            'text' => 'La dÃ©claration a Ã©tÃ© supprimÃ©e dÃ©finitivement.',
+            'title' => 'Validation supprimée',
+            'text' => 'La déclaration a été supprimée définitivement.',
             'type' => 'warning',
         ]);
     }
@@ -292,8 +292,8 @@ class ValidationController extends Controller
         AdminActivity::log('validations', 'trash_emptied', 'Corbeille validations videe', $count.' validation(s) supprimee(s) definitivement.');
 
         return redirect()->route('admin.validations.trash')->with('admin_toast', [
-            'title' => 'Corbeille vidÃ©e',
-            'text' => 'Toutes les validations en corbeille ont Ã©tÃ© supprimÃ©es dÃ©finitivement.',
+            'title' => 'Corbeille vidée',
+            'text' => 'Toutes les validations en corbeille ont été supprimées définitivement.',
             'type' => 'warning',
         ]);
     }

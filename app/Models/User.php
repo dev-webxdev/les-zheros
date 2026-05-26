@@ -5,8 +5,6 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use App\Support\AdminAccess;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,9 +12,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'country', 'avatar_path', 'role', 'admin_roles', 'password', 'is_admin', 'is_approved'])]
+#[Fillable(['name', 'email', 'country', 'avatar_path', 'role', 'admin_roles', 'password', 'is_admin', 'is_approved', 'legacy_points_total'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, SoftDeletes;
@@ -32,6 +30,7 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'is_admin' => 'boolean',
             'is_approved' => 'boolean',
+            'legacy_points_total' => 'float',
             'password' => 'hashed',
         ];
     }
@@ -69,12 +68,6 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->is_admin
             || count(array_diff($this->adminRoles(), [AdminAccess::MEMBER])) > 0;
-    }
-
-    public function canAccessPanel(Panel $panel): bool
-    {
-        return $panel->getId() === 'admin-filament'
-            && $this->hasAdminAccess();
     }
 
     public function canAccessAdminArea(string $area): bool

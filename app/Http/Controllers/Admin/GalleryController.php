@@ -94,8 +94,8 @@ class GalleryController extends Controller
         }
 
         return back()->with('admin_toast', [
-            'title' => 'Action groupÃ©e terminÃ©e',
-            'text' => $images->count().' image(s) traitÃ©e(s).',
+            'title' => 'Action groupée terminée',
+            'text' => $images->count().' image(s) traitée(s).',
             'type' => $data['action'] === 'force_delete' ? 'warning' : 'success',
         ]);
     }

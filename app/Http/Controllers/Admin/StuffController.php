@@ -95,8 +95,8 @@ class StuffController extends Controller
         }
 
         return back()->with('admin_toast', [
-            'title' => 'Action groupÃ©e terminÃ©e',
-            'text' => $stuffs->count().' stuff(s) traitÃ©(s).',
+            'title' => 'Action groupée terminée',
+            'text' => $stuffs->count().' stuff(s) traité(s).',
             'type' => $data['action'] === 'force_delete' ? 'warning' : 'success',
         ]);
     }

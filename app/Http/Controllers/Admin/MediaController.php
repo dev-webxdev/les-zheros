@@ -52,7 +52,7 @@ class MediaController extends Controller
             'status' => $request->query('status', 'all'),
         ];
         $usedReferences = $this->usedReferences();
-        $images = collect($this->scanImages($usedReferences))
+        $images = collect($this->scanImages($usedReferences, includeMissionUploads: false))
             ->when($filters['status'] !== 'all', function ($items) use ($filters) {
                 return match ($filters['status']) {
                     'used' => $items->where('used', true),
@@ -197,13 +197,13 @@ class MediaController extends Controller
             }
 
             File::delete($target);
-            AdminActivity::log('media', 'deleted', 'Image supprimÃ©e', $path);
+            AdminActivity::log('media', 'deleted', 'Image supprimée', $path);
             $deleted++;
         }
 
         return back()->with('admin_toast', [
-            'title' => 'Suppression groupÃ©e terminÃ©e',
-            'text' => $deleted.' image(s) supprimÃ©e(s).',
+            'title' => 'Suppression groupée terminée',
+            'text' => $deleted.' image(s) supprimée(s).',
             'type' => 'warning',
         ]);
     }
@@ -212,18 +212,24 @@ class MediaController extends Controller
      * @param list<string> $usedReferences
      * @return list<array<string, mixed>>
      */
-    private function scanImages(array $usedReferences): array
+    private function scanImages(array $usedReferences, bool $includeMissionUploads = true): array
     {
         return collect([
             ['root' => public_path('assets/uploads'), 'public' => 'assets/uploads', 'label' => 'Uploads', 'key' => 'uploads', 'deletable' => true],
         ])
-            ->flatMap(function (array $source) use ($usedReferences) {
+            ->flatMap(function (array $source) use ($usedReferences, $includeMissionUploads) {
                 if (! File::isDirectory($source['root'])) {
                     return [];
                 }
 
                 return collect(File::allFiles($source['root']))
                     ->filter(fn (SplFileInfo $file): bool => in_array(Str::lower($file->getExtension()), self::IMAGE_EXTENSIONS, true))
+                    ->when(! $includeMissionUploads, fn ($files) => $files->reject(
+                        fn (SplFileInfo $file): bool => Str::startsWith(
+                            str_replace('\\', '/', $file->getPathname()),
+                            str_replace('\\', '/', public_path('assets/uploads/missions')).'/',
+                        )
+                    ))
                     ->map(function (SplFileInfo $file) use ($source, $usedReferences): array {
                         $path = $this->normalizePublicPath($source['public'].'/'.Str::after($file->getPathname(), $source['root']));
                         $used = $source['deletable'] ? $this->isUsed($path, $usedReferences) : true;

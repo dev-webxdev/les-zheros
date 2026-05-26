@@ -16,61 +16,80 @@
 
 @section('admin')
 <main class="admin-main">
-    <header class="admin-topbar">
-        <div class="admin-breadcrumb">
-            <button class="admin-menu-button" type="button" aria-label="Ouvrir la navigation"><i class="fa-solid fa-table-columns"></i></button>
-            <span></span>
-            <p>Annonces / {{ $isEdit ? 'Modifier' : 'Créer' }}</p>
-        </div>
-        <div class="admin-actions">
-            <a class="admin-secondary-button" href="{{ route('admin.annonces.index') }}"><i class="fa-solid fa-arrow-left"></i><span>Retour aux annonces</span></a>
-        </div>
-    </header>
+    @component('admin.components.page-header', ['breadcrumb' => 'Annonces / '.($isEdit ? 'Modifier' : 'Créer')])
+        @slot('actions')
+            @component('admin.components.button', ['href' => route('admin.annonces.index'), 'class' => 'admin-secondary-button', 'icon' => 'fa-solid fa-arrow-left', 'label' => 'Retour aux annonces'])@endcomponent
+        @endslot
+    @endcomponent
 
     <section class="admin-content">
         <div class="admin-title"><i class="fa-solid fa-bullhorn"></i><h1>{{ $isEdit ? 'Modifier une annonce' : 'Créer une annonce' }}</h1></div>
 
-        <section class="admin-form-card" aria-labelledby="announcement-title">
-            <div class="admin-form-head"><div><h2 id="announcement-title">Informations de l'annonce</h2><p>Prépare le titre, le statut de publication et le contenu visible par la guilde.</p></div></div>
-
+        @component('admin.components.form-card', [
+            'titleId' => 'announcement-title',
+            'title' => 'Informations de l\'annonce',
+            'description' => 'Prépare le titre, le statut de publication et le contenu visible par la guilde.',
+        ])
             <form class="admin-mission-form" action="{{ $isEdit ? route('admin.annonces.update', $announcement) : route('admin.annonces.store') }}" method="post" data-real-form>
                 @csrf
                 @if($isEdit)
                     @method('patch')
                 @endif
-                <section class="admin-form-section">
-                    <div class="admin-form-section-title"><span>1</span><div><h3>Publication</h3><p>Une annonce peut rester en brouillon avant sa mise en ligne.</p></div></div>
-
+                @component('admin.components.form-section', [
+                    'number' => 1,
+                    'title' => 'Publication',
+                    'description' => 'Une annonce peut rester en brouillon avant sa mise en ligne.',
+                ])
                     <div class="admin-form-grid admin-form-grid--announcement">
-                        <label class="admin-field admin-field--full" for="announcement-name">
-                            <span>Titre</span>
-                            <input id="announcement-name" name="title" type="text" value="{{ old('title', $announcement->title) }}" placeholder="Ex: Sortie guilde dimanche soir" required>
-                        </label>
-                        <label class="admin-field" for="announcement-status">
-                            <span>Statut</span>
-                            <select id="announcement-status" name="status" required data-announcement-status>
-                                <option value="draft" @selected($formStatus === 'draft')>Brouillon</option>
-                                <option value="published" @selected($formStatus === 'published')>Immédiat</option>
-                                <option value="scheduled" @selected($formStatus === 'scheduled')>Programmé</option>
-                            </select>
-                        </label>
-                        <label class="admin-field" for="announcement-tag">
-                            <span>Tag</span>
-                            <select id="announcement-tag" name="tag" required>
-                                @foreach(Announcement::TAGS as $value => $label)
-                                    <option value="{{ $value }}" @selected(old('tag', $announcement->tag) === $value)>{{ $label }}</option>
-                                @endforeach
-                            </select>
-                        </label>
-                        <label class="admin-field" for="announcement-date" data-scheduled-field hidden>
-                            <span>Publication</span>
-                            <input id="announcement-date" name="published_at" type="datetime-local" value="{{ old('published_at', $announcement->published_at?->format('Y-m-d\TH:i')) }}">
-                        </label>
-                    </div>
-                </section>
+                        @component('admin.components.text-input', [
+                            'id' => 'announcement-name',
+                            'name' => 'title',
+                            'label' => 'Titre',
+                            'value' => old('title', $announcement->title),
+                            'placeholder' => 'Ex: Sortie guilde dimanche soir',
+                            'required' => true,
+                            'class' => 'admin-field--full',
+                        ])@endcomponent
 
-                <section class="admin-form-section">
-                    <div class="admin-form-section-title"><span>2</span><div><h3>Contenu</h3><p>Écris le message à afficher sur la carte et dans la modale.</p></div></div>
+                        @component('admin.components.select', [
+                            'id' => 'announcement-status',
+                            'name' => 'status',
+                            'label' => 'Statut',
+                            'required' => true,
+                            'selectAttributes' => 'data-announcement-status',
+                        ])
+                            <option value="draft" @selected($formStatus === 'draft')>Brouillon</option>
+                            <option value="published" @selected($formStatus === 'published')>Immédiat</option>
+                            <option value="scheduled" @selected($formStatus === 'scheduled')>Programmé</option>
+                        @endcomponent
+
+                        @component('admin.components.select', [
+                            'id' => 'announcement-tag',
+                            'name' => 'tag',
+                            'label' => 'Tag',
+                            'required' => true,
+                        ])
+                            @foreach(Announcement::TAGS as $value => $label)
+                                <option value="{{ $value }}" @selected(old('tag', $announcement->tag) === $value)>{{ $label }}</option>
+                            @endforeach
+                        @endcomponent
+
+                        @component('admin.components.text-input', [
+                            'id' => 'announcement-date',
+                            'name' => 'published_at',
+                            'type' => 'datetime-local',
+                            'label' => 'Publication',
+                            'value' => old('published_at', $announcement->published_at?->format('Y-m-d\TH:i')),
+                            'fieldAttributes' => 'data-scheduled-field hidden',
+                        ])@endcomponent
+                    </div>
+                @endcomponent
+
+                @component('admin.components.form-section', [
+                    'number' => 2,
+                    'title' => 'Contenu',
+                    'description' => 'Écris le message à afficher sur la carte et dans la modale.',
+                ])
                     <label class="admin-field admin-field--editor" for="announcement-content">
                         <span>Message</span>
                         <div class="admin-rich-editor" data-rich-editor>
@@ -86,14 +105,14 @@
                             <textarea id="announcement-content" name="content" required data-editor-input hidden>{{ old('content', $announcement->content) }}</textarea>
                         </div>
                     </label>
-                </section>
+                @endcomponent
 
-                <div class="admin-form-actions">
-                    <a class="admin-secondary-button" href="{{ route('admin.annonces.index') }}"><i class="fa-solid fa-xmark"></i><span>Annuler</span></a>
-                    <button class="admin-create-button" type="submit"><i class="fa-solid fa-floppy-disk"></i><span>Enregistrer</span></button>
-                </div>
+                @component('admin.components.form-actions')
+                    @component('admin.components.button', ['href' => route('admin.annonces.index'), 'class' => 'admin-secondary-button', 'icon' => 'fa-solid fa-xmark', 'label' => 'Annuler'])@endcomponent
+                    @component('admin.components.button', ['type' => 'submit', 'class' => 'admin-create-button', 'icon' => 'fa-solid fa-floppy-disk', 'label' => 'Enregistrer'])@endcomponent
+                @endcomponent
             </form>
-        </section>
+        @endcomponent
     </section>
 </main>
 @endsection

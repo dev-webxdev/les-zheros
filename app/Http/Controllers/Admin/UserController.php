@@ -80,7 +80,7 @@ class UserController extends Controller
         $user->setAdminRoles($validated['roles']);
         $user->save();
 
-        AdminActivity::log('users', 'created', 'Utilisateur cree', 'Compte cree depuis l’administration.', $user);
+        AdminActivity::log('users', 'created', 'Utilisateur cree', 'Compte cree depuis lâ€™administration.', $user);
 
         return redirect()->route('admin.utilisateurs.index')->with('admin_toast', [
             'title' => 'Utilisateur cree',
@@ -228,11 +228,11 @@ class UserController extends Controller
             $count = $users->count();
         }
 
-        AdminActivity::log('users', 'bulk_action', 'Action groupÃ©e utilisateurs', $count.' compte(s) traitÃ©(s).');
+        AdminActivity::log('users', 'bulk_action', 'Action groupée utilisateurs', $count.' compte(s) traité(s).');
 
         return back()->with('admin_toast', [
-            'title' => 'Action groupÃ©e terminÃ©e',
-            'text' => $count.' utilisateur(s) traitÃ©(s).',
+            'title' => 'Action groupée terminée',
+            'text' => $count.' utilisateur(s) traité(s).',
             'type' => $data['action'] === 'force_delete' ? 'warning' : 'success',
         ]);
     }

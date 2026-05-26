@@ -9,22 +9,16 @@
 
 @section('admin')
 <main class="admin-main">
-    <header class="admin-topbar">
-        <div class="admin-breadcrumb">
-            <button class="admin-menu-button" type="button" aria-label="Ouvrir la navigation"><i class="fa-solid fa-table-columns"></i></button>
-            <span></span>
-            <p>Galerie</p>
-        </div>
-
-        <div class="admin-actions">
+    @component('admin.components.page-header', ['breadcrumb' => 'Galerie'])
+        @slot('actions')
             <label class="admin-search">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input type="search" placeholder="Rechercher..." data-gallery-search>
             </label>
-            <a class="admin-secondary-button" href="{{ route('admin.galerie.trash') }}"><i class="fa-regular fa-trash-can"></i><span>Corbeille</span></a>
-            <a class="admin-create-button" href="{{ route('admin.galerie.create') }}"><i class="fa-solid fa-circle-plus"></i><span>Ajouter</span></a>
-        </div>
-    </header>
+            @component('admin.components.button', ['href' => route('admin.galerie.trash'), 'class' => 'admin-secondary-button', 'icon' => 'fa-regular fa-trash-can', 'label' => 'Corbeille'])@endcomponent
+            @component('admin.components.button', ['href' => route('admin.galerie.create'), 'class' => 'admin-create-button', 'icon' => 'fa-solid fa-circle-plus', 'label' => 'Ajouter'])@endcomponent
+        @endslot
+    @endcomponent
 
     <section class="admin-content">
         <div class="admin-title admin-title--split">
@@ -54,7 +48,7 @@
                             <p>{{ $image->description ? Str::limit($image->description, 220) : 'Aucune description ajoutée.' }}</p>
                         </div>
                         <div class="admin-gallery-card__meta">
-                            <span @class(['admin-tag', 'admin-tag--success' => $image->is_published])>{{ $image->is_published ? 'Publié' : 'Brouillon' }}</span>
+                            @component('admin.components.badge', ['class' => $image->is_published ? 'admin-tag--success' : null, 'label' => $image->is_published ? 'Publié' : 'Brouillon'])@endcomponent
                             <time datetime="{{ $image->dateValue() }}">{{ $image->displayDate() }}</time>
                         </div>
                     </div>
@@ -70,7 +64,7 @@
                     </div>
                 </article>
             @empty
-                <div class="admin-empty-state"><i class="fa-regular fa-images"></i><strong>Aucune image</strong><span>Ajoute une image pour commencer la galerie.</span></div>
+                @component('admin.components.empty-state', ['icon' => 'fa-regular fa-images', 'title' => 'Aucune image', 'text' => 'Ajoute une image pour commencer la galerie.'])@endcomponent
             @endforelse
         </div>
         @include('partials.admin-pagination', ['paginator' => $images])

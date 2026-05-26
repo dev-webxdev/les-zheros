@@ -9,30 +9,16 @@
 
 @section('admin')
 <main class="admin-main">
-    <header class="admin-topbar">
-        <div class="admin-breadcrumb">
-            <button class="admin-menu-button" type="button" aria-label="Ouvrir la navigation">
-                <i class="fa-solid fa-table-columns"></i>
-            </button>
-            <span></span>
-            <p>Catalogue stuffs</p>
-        </div>
-
-        <div class="admin-actions">
+    @component('admin.components.page-header', ['breadcrumb' => 'Catalogue stuffs'])
+        @slot('actions')
             <label class="admin-search">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input type="search" placeholder="Rechercher..." data-stuff-search>
             </label>
-            <a class="admin-secondary-button" href="{{ route('admin.stuffs.trash') }}">
-                <i class="fa-regular fa-trash-can"></i>
-                <span>Corbeille</span>
-            </a>
-            <a class="admin-create-button" href="{{ route('admin.stuffs.create') }}">
-                <i class="fa-solid fa-circle-plus"></i>
-                <span>Ajouter</span>
-            </a>
-        </div>
-    </header>
+            @component('admin.components.button', ['href' => route('admin.stuffs.trash'), 'class' => 'admin-secondary-button', 'icon' => 'fa-regular fa-trash-can', 'label' => 'Corbeille'])@endcomponent
+            @component('admin.components.button', ['href' => route('admin.stuffs.create'), 'class' => 'admin-create-button', 'icon' => 'fa-solid fa-circle-plus', 'label' => 'Ajouter'])@endcomponent
+        @endslot
+    @endcomponent
 
     <section class="admin-content admin-stuffs">
         <div class="admin-title">
@@ -46,8 +32,8 @@
             'actions' => $canDeleteStuffs ? ['trash' => 'Mettre en corbeille'] : [],
         ])
 
-        <div class="admin-table-card">
-            <table class="admin-table admin-table--stuffs">
+        @component('admin.components.table-card')
+            @component('admin.components.table', ['class' => 'admin-table--stuffs'])
                 <thead>
                     <tr>
                         @if($canDeleteStuffs)<th class="admin-bulk-check"><input type="checkbox" data-bulk-check-all="stuffs-bulk-form" aria-label="Tout sélectionner"></th>@endif
@@ -64,18 +50,18 @@
                     @forelse($stuffs as $stuff)
                         <tr data-stuff-row data-search="{{ strtolower($stuff->class_label.' '.$stuff->title.' '.implode(' ', $stuff->elements ?? []).' '.$stuff->mode) }}">
                             @if($canDeleteStuffs)<td class="admin-bulk-check"><input type="checkbox" name="ids[]" value="{{ $stuff->id }}" form="stuffs-bulk-form" data-bulk-item aria-label="Sélectionner {{ $stuff->title }}"></td>@endif
-                            <td><span class="admin-tag">{{ $stuff->class_label }}</span></td>
+                            <td>@component('admin.components.badge', ['label' => $stuff->class_label])@endcomponent</td>
                             <td>
                                 <div class="admin-announcement-cell">
                                     <strong>{{ $stuff->title }}</strong>
                                 </div>
                             </td>
                             <td>{{ implode(' / ', $stuff->elements ?? []) }}</td>
-                            <td><span class="admin-tag admin-tag--primary">{{ $stuff->mode }}</span></td>
+                            <td>@component('admin.components.badge', ['class' => 'admin-tag--primary', 'label' => $stuff->mode])@endcomponent</td>
                             <td>{{ $stuff->levelLabel() }}</td>
                             <td>{{ $stuff->is_published ? 'Publié' : 'Brouillon' }}</td>
                             <td>
-                                <div class="admin-row-actions admin-stuff-actions">
+                                @component('admin.components.table-actions', ['class' => 'admin-stuff-actions'])
                                     <a class="admin-action-button admin-action-button--guide" href="{{ $stuff->dofusbook_url }}" target="_blank" rel="noopener" aria-label="Ouvrir {{ $stuff->title }}" title="Dofusbook"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                                     <a class="admin-action-button admin-action-button--edit" href="{{ route('admin.stuffs.edit', $stuff) }}" aria-label="Modifier {{ $stuff->title }}" title="Modifier"><i class="fa-regular fa-pen-to-square"></i></a>
                                     @if($canDeleteStuffs)
@@ -85,23 +71,17 @@
                                             <button class="admin-action-button admin-action-button--delete" type="submit" aria-label="Mettre {{ $stuff->title }} à la corbeille" title="Corbeille"><i class="fa-regular fa-trash-can"></i></button>
                                         </form>
                                     @endif
-                                </div>
+                                @endcomponent
                             </td>
                         </tr>
                     @empty
-                        <tr class="admin-table-empty-row">
-                            <td colspan="{{ $canDeleteStuffs ? 8 : 7 }}">
-                                <div class="admin-empty-state">
-                                    <i class="fa-solid fa-shield-halved"></i>
-                                    <strong>Aucun stuff</strong>
-                                    <span>Ajoute un premier build pour alimenter le catalogue.</span>
-                                </div>
-                            </td>
-                        </tr>
+                        @component('admin.components.table-empty-row', ['colspan' => $canDeleteStuffs ? 8 : 7])
+                                @component('admin.components.empty-state', ['icon' => 'fa-solid fa-shield-halved', 'title' => 'Aucun stuff', 'text' => 'Ajoute un premier build pour alimenter le catalogue.'])@endcomponent
+                        @endcomponent
                     @endforelse
                 </tbody>
-            </table>
-        </div>
+            @endcomponent
+        @endcomponent
         @include('partials.admin-pagination', ['paginator' => $stuffs])
     </section>
 </main>

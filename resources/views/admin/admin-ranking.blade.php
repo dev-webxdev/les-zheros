@@ -4,7 +4,7 @@
 @section('description', 'Classement global des missions de la guilde Les Zheros.')
 @php($activeAdmin = 'admin-ranking')
 @push('scripts')
-<script src="{{ asset('assets/js/admin-ranking.js') }}" defer></script>
+<script src="{{ asset('assets/js/admin-ranking.js') }}?v={{ filemtime(public_path('assets/js/admin-ranking.js')) }}" defer></script>
 @endpush
 
 @section('admin')
@@ -49,9 +49,9 @@
                                 <th>Joueur</th>
                                 <th>Missions</th>
                                 <th>Aides</th>
-                                <th><button class="admin-sort-button" type="button" data-sort-ranking="week">Points de la semaine <span>?</span></button></th>
-                                <th><button class="admin-sort-button" type="button" data-sort-ranking="month">Points du mois <span>?</span></button></th>
-                                <th><button class="admin-sort-button" type="button" data-sort-ranking="total">Points totaux <span>?</span></button></th>
+                                <th><button class="admin-sort-button" type="button" data-sort-ranking="week">Points de la semaine <span aria-hidden="true"><i class="fa-solid fa-arrow-down"></i></span></button></th>
+                                <th><button class="admin-sort-button" type="button" data-sort-ranking="month">Points du mois <span aria-hidden="true"><i class="fa-solid fa-arrow-down"></i></span></button></th>
+                                <th><button class="admin-sort-button" type="button" data-sort-ranking="total">Points totaux <span aria-hidden="true"><i class="fa-solid fa-arrow-down"></i></span></button></th>
                             </tr>
                         </thead>
                         <tbody>

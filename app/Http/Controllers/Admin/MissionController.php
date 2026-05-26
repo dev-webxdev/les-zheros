@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mission;
+use App\Models\MissionValidation;
 use App\Support\PublicUploadManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -93,13 +94,16 @@ class MissionController extends Controller
             $count = $missions->count();
         } else {
             $missions = Mission::onlyTrashed()->whereKey($data['ids'])->get();
-            $missions->each->forceDelete();
+            $missions->each(function (Mission $mission): void {
+                $this->preserveMissionPoints($mission);
+                $mission->forceDelete();
+            });
             $count = $missions->count();
         }
 
         return back()->with('admin_toast', [
-            'title' => 'Action groupÃ©e terminÃ©e',
-            'text' => $count.' mission(s) traitÃ©e(s).',
+            'title' => 'Action groupée terminée',
+            'text' => $count.' mission(s) traitée(s).',
             'type' => $data['action'] === 'force_delete' ? 'warning' : 'success',
         ]);
     }
@@ -126,6 +130,7 @@ class MissionController extends Controller
     public function forceDelete(int $mission): RedirectResponse
     {
         $trashedMission = Mission::onlyTrashed()->findOrFail($mission);
+        $this->preserveMissionPoints($trashedMission);
         $trashedMission->forceDelete();
 
         return redirect()->route('admin.missions.trash')->with('admin_toast', [
@@ -137,13 +142,39 @@ class MissionController extends Controller
 
     public function emptyTrash(): RedirectResponse
     {
-        Mission::onlyTrashed()->forceDelete();
+        Mission::onlyTrashed()
+            ->get()
+            ->each(function (Mission $mission): void {
+                $this->preserveMissionPoints($mission);
+                $mission->forceDelete();
+            });
 
         return redirect()->route('admin.missions.trash')->with('admin_toast', [
             'title' => 'Corbeille vidée',
             'text' => 'Toutes les missions en corbeille ont été supprimées définitivement.',
             'type' => 'warning',
         ]);
+    }
+
+    private function preserveMissionPoints(Mission $mission): void
+    {
+        MissionValidation::query()
+            ->where('mission_id', $mission->id)
+            ->where('status', MissionValidation::VALIDATED)
+            ->whereNull('deleted_at')
+            ->get()
+            ->groupBy('user_id')
+            ->each(function ($validations, int $userId): void {
+                $points = round($validations->sum(fn (MissionValidation $validation): float => $validation->points()), 2);
+
+                if ($points <= 0) {
+                    return;
+                }
+
+                \DB::table('users')
+                    ->where('id', $userId)
+                    ->increment('legacy_points_total', $points);
+            });
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\Models\MissionValidation;
+use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -29,42 +30,58 @@ class RankingBoard
         $now = now();
         $weekStart = $this->missionCycle->current()['start'];
         $monthStart = $now->copy()->startOfMonth();
-
-        return MissionValidation::query()
-            ->with('user:id,name,avatar_path')
+        $validationsByUser = MissionValidation::query()
             ->where('status', MissionValidation::VALIDATED)
             ->latest()
             ->get()
-            ->groupBy('user_id')
-            ->map(function (Collection $validations): array {
-                /** @var MissionValidation $first */
-                $first = $validations->first();
-                $name = $first?->user?->name ?? 'Joueur supprimé';
+            ->groupBy('user_id');
+        $userIds = $validationsByUser->keys()
+            ->filter()
+            ->map(fn (mixed $id): int => (int) $id)
+            ->values();
+
+        return User::query()
+            ->where(function ($query) use ($userIds): void {
+                $query->where('legacy_points_total', '>', 0);
+
+                if ($userIds->isNotEmpty()) {
+                    $query->orWhereIn('id', $userIds);
+                }
+            })
+            ->select(['id', 'name', 'avatar_path', 'legacy_points_total'])
+            ->get()
+            ->map(function (User $user) use ($validationsByUser): array {
+                /** @var Collection<int, MissionValidation> $validations */
+                $validations = $validationsByUser->get($user->id, collect());
+                $name = $user->name;
 
                 return [
                     'name' => $name,
                     'initials' => $this->initials($name),
-                    'avatar' => $first?->user?->avatarUrl(),
+                    'avatar' => $user->avatarUrl(),
                     'missions' => $validations->count(),
                     'helps' => $validations->filter(fn (MissionValidation $validation): bool => filled($validation->teammates))->count(),
                     'validations' => $validations,
+                    'legacy_total' => (float) $user->legacy_points_total,
                 ];
             })
             ->map(function (array $row) use ($weekStart, $monthStart): array {
                 /** @var Collection<int, MissionValidation> $validations */
                 $validations = $row['validations'];
+                $legacyTotal = $row['legacy_total'];
 
                 unset($row['validations']);
+                unset($row['legacy_total']);
 
                 return [
                     ...$row,
                     'week' => $this->pointsSince($validations, $weekStart),
                     'month' => $this->pointsSince($validations, $monthStart),
-                    'total' => round($validations->sum(fn (MissionValidation $validation): float => $validation->points()), 2),
+                    'total' => round($legacyTotal + $validations->sum(fn (MissionValidation $validation): float => $validation->points()), 2),
                 ];
             })
             ->filter(fn (array $row): bool => $row['total'] > 0)
-            ->sortByDesc('month')
+            ->sortByDesc('total')
             ->values()
             ->map(fn (array $row, int $index): array => [
                 'rank' => $index + 1,

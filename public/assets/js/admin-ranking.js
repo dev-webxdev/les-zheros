@@ -37,6 +37,20 @@ if (rankingTable) {
         });
     };
 
+    const setSortIcons = (key, direction) => {
+        sortButtons.forEach((button) => {
+            const isActive = button.dataset.sortRanking === key;
+            const icon = button.querySelector("span i");
+
+            button.classList.toggle("is-active", isActive);
+
+            if (icon) {
+                icon.classList.toggle("fa-arrow-up", isActive && direction === "asc");
+                icon.classList.toggle("fa-arrow-down", !isActive || direction === "desc");
+            }
+        });
+    };
+
     const sortRanking = (key) => {
         const direction = currentSort.key === key && currentSort.direction === "desc" ? "asc" : "desc";
         const rows = Array.from(rankingBody.querySelectorAll("tr:not([data-ranking-empty])"));
@@ -51,12 +65,7 @@ if (rankingTable) {
         rows.forEach((row) => rankingBody.appendChild(row));
         currentSort = { key, direction };
 
-        sortButtons.forEach((button) => {
-            const isActive = button.dataset.sortRanking === key;
-            button.classList.toggle("is-active", isActive);
-            button.querySelector("span").textContent = isActive && direction === "asc" ? "↑" : "↓";
-        });
-
+        setSortIcons(key, direction);
         updateRankingBadges();
     };
 
@@ -65,4 +74,6 @@ if (rankingTable) {
             sortRanking(button.dataset.sortRanking);
         });
     });
+
+    setSortIcons(currentSort.key, currentSort.direction);
 }

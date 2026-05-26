@@ -34,12 +34,12 @@ class MissionValidationAdminWorkflow
 
     public static function logCreated(): void
     {
-        AdminActivity::log('validations', 'created', 'Validation ajoutee', 'Declaration ajoutee depuis Filament.');
+        AdminActivity::log('validations', 'created', 'Validation ajoutee', 'Declaration ajoutee depuis l admin.');
     }
 
     public static function logUpdated(MissionValidation $validation): void
     {
-        AdminActivity::log('validations', 'updated', 'Validation modifiee', 'Declaration mise a jour depuis Filament.', $validation);
+        AdminActivity::log('validations', 'updated', 'Validation modifiee', 'Declaration mise a jour depuis l admin.', $validation);
     }
 
     public static function logStatusUpdated(MissionValidation $validation): void
@@ -60,16 +60,16 @@ class MissionValidationAdminWorkflow
 
     public static function logTrashed(MissionValidation $validation): void
     {
-        AdminActivity::log('validations', 'trashed', 'Validation mise en corbeille', 'Declaration deplacee dans la corbeille depuis Filament.', $validation);
+        AdminActivity::log('validations', 'trashed', 'Validation mise en corbeille', 'Declaration deplacee dans la corbeille depuis l admin.', $validation);
     }
 
     public static function logRestored(MissionValidation $validation): void
     {
-        AdminActivity::log('validations', 'restored', 'Validation restauree', 'Declaration restauree depuis Filament.', $validation);
+        AdminActivity::log('validations', 'restored', 'Validation restauree', 'Declaration restauree depuis l admin.', $validation);
     }
 
     public static function logForceDeleted(MissionValidation $validation): void
     {
-        AdminActivity::log('validations', 'force_deleted', 'Validation supprimee definitivement', 'Declaration supprimee definitivement depuis Filament.', $validation);
+        AdminActivity::log('validations', 'force_deleted', 'Validation supprimee definitivement', 'Declaration supprimee definitivement depuis l admin.', $validation);
     }
 }
