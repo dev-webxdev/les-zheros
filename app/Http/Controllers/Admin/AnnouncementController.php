@@ -94,6 +94,8 @@ class AnnouncementController extends Controller
 
     public function forceDelete(int $announcement): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('announcements'), 403);
+
         Announcement::onlyTrashed()->findOrFail($announcement)->forceDelete();
 
         return redirect()->route('admin.annonces.trash')->with('admin_toast', [
@@ -105,6 +107,8 @@ class AnnouncementController extends Controller
 
     public function emptyTrash(): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('announcements'), 403);
+
         Announcement::onlyTrashed()->forceDelete();
 
         return redirect()->route('admin.annonces.trash')->with('admin_toast', [

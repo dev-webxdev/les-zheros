@@ -40,7 +40,7 @@
                                         <i class="fa-solid fa-rotate-left"></i>
                                     </button>
                                 </form>
-                                @if ($canDeleteMissions)
+                                @if ($canForceDeleteMissions)
                                     <form action="{{ route('admin.missions.force-delete', $mission->id) }}" method="post" data-real-form>
                                         @csrf
                                         @method('delete')

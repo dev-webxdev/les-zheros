@@ -122,6 +122,8 @@ class GalleryController extends Controller
 
     public function forceDelete(int $image): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('gallery'), 403);
+
         GalleryImage::onlyTrashed()->findOrFail($image)->forceDelete();
 
         return redirect()->route('admin.galerie.trash')->with('admin_toast', [
@@ -133,6 +135,8 @@ class GalleryController extends Controller
 
     public function emptyTrash(): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('gallery'), 403);
+
         GalleryImage::onlyTrashed()->forceDelete();
 
         return redirect()->route('admin.galerie.trash')->with('admin_toast', [

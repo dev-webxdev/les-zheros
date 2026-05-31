@@ -47,7 +47,7 @@
                                         <i class="fa-solid fa-rotate-left"></i>
                                     </button>
                                 </form>
-                                @if ($canDeleteValidations)
+                                @if ($canForceDeleteValidations)
                                     <form action="{{ route('admin.validations.force-delete', $validation->id) }}" method="post" data-real-form>
                                         @csrf
                                         @method('delete')

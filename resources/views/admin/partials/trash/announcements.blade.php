@@ -12,6 +12,7 @@
                         @component('admin.components.trash-actions', [
                             'restoreUrl' => route('admin.annonces.restore', $announcement->id),
                             'deleteUrl' => route('admin.annonces.force-delete', $announcement->id),
+                            'canDelete' => $canForceDeleteAnnouncements,
                         ])@endcomponent
                     </td>
                 </tr>

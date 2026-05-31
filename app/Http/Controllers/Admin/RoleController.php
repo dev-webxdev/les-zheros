@@ -157,6 +157,8 @@ class RoleController extends Controller
 
     public function forceDelete(int $role): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('roles'), 403);
+
         $adminRole = AdminRole::onlyTrashed()->findOrFail($role);
         $this->removeRoleFromUsers($adminRole->key);
         $adminRole->forceDelete();
@@ -170,6 +172,8 @@ class RoleController extends Controller
 
     public function emptyTrash(): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('roles'), 403);
+
         AdminRole::onlyTrashed()->forceDelete();
 
         return redirect()->route('admin.roles.trash')->with('admin_toast', [

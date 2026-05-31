@@ -25,7 +25,7 @@
                                     <i class="fa-solid fa-rotate-left"></i>
                                 </button>
                             </form>
-                            @if($canDeleteOutings)
+                            @if($canForceDeleteOutings)
                                 <form action="{{ route('admin.sorties.force-delete', $outing->id) }}" method="post" data-real-form>
                                     @csrf
                                     @method('delete')

@@ -52,6 +52,7 @@ class EnsureUserIsAdmin
             Str::startsWith($routeName, 'admin.stuffs') => 'stuffs',
             Str::startsWith($routeName, 'admin.utilisateurs') => 'users',
             Str::startsWith($routeName, 'admin.validations') => 'validations',
+            Str::startsWith($routeName, 'admin.mot-mystere') => null,
             default => null,
         };
     }

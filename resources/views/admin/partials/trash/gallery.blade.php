@@ -20,6 +20,7 @@
                         @component('admin.components.trash-actions', [
                             'restoreUrl' => route('admin.galerie.restore', $image->id),
                             'deleteUrl' => route('admin.galerie.force-delete', $image->id),
+                            'canDelete' => $canForceDeleteGallery,
                             'restoreAria' => 'Restaurer '.$image->title,
                             'deleteAria' => 'Supprimer definitivement '.$image->title,
                         ])@endcomponent

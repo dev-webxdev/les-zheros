@@ -133,6 +133,7 @@ final class AdminAccess
             'users.delete' => 'Supprimer les utilisateurs',
             'validations.manage' => 'Gérer les validations',
             'validations.delete' => 'Supprimer les validations',
+            'word_mystery.manage' => 'Gérer Mot Mystère',
         ];
     }
 
@@ -224,6 +225,7 @@ final class AdminAccess
                 'stuffs',
                 'users',
                 'validations',
+                'word_mystery',
             ], true))
             ->unique()
             ->values()

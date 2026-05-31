@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\StuffController as AdminStuffController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ValidationController;
+use App\Http\Controllers\Admin\WordMysteryController as AdminWordMysteryController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
@@ -28,11 +29,14 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OutingController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\StuffController;
+use App\Http\Controllers\WordMysteryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/guides', [GuideController::class, 'index'])->name('guides.index');
 Route::get('/guides/{guide:slug}', [GuideController::class, 'show'])->name('guides.show');
 Route::get('/stuffs', [StuffController::class, 'index'])->name('stuffs.index');
+Route::get('/mot-mystere', [WordMysteryController::class, 'show'])->name('mot-mystere');
+Route::post('/mot-mystere', [WordMysteryController::class, 'submit'])->middleware('auth')->name('mot-mystere.submit');
 Route::redirect('/login', '/connexion')->name('login');
 Route::get('/', function () {
     if (! auth()->check()) {
@@ -117,6 +121,13 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::patch('/admin/guides/{guide}', [AdminGuideController::class, 'update'])->middleware('admin:guides')->name('admin.guides.update');
     Route::delete('/admin/guides/{guide}', [AdminGuideController::class, 'destroy'])->middleware('admin:guides,delete')->name('admin.guides.destroy');
     Route::get('/admin/loterie', [LotteryController::class, 'index'])->middleware('admin:lottery')->name('admin.loterie.index');
+    Route::get('/admin/mot-mystere', [AdminWordMysteryController::class, 'index'])->name('admin.mot-mystere.index');
+    Route::get('/admin/mot-mystere/creer', [AdminWordMysteryController::class, 'create'])->name('admin.mot-mystere.create');
+    Route::post('/admin/mot-mystere', [AdminWordMysteryController::class, 'store'])->name('admin.mot-mystere.store');
+    Route::get('/admin/mot-mystere/{word}/modifier', [AdminWordMysteryController::class, 'edit'])->name('admin.mot-mystere.edit');
+    Route::patch('/admin/mot-mystere/{word}', [AdminWordMysteryController::class, 'update'])->name('admin.mot-mystere.update');
+    Route::delete('/admin/mot-mystere/{word}', [AdminWordMysteryController::class, 'destroy'])->name('admin.mot-mystere.destroy');
+    Route::patch('/admin/mot-mystere/recompenses/{reward}', [AdminWordMysteryController::class, 'updateReward'])->name('admin.mot-mystere.rewards.update');
     Route::get('/admin/missions', [AdminMissionController::class, 'index'])->middleware('admin:missions')->name('admin.missions.index');
     Route::get('/admin/missions/creer', [AdminMissionController::class, 'create'])->middleware('admin:missions')->name('admin.missions.create');
     Route::post('/admin/missions', [AdminMissionController::class, 'store'])->middleware('admin:missions')->name('admin.missions.store');

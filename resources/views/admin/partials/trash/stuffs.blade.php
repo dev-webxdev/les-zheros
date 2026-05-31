@@ -27,6 +27,7 @@
                             'class' => 'admin-stuff-actions',
                             'restoreUrl' => route('admin.stuffs.restore', $stuff->id),
                             'deleteUrl' => route('admin.stuffs.force-delete', $stuff->id),
+                            'canDelete' => $canForceDeleteStuffs,
                             'restoreAria' => 'Restaurer '.$stuff->title,
                             'deleteAria' => 'Supprimer definitivement '.$stuff->title,
                         ])@endcomponent

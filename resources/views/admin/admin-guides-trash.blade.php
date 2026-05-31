@@ -3,6 +3,7 @@
 @section('title', 'Corbeille des guides | Les Zheros')
 @section('description', 'Corbeille des guides de missions de la guilde Les Zheros.')
 @php($activeAdmin = 'admin-guides')
+@php($canForceDeleteGuides = auth()->user()?->canForceDeleteInAdminArea('guides'))
 
 @section('admin')
 <main class="admin-main">
@@ -20,7 +21,7 @@
                 <i class="fa-solid fa-arrow-left"></i>
                 <span>Retour aux guides</span>
             </a>
-            @if($guides->isNotEmpty())
+            @if($canForceDeleteGuides && $guides->isNotEmpty())
                 <form action="{{ route('admin.guides.empty-trash') }}" method="post" data-real-form>
                     @csrf
                     @method('delete')
@@ -59,11 +60,13 @@
                             @method('patch')
                             <button class="admin-action-button admin-action-button--restore" type="submit" aria-label="Restaurer {{ $guide->title }}" title="Restaurer"><i class="fa-solid fa-rotate-left"></i></button>
                         </form>
-                        <form action="{{ route('admin.guides.force-delete', $guide->id) }}" method="post" data-real-form>
-                            @csrf
-                            @method('delete')
-                            <button class="admin-action-button admin-action-button--delete" type="submit" aria-label="Supprimer définitivement {{ $guide->title }}" title="Supprimer définitivement"><i class="fa-regular fa-trash-can"></i></button>
-                        </form>
+                        @if($canForceDeleteGuides)
+                            <form action="{{ route('admin.guides.force-delete', $guide->id) }}" method="post" data-real-form>
+                                @csrf
+                                @method('delete')
+                                <button class="admin-action-button admin-action-button--delete" type="submit" aria-label="Supprimer définitivement {{ $guide->title }}" title="Supprimer définitivement"><i class="fa-regular fa-trash-can"></i></button>
+                            </form>
+                        @endif
                     </div>
                 </article>
             @empty

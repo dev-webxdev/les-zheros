@@ -3,7 +3,7 @@
 @section('title', 'Corbeille des utilisateurs | Les Zheros')
 @section('description', 'Corbeille des utilisateurs de la guilde Les Zheros.')
 @php($activeAdmin = 'admin-users')
-@php($canDeleteUsers = auth()->user()?->canDeleteInAdminArea('users'))
+@php($canForceDeleteUsers = auth()->user()?->canForceDeleteInAdminArea('users'))
 
 @section('admin')
 @include('admin.partials.trash-page', [
@@ -12,7 +12,7 @@
     'backLabel' => 'Retour aux utilisateurs',
     'emptyTrashUrl' => route('admin.utilisateurs.empty-trash'),
     'items' => $users,
-    'canEmptyTrash' => $canDeleteUsers,
+    'canEmptyTrash' => $canForceDeleteUsers,
     'emptyButtonFirst' => true,
     'titleIcon' => 'fa-solid fa-users',
     'bulk' => [
@@ -20,7 +20,7 @@
         'action' => route('admin.utilisateurs.bulk'),
         'actions' => array_filter([
             'restore' => 'Restaurer',
-            $canDeleteUsers ? 'force_delete' : null => $canDeleteUsers ? 'Supprimer définitivement' : null,
+            $canForceDeleteUsers ? 'force_delete' : null => $canForceDeleteUsers ? 'Supprimer définitivement' : null,
         ]),
     ],
     'tableView' => 'admin.partials.trash.users',

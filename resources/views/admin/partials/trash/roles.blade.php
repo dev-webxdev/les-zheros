@@ -31,13 +31,15 @@
                                     <i class="fa-solid fa-rotate-left"></i>
                                 </button>
                             </form>
-                            <form action="{{ route('admin.roles.force-delete', $role->id) }}" method="post" data-real-form>
-                                @csrf
-                                @method('delete')
-                                <button class="admin-action-button admin-action-button--delete" type="submit" aria-label="Supprimer definitivement {{ $role->label }}" title="Supprimer definitivement">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </button>
-                            </form>
+                            @if($canForceDeleteRoles)
+                                <form action="{{ route('admin.roles.force-delete', $role->id) }}" method="post" data-real-form>
+                                    @csrf
+                                    @method('delete')
+                                    <button class="admin-action-button admin-action-button--delete" type="submit" aria-label="Supprimer definitivement {{ $role->label }}" title="Supprimer definitivement">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                     </td>
                 </tr>

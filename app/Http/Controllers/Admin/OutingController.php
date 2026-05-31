@@ -151,6 +151,8 @@ class OutingController extends Controller
 
     public function forceDelete(int $outing): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('outings'), 403);
+
         Outing::onlyTrashed()->findOrFail($outing)->forceDelete();
 
         return redirect()->route('admin.sorties.trash')->with('admin_toast', [
@@ -162,6 +164,8 @@ class OutingController extends Controller
 
     public function emptyTrash(): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('outings'), 403);
+
         Outing::onlyTrashed()->forceDelete();
 
         return redirect()->route('admin.sorties.trash')->with('admin_toast', [

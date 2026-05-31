@@ -2,6 +2,7 @@
     $activeAdmin = $activeAdmin ?? '';
     $adminUser = auth()->user();
     $can = fn (string $area): bool => (bool) $adminUser?->canAccessAdminArea($area);
+    $canWordMystery = (bool) ($adminUser?->hasAdminAccess() || $adminUser?->canAccessAdminArea('word_mystery') || $adminUser?->canAccessAdminPermission('word_mystery.manage'));
 @endphp
 
 <aside class="admin-sidebar" aria-label="Navigation administration">
@@ -62,7 +63,7 @@
             @endif
         @endif
 
-        @if ($can('outings') || $can('lottery') || $can('ranking'))
+        @if ($can('outings') || $can('lottery') || $canWordMystery || $can('ranking'))
             <p class="admin-nav__label">Activités</p>
 
             @if ($can('outings'))
@@ -76,6 +77,13 @@
                 <a @class(['admin-nav__link', 'is-active' => str_starts_with($activeAdmin, 'admin-lottery')]) href="{{ route('admin.loterie.index') }}">
                     <i class="fa-solid fa-dice"></i>
                     <span>Loterie</span>
+                </a>
+            @endif
+
+            @if ($canWordMystery)
+                <a @class(['admin-nav__link', 'is-active' => str_starts_with($activeAdmin, 'admin-word-mystery')]) href="{{ route('admin.mot-mystere.index') }}">
+                    <i class="fa-solid fa-key"></i>
+                    <span>Mot Mystère</span>
                 </a>
             @endif
 

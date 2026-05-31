@@ -123,6 +123,8 @@ class StuffController extends Controller
 
     public function forceDelete(int $stuff): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('stuffs'), 403);
+
         Stuff::onlyTrashed()->findOrFail($stuff)->forceDelete();
 
         return redirect()->route('admin.stuffs.trash')->with('admin_toast', [
@@ -134,6 +136,8 @@ class StuffController extends Controller
 
     public function emptyTrash(): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('stuffs'), 403);
+
         Stuff::onlyTrashed()->forceDelete();
 
         return redirect()->route('admin.stuffs.trash')->with('admin_toast', [

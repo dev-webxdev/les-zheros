@@ -50,7 +50,7 @@
                                         <i class="fa-solid fa-rotate-left"></i>
                                     </button>
                                 </form>
-                                @if ($canDeleteUsers)
+                                @if ($canForceDeleteUsers)
                                     <form action="{{ route('admin.utilisateurs.force-delete', $user->id) }}" method="post" data-real-form>
                                         @csrf
                                         @method('delete')

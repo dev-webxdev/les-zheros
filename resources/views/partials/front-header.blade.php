@@ -20,6 +20,7 @@
                             @endauth
                             <li @class(['is-active' => $activePage === 'guides' || $activePage === 'guide'])><a href="{{ route('guides.index') }}"><i class="fa-solid fa-book-open"></i><span>Guides</span></a></li>
                             <li @class(['is-active' => $activePage === 'stuffs'])><a href="{{ route('stuffs.index') }}"><i class="fa-solid fa-shield-halved"></i><span>Stuffs</span></a></li>
+                            <li @class(['is-active' => $activePage === 'mot-mystere'])><a href="{{ route('mot-mystere') }}"><i class="fa-solid fa-key"></i><span>Mot Mystere</span></a></li>
                             @auth
                                 <li @class(['is-active' => $activePage === 'galerie'])><a href="{{ route('galerie') }}"><i class="fa-regular fa-images"></i><span>Galerie</span></a></li>
                                 <li @class(['is-active' => $activePage === 'classement'])><a href="{{ route('classement') }}"><i class="fa-solid fa-trophy"></i><span>Classement</span></a></li>

@@ -276,6 +276,8 @@ class ValidationController extends Controller
 
     public function forceDelete(int $validation): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('validations'), 403);
+
         $trashedValidation = MissionValidation::onlyTrashed()->findOrFail($validation);
         AdminActivity::log('validations', 'force_deleted', 'Validation supprimee definitivement', 'Declaration supprimee depuis la corbeille.', $trashedValidation);
         $trashedValidation->forceDelete();
@@ -289,6 +291,8 @@ class ValidationController extends Controller
 
     public function emptyTrash(): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('validations'), 403);
+
         $count = MissionValidation::onlyTrashed()->count();
         MissionValidation::onlyTrashed()->forceDelete();
         AdminActivity::log('validations', 'trash_emptied', 'Corbeille validations videe', $count.' validation(s) supprimee(s) definitivement.');

@@ -193,6 +193,8 @@ class GuideController extends Controller
 
     public function forceDelete(int $guide): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('guides'), 403);
+
         Guide::onlyTrashed()->findOrFail($guide)->forceDelete();
 
         return redirect()->route('admin.guides.trash')->with('admin_toast', [
@@ -204,6 +206,8 @@ class GuideController extends Controller
 
     public function emptyTrash(): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('guides'), 403);
+
         Guide::onlyTrashed()->forceDelete();
 
         return redirect()->route('admin.guides.trash')->with('admin_toast', [

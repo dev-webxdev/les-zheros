@@ -1,6 +1,6 @@
 @php
     $contentClass = trim('admin-content '.($contentClass ?? ''));
-    $canEmptyTrash = $canEmptyTrash ?? true;
+    $canEmptyTrash = $canEmptyTrash ?? false;
     $emptyButtonFirst = $emptyButtonFirst ?? false;
     $titleText = $titleText ?? 'Corbeille';
 @endphp

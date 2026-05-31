@@ -131,6 +131,8 @@ class MissionController extends Controller
 
     public function forceDelete(int $mission): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('missions'), 403);
+
         $trashedMission = Mission::onlyTrashed()->findOrFail($mission);
         $this->preserveMissionPoints($trashedMission);
         $trashedMission->forceDelete();
@@ -144,6 +146,8 @@ class MissionController extends Controller
 
     public function emptyTrash(): RedirectResponse
     {
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('missions'), 403);
+
         Mission::onlyTrashed()
             ->get()
             ->each(function (Mission $mission): void {

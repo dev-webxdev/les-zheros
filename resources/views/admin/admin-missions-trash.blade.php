@@ -3,7 +3,7 @@
 @section('title', 'Corbeille des missions | Les Zheros')
 @section('description', 'Corbeille des missions de la guilde Les Zheros.')
 @php($activeAdmin = 'admin-missions')
-@php($canDeleteMissions = auth()->user()?->canDeleteInAdminArea('missions'))
+@php($canForceDeleteMissions = auth()->user()?->canForceDeleteInAdminArea('missions'))
 
 @section('admin')
 @include('admin.partials.trash-page', [
@@ -12,14 +12,14 @@
     'backLabel' => 'Retour aux missions',
     'emptyTrashUrl' => route('admin.missions.empty-trash'),
     'items' => $missions,
-    'canEmptyTrash' => $canDeleteMissions,
+    'canEmptyTrash' => $canForceDeleteMissions,
     'titleIcon' => 'fa-solid fa-scroll',
     'bulk' => [
         'id' => 'missions-trash-bulk-form',
         'action' => route('admin.missions.bulk'),
         'actions' => array_filter([
             'restore' => 'Restaurer',
-            $canDeleteMissions ? 'force_delete' : null => $canDeleteMissions ? 'Supprimer définitivement' : null,
+            $canForceDeleteMissions ? 'force_delete' : null => $canForceDeleteMissions ? 'Supprimer définitivement' : null,
         ]),
     ],
     'tableView' => 'admin.partials.trash.missions',
