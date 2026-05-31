@@ -13,9 +13,13 @@ class NotificationController extends Controller
     {
         return view('admin.admin-notifications', [
             'notifications' => AdminNotification::query()
+                ->whereIn('area', ['users', 'lottery'])
                 ->latest()
                 ->paginate(20),
-            'unreadCount' => AdminNotification::query()->whereNull('read_at')->count(),
+            'unreadCount' => AdminNotification::query()
+                ->whereIn('area', ['users', 'lottery'])
+                ->whereNull('read_at')
+                ->count(),
         ]);
     }
 

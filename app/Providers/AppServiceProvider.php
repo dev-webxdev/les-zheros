@@ -26,7 +26,10 @@ class AppServiceProvider extends ServiceProvider
     {
         View::composer('layouts.admin', function ($view): void {
             $notificationCount = Schema::hasTable('admin_notifications')
-                ? AdminNotification::query()->whereNull('read_at')->count()
+                ? AdminNotification::query()
+                    ->whereIn('area', ['users', 'lottery'])
+                    ->whereNull('read_at')
+                    ->count()
                 : 0;
 
             $view->with([

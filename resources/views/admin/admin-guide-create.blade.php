@@ -6,10 +6,10 @@
     $activeAdmin = 'admin-guides';
 @endphp
 @push('scripts')
-<script src="{{ asset('assets/js/admin-guides.js') }}" defer></script>
+<script src="{{ asset('assets/js/admin-guides.js') }}?v={{ filemtime(public_path('assets/js/admin-guides.js')) }}" defer></script>
 @endpush
 @push('scripts')
-<script src="{{ asset('assets/js/admin-rich-editor.js') }}" defer></script>
+<script src="{{ asset('assets/js/admin-rich-editor.js') }}?v={{ filemtime(public_path('assets/js/admin-rich-editor.js')) }}" defer></script>
 @endpush
 
 @section('admin')
@@ -37,6 +37,7 @@
     $strategySections = $guideSections->filter(fn ($section) => ($section['kind'] ?? 'strategy') === 'strategy')->values();
     $spellSections = $guideSections->filter(fn ($section) => ($section['kind'] ?? '') === 'spells')->values();
     $sectionFormIndex = 0;
+    $autosaveDraft = ! $guide->exists || ! $guide->is_published;
 @endphp
 <main class="admin-main">
             <header class="admin-topbar">
@@ -57,11 +58,12 @@
             </header>
 
             <section class="admin-content admin-content--editor">
-                <form id="guide-form" class="admin-guide-editor admin-guide-editor--cms" action="{{ $guide->exists ? route('admin.guides.update', $guide) : route('admin.guides.store') }}" method="post" enctype="multipart/form-data" data-real-form>
+                <form id="guide-form" class="admin-guide-editor admin-guide-editor--cms" action="{{ $guide->exists ? route('admin.guides.update', $guide) : route('admin.guides.store') }}" method="post" enctype="multipart/form-data" data-real-form @if($autosaveDraft) data-guide-autosave="{{ route('admin.guides.autosave') }}" @endif>
                     @csrf
                     @if($guide->exists)
                         @method('patch')
                     @endif
+                    <input type="hidden" name="auto_draft_id" value="{{ old('auto_draft_id', $autosaveDraft && $guide->exists ? $guide->id : null) }}" data-guide-auto-draft-id>
                     <input type="hidden" name="cover_path" value="{{ $coverPath }}" data-guide-cover-path-input>
                     <section class="admin-guide-compose">
                         <nav class="admin-guide-editor-tabs" aria-label="Sections du guide" data-guide-editor-tabs>
@@ -329,6 +331,9 @@
                             <i class="fa-solid fa-floppy-disk"></i>
                             <span>Enregistrer</span>
                         </button>
+                        @if($autosaveDraft)
+                            <p class="admin-guide-autosave-status" data-guide-autosave-status>Sauvegarde auto prête</p>
+                        @endif
                     </aside>
                 </form>
             </section>

@@ -22,5 +22,4 @@ Artisan::command('site:backup', function () {
     $this->info('Sauvegarde creee : '.basename($path));
 })->purpose('Cree une sauvegarde du site et conserve les 10 dernieres');
 
-Schedule::command('missions:sync-cycle')->everyMinute();
 Schedule::command('site:backup')->dailyAt('03:00');

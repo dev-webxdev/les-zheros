@@ -46,7 +46,7 @@
                 <strong>{{ $guideCount ?? $guides->total() }} guides actifs</strong>
                 <p>Organise les guides par mission pour les retrouver rapidement au moment de valider une semaine compliquée.</p>
                 <div class="admin-guide-stats">
-                    @foreach (array_intersect_key(\App\Models\Guide::CATEGORIES, array_flip(['donjon', 'expedition'])) as $category => $label)
+                    @foreach (\App\Models\Guide::CATEGORIES as $category => $label)
                         <span><strong>{{ $categoryCounts[$category] ?? 0 }}</strong> {{ $label }}</span>
                     @endforeach
                 </div>

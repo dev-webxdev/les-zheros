@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Guide;
 use App\Models\Mission;
 use App\Support\PublicUploadManager;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -37,7 +38,6 @@ class GuideController extends Controller
     {
         $mission = $request->filled('mission_id')
             ? Mission::query()
-                ->whereIn('category', ['donjon', 'expedition'])
                 ->find($request->integer('mission_id'))
             : null;
 
@@ -67,7 +67,15 @@ class GuideController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        Guide::create($this->payload($request));
+        $draft = $request->filled('auto_draft_id')
+            ? Guide::query()->whereKey($request->integer('auto_draft_id'))->first()
+            : null;
+
+        if ($draft) {
+            $draft->update($this->payload($request, $draft));
+        } else {
+            Guide::create($this->payload($request));
+        }
 
         return redirect()->route('admin.guides.index')->with('admin_toast', [
             'title' => 'Guide créé',
@@ -81,6 +89,63 @@ class GuideController extends Controller
         return view('admin.admin-guide-create', [
             'guide' => $guide,
             'missions' => $this->guideMissions(),
+        ]);
+    }
+
+    public function autosave(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'auto_draft_id' => ['nullable', 'integer', 'exists:guides,id'],
+            'mission_id' => ['nullable', 'exists:missions,id'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'category' => ['nullable', Rule::in(array_keys(Guide::CATEGORIES))],
+            'summary' => ['nullable', 'string', 'max:2000'],
+            'chips' => ['nullable', 'string', 'max:500'],
+            'checklist' => ['nullable', 'array'],
+            'checklist.*' => ['nullable', 'string', 'max:500'],
+            'sections' => ['nullable', 'array'],
+            'sections.*.kind' => ['nullable', Rule::in(['placement', 'strategy', 'spells'])],
+            'sections.*.title' => ['nullable', 'string', 'max:255'],
+            'sections.*.body' => ['nullable', 'string', 'max:8000'],
+            'sections.*.caption' => ['nullable', 'string', 'max:1000'],
+            'sections.*.images' => ['nullable', 'array'],
+            'sections.*.images.*.caption' => ['nullable', 'string', 'max:1200'],
+            'cover_path' => ['nullable', 'string', 'max:1000'],
+            'published_at' => ['nullable', 'date'],
+        ]);
+
+        $guide = ! empty($validated['auto_draft_id'])
+            ? Guide::query()->whereKey($validated['auto_draft_id'])->first()
+            : null;
+
+        $title = trim((string) ($validated['title'] ?? ''));
+        $title = $title !== '' ? $title : 'Brouillon guide '.now()->format('d/m/Y H:i');
+
+        $payload = [
+            'mission_id' => $validated['mission_id'] ?? null,
+            'title' => $title,
+            'slug' => $this->uniqueSlug($title, $guide),
+            'category' => $validated['category'] ?? 'donjon',
+            'summary' => $validated['summary'] ?? null,
+            'chips' => $this->splitList($validated['chips'] ?? ''),
+            'checklist' => collect($validated['checklist'] ?? [])->filter()->values()->all(),
+            'sections' => $this->autosaveSections($request, $guide),
+            'cover_path' => $validated['cover_path'] ?? $guide?->cover_path,
+            'map_path' => $guide?->map_path,
+            'is_published' => false,
+            'published_at' => $validated['published_at'] ?? $guide?->published_at ?? now(),
+        ];
+
+        if ($guide) {
+            $guide->update($payload);
+        } else {
+            $guide = Guide::create($payload);
+        }
+
+        return response()->json([
+            'id' => $guide->id,
+            'edit_url' => route('admin.guides.edit', $guide),
+            'saved_at' => now()->format('H:i'),
         ]);
     }
 
@@ -177,17 +242,7 @@ class GuideController extends Controller
             'published_at' => ['nullable', 'date'],
         ]);
 
-        $slug = Str::slug($validated['title']);
-        $baseSlug = $slug;
-        $counter = 2;
-
-        while (Guide::withTrashed()
-            ->where('slug', $slug)
-            ->when($guide, fn ($query) => $query->where('id', '!=', $guide->getKey()))
-            ->exists()) {
-            $slug = $baseSlug.'-'.$counter;
-            $counter++;
-        }
+        $slug = $this->uniqueSlug($validated['title'], $guide);
 
         return [
             'mission_id' => $validated['mission_id'] ?? null,
@@ -203,6 +258,23 @@ class GuideController extends Controller
             'is_published' => $request->boolean('published'),
             'published_at' => $validated['published_at'] ?? now(),
         ];
+    }
+
+    private function uniqueSlug(string $title, ?Guide $guide = null): string
+    {
+        $slug = Str::slug($title) ?: 'guide';
+        $baseSlug = $slug;
+        $counter = 2;
+
+        while (Guide::withTrashed()
+            ->where('slug', $slug)
+            ->when($guide, fn ($query) => $query->where('id', '!=', $guide->getKey()))
+            ->exists()) {
+            $slug = $baseSlug.'-'.$counter;
+            $counter++;
+        }
+
+        return $slug;
     }
 
     /**
@@ -257,6 +329,37 @@ class GuideController extends Controller
             ->all();
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function autosaveSections(Request $request, ?Guide $guide): array
+    {
+        return collect($request->input('sections', []))
+            ->map(function (array $section, int $index) use ($guide): array {
+                $existing = $guide?->sections[$index] ?? [];
+                $existingImages = collect($existing['images'] ?? [])->values();
+
+                $images = collect($section['images'] ?? [])
+                    ->map(fn (array $image, int $imageIndex): array => [
+                        'image' => $existingImages[$imageIndex]['image'] ?? null,
+                        'caption' => (string) ($image['caption'] ?? $existingImages[$imageIndex]['caption'] ?? ''),
+                    ])
+                    ->filter(fn (array $image): bool => ! empty($image['image']) || $image['caption'] !== '')
+                    ->values()
+                    ->all();
+
+                return [
+                    'kind' => (string) ($section['kind'] ?? $existing['kind'] ?? 'strategy'),
+                    'title' => trim((string) ($section['title'] ?? '')),
+                    'body' => (string) ($section['body'] ?? ''),
+                    'images' => $images,
+                ];
+            })
+            ->filter(fn (array $section): bool => $section['title'] !== '' || trim(strip_tags($section['body'])) !== '' || ! empty($section['images']))
+            ->values()
+            ->all();
+    }
+
     private function upload(Request $request, string $key, string $directory, ?string $fallback = null): ?string
     {
         if (! $request->hasFile($key)) {
@@ -269,7 +372,6 @@ class GuideController extends Controller
     private function guideMissions()
     {
         return Mission::query()
-            ->whereIn('category', ['donjon', 'expedition'])
             ->orderBy('title')
             ->get();
     }

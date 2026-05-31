@@ -83,7 +83,7 @@ class MissionValidationPointsTest extends TestCase
         CarbonImmutable::setTestNow();
     }
 
-    public function test_mission_cycle_advances_and_lottery_uses_current_cycle(): void
+    public function test_lottery_uses_configured_cycle_without_auto_advancing_it(): void
     {
         CarbonImmutable::setTestNow('2026-05-20 10:00:00');
         $admin = User::factory()->create(['is_admin' => true]);
@@ -120,13 +120,13 @@ class MissionValidationPointsTest extends TestCase
         $this->actingAs($admin)
             ->get(route('admin.loterie.index'))
             ->assertOk()
-            ->assertSee('Cycle du 20/05/2026 08:00 au 27/05/2026 08:00')
+            ->assertSee('Cycle du 13/05/2026 08:00 au 20/05/2026 08:00')
             ->assertSee('"points":0.25', false)
             ->assertDontSee('"points":0.5', false);
 
         $this->assertDatabaseHas('guild_settings', [
             'key' => 'mission_cycle_end',
-            'value' => '2026-05-27T08:00',
+            'value' => '2026-05-20T08:00',
         ]);
 
         CarbonImmutable::setTestNow();

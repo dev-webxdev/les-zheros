@@ -78,7 +78,9 @@ class StuffController extends Controller
             'ids.*' => ['integer'],
         ]);
 
-        if (in_array($data['action'], ['trash', 'force_delete'], true)) {
+        if ($data['action'] === 'force_delete') {
+            abort_unless($request->user()?->canForceDeleteInAdminArea('stuffs'), 403);
+        } elseif ($data['action'] === 'trash') {
             abort_unless($request->user()?->canDeleteInAdminArea('stuffs'), 403);
         }
 

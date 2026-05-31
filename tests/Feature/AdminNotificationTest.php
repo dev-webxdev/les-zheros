@@ -30,7 +30,7 @@ class AdminNotificationTest extends TestCase
         ]);
     }
 
-    public function test_mission_declaration_creates_internal_notification(): void
+    public function test_mission_declaration_does_not_create_internal_notification(): void
     {
         $user = User::factory()->create(['is_approved' => true]);
         $mission = Mission::create([
@@ -47,9 +47,37 @@ class AdminNotificationTest extends TestCase
             ])
             ->assertRedirect(route('profil', ['tab' => 'missions']));
 
+        $this->assertDatabaseCount('admin_notifications', 0);
+    }
+
+    public function test_lottery_page_notifies_when_pending_validation_exists_before_draw(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $user = User::factory()->create(['is_approved' => true]);
+        $mission = Mission::create([
+            'title' => 'Mission loterie',
+            'category' => 'donjon',
+            'guildatons' => 10,
+            'activity_points' => 20,
+        ]);
+
+        $validation = MissionValidation::create([
+            'mission_id' => $mission->id,
+            'user_id' => $user->id,
+            'characters' => 1,
+            'status' => MissionValidation::PENDING,
+        ]);
+        $validation->created_at = '2026-05-18 18:00:00';
+        $validation->save();
+
+        $this->actingAs($admin)
+            ->get(route('admin.loterie.index'))
+            ->assertOk()
+            ->assertSee('lottery-pending-validations-data');
+
         $this->assertDatabaseHas('admin_notifications', [
-            'area' => 'validations',
-            'title' => 'Nouvelle validation',
+            'area' => 'lottery',
+            'title' => 'Mission non validee avant loterie',
         ]);
     }
 

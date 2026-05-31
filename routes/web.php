@@ -30,25 +30,34 @@ use App\Http\Controllers\RankingController;
 use App\Http\Controllers\StuffController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('accueil');
-Route::redirect('/accueil', '/', 301);
-
-Route::get('/classement', [RankingController::class, 'index'])->name('classement');
-Route::get('/galerie', [GalleryController::class, 'index'])->name('galerie');
 Route::get('/guides', [GuideController::class, 'index'])->name('guides.index');
 Route::get('/guides/{guide:slug}', [GuideController::class, 'show'])->name('guides.show');
-Route::get('/missions', [MissionController::class, 'index'])->name('missions.index');
+Route::get('/stuffs', [StuffController::class, 'index'])->name('stuffs.index');
+Route::redirect('/login', '/connexion')->name('login');
+Route::get('/', function () {
+    if (! auth()->check()) {
+        return redirect()->route('guides.index');
+    }
+
+    return app(HomeController::class)->index();
+})->name('accueil');
+
 Route::middleware('auth')->group(function (): void {
+    Route::redirect('/accueil', '/', 301);
+    Route::get('/classement', [RankingController::class, 'index'])->name('classement');
+    Route::get('/galerie', [GalleryController::class, 'index'])->name('galerie');
+    Route::get('/missions', [MissionController::class, 'index'])->name('missions.index');
     Route::get('/profil', [ProfileController::class, 'show'])->name('profil');
     Route::patch('/profil', [ProfileController::class, 'update'])->name('profil.update');
     Route::post('/profil/avatar', [ProfileController::class, 'updateAvatar'])->name('profil.avatar.update');
     Route::patch('/profil/mot-de-passe', [ProfileController::class, 'updatePassword'])->name('profil.password.update');
     Route::post('/profil/missions', [ProfileController::class, 'storeMissionValidation'])->name('profil.missions.store');
     Route::delete('/profil', [ProfileController::class, 'destroy'])->name('profil.destroy');
+    Route::get('/sorties', [OutingController::class, 'index'])->name('sorties.index');
+    Route::post('/sorties/{outing}/vote', [OutingController::class, 'vote'])->name('sorties.vote');
+    Route::delete('/sorties/{outing}/vote', [OutingController::class, 'cancel'])->name('sorties.vote.cancel');
 });
-Route::get('/sorties', [OutingController::class, 'index'])->name('sorties.index');
-Route::get('/stuffs', [StuffController::class, 'index'])->name('stuffs.index');
-Route::redirect('/login', '/connexion')->name('login');
+
 Route::middleware('guest')->group(function (): void {
     Route::get('/connexion', [AuthenticatedSessionController::class, 'create'])->name('connexion');
     Route::post('/connexion', [AuthenticatedSessionController::class, 'store'])->name('connexion.store');
@@ -64,11 +73,6 @@ Route::post('/deconnexion', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
     ->name('deconnexion');
 
-Route::middleware('auth')->group(function (): void {
-    Route::post('/sorties/{outing}/vote', [OutingController::class, 'vote'])->name('sorties.vote');
-    Route::delete('/sorties/{outing}/vote', [OutingController::class, 'cancel'])->name('sorties.vote.cancel');
-});
-
 Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin', DashboardController::class)->name('admin.dashboard');
     Route::delete('/admin/activite', [ActivityController::class, 'destroy'])->middleware('admin:activity')->name('admin.activite.destroy');
@@ -83,9 +87,9 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin/annonces/creer', [AdminAnnouncementController::class, 'create'])->middleware('admin:announcements')->name('admin.annonces.create');
     Route::post('/admin/annonces', [AdminAnnouncementController::class, 'store'])->middleware('admin:announcements')->name('admin.annonces.store');
     Route::get('/admin/annonces/corbeille', [AdminAnnouncementController::class, 'trash'])->middleware('admin:announcements')->name('admin.annonces.trash');
-    Route::delete('/admin/annonces/corbeille', [AdminAnnouncementController::class, 'emptyTrash'])->middleware('admin:announcements,delete')->name('admin.annonces.empty-trash');
+    Route::delete('/admin/annonces/corbeille', [AdminAnnouncementController::class, 'emptyTrash'])->middleware('admin:announcements,force-delete')->name('admin.annonces.empty-trash');
     Route::patch('/admin/annonces/corbeille/{announcement}/restaurer', [AdminAnnouncementController::class, 'restore'])->middleware('admin:announcements')->name('admin.annonces.restore');
-    Route::delete('/admin/annonces/corbeille/{announcement}', [AdminAnnouncementController::class, 'forceDelete'])->middleware('admin:announcements,delete')->name('admin.annonces.force-delete');
+    Route::delete('/admin/annonces/corbeille/{announcement}', [AdminAnnouncementController::class, 'forceDelete'])->middleware('admin:announcements,force-delete')->name('admin.annonces.force-delete');
     Route::get('/admin/annonces/{announcement}/modifier', [AdminAnnouncementController::class, 'edit'])->middleware('admin:announcements')->name('admin.annonces.edit');
     Route::patch('/admin/annonces/{announcement}', [AdminAnnouncementController::class, 'update'])->middleware('admin:announcements')->name('admin.annonces.update');
     Route::delete('/admin/annonces/{announcement}', [AdminAnnouncementController::class, 'destroy'])->middleware('admin:announcements,delete')->name('admin.annonces.destroy');
@@ -95,19 +99,20 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::post('/admin/galerie', [AdminGalleryController::class, 'store'])->middleware('admin:gallery')->name('admin.galerie.store');
     Route::post('/admin/galerie/actions', [AdminGalleryController::class, 'bulk'])->middleware('admin:gallery')->name('admin.galerie.bulk');
     Route::get('/admin/galerie/corbeille', [AdminGalleryController::class, 'trash'])->middleware('admin:gallery')->name('admin.galerie.trash');
-    Route::delete('/admin/galerie/corbeille', [AdminGalleryController::class, 'emptyTrash'])->middleware('admin:gallery,delete')->name('admin.galerie.empty-trash');
+    Route::delete('/admin/galerie/corbeille', [AdminGalleryController::class, 'emptyTrash'])->middleware('admin:gallery,force-delete')->name('admin.galerie.empty-trash');
     Route::patch('/admin/galerie/corbeille/{image}/restaurer', [AdminGalleryController::class, 'restore'])->middleware('admin:gallery')->name('admin.galerie.restore');
-    Route::delete('/admin/galerie/corbeille/{image}', [AdminGalleryController::class, 'forceDelete'])->middleware('admin:gallery,delete')->name('admin.galerie.force-delete');
+    Route::delete('/admin/galerie/corbeille/{image}', [AdminGalleryController::class, 'forceDelete'])->middleware('admin:gallery,force-delete')->name('admin.galerie.force-delete');
     Route::get('/admin/galerie/{image}/modifier', [AdminGalleryController::class, 'edit'])->middleware('admin:gallery')->name('admin.galerie.edit');
     Route::patch('/admin/galerie/{image}', [AdminGalleryController::class, 'update'])->middleware('admin:gallery')->name('admin.galerie.update');
     Route::delete('/admin/galerie/{image}', [AdminGalleryController::class, 'destroy'])->middleware('admin:gallery,delete')->name('admin.galerie.destroy');
     Route::get('/admin/guides', [AdminGuideController::class, 'index'])->middleware('admin:guides')->name('admin.guides.index');
     Route::get('/admin/guides/creer', [AdminGuideController::class, 'create'])->middleware('admin:guides')->name('admin.guides.create');
     Route::post('/admin/guides', [AdminGuideController::class, 'store'])->middleware('admin:guides')->name('admin.guides.store');
+    Route::post('/admin/guides/brouillon-auto', [AdminGuideController::class, 'autosave'])->middleware('admin:guides')->name('admin.guides.autosave');
     Route::get('/admin/guides/corbeille', [AdminGuideController::class, 'trash'])->middleware('admin:guides')->name('admin.guides.trash');
-    Route::delete('/admin/guides/corbeille', [AdminGuideController::class, 'emptyTrash'])->middleware('admin:guides,delete')->name('admin.guides.empty-trash');
+    Route::delete('/admin/guides/corbeille', [AdminGuideController::class, 'emptyTrash'])->middleware('admin:guides,force-delete')->name('admin.guides.empty-trash');
     Route::patch('/admin/guides/corbeille/{guide}/restaurer', [AdminGuideController::class, 'restore'])->middleware('admin:guides')->name('admin.guides.restore');
-    Route::delete('/admin/guides/corbeille/{guide}', [AdminGuideController::class, 'forceDelete'])->middleware('admin:guides,delete')->name('admin.guides.force-delete');
+    Route::delete('/admin/guides/corbeille/{guide}', [AdminGuideController::class, 'forceDelete'])->middleware('admin:guides,force-delete')->name('admin.guides.force-delete');
     Route::get('/admin/guides/{guide}/modifier', [AdminGuideController::class, 'edit'])->middleware('admin:guides')->name('admin.guides.edit');
     Route::patch('/admin/guides/{guide}', [AdminGuideController::class, 'update'])->middleware('admin:guides')->name('admin.guides.update');
     Route::delete('/admin/guides/{guide}', [AdminGuideController::class, 'destroy'])->middleware('admin:guides,delete')->name('admin.guides.destroy');
@@ -117,9 +122,9 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::post('/admin/missions', [AdminMissionController::class, 'store'])->middleware('admin:missions')->name('admin.missions.store');
     Route::post('/admin/missions/actions', [AdminMissionController::class, 'bulk'])->middleware('admin:missions')->name('admin.missions.bulk');
     Route::get('/admin/missions/corbeille', [AdminMissionController::class, 'trash'])->middleware('admin:missions')->name('admin.missions.trash');
-    Route::delete('/admin/missions/corbeille', [AdminMissionController::class, 'emptyTrash'])->middleware('admin:missions,delete')->name('admin.missions.empty-trash');
+    Route::delete('/admin/missions/corbeille', [AdminMissionController::class, 'emptyTrash'])->middleware('admin:missions,force-delete')->name('admin.missions.empty-trash');
     Route::patch('/admin/missions/corbeille/{mission}/restaurer', [AdminMissionController::class, 'restore'])->middleware('admin:missions')->name('admin.missions.restore');
-    Route::delete('/admin/missions/corbeille/{mission}', [AdminMissionController::class, 'forceDelete'])->middleware('admin:missions,delete')->name('admin.missions.force-delete');
+    Route::delete('/admin/missions/corbeille/{mission}', [AdminMissionController::class, 'forceDelete'])->middleware('admin:missions,force-delete')->name('admin.missions.force-delete');
     Route::get('/admin/missions/{mission}/modifier', [AdminMissionController::class, 'edit'])->middleware('admin:missions')->name('admin.missions.edit');
     Route::patch('/admin/missions/{mission}', [AdminMissionController::class, 'update'])->middleware('admin:missions')->name('admin.missions.update');
     Route::delete('/admin/missions/{mission}', [AdminMissionController::class, 'destroy'])->middleware('admin:missions,delete')->name('admin.missions.destroy');
@@ -128,9 +133,9 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin/roles/creer', [RoleController::class, 'create'])->middleware('admin:roles')->name('admin.roles.create');
     Route::post('/admin/roles', [RoleController::class, 'store'])->middleware('admin:roles')->name('admin.roles.store');
     Route::get('/admin/roles/corbeille', [RoleController::class, 'trash'])->middleware('admin:roles')->name('admin.roles.trash');
-    Route::delete('/admin/roles/corbeille', [RoleController::class, 'emptyTrash'])->middleware('admin:roles,delete')->name('admin.roles.empty-trash');
+    Route::delete('/admin/roles/corbeille', [RoleController::class, 'emptyTrash'])->middleware('admin:roles,force-delete')->name('admin.roles.empty-trash');
     Route::patch('/admin/roles/corbeille/{role}/restaurer', [RoleController::class, 'restore'])->middleware('admin:roles')->name('admin.roles.restore');
-    Route::delete('/admin/roles/corbeille/{role}', [RoleController::class, 'forceDelete'])->middleware('admin:roles,delete')->name('admin.roles.force-delete');
+    Route::delete('/admin/roles/corbeille/{role}', [RoleController::class, 'forceDelete'])->middleware('admin:roles,force-delete')->name('admin.roles.force-delete');
     Route::get('/admin/roles/{role}/modifier', [RoleController::class, 'edit'])->middleware('admin:roles')->name('admin.roles.edit');
     Route::patch('/admin/roles/{role}', [RoleController::class, 'update'])->middleware('admin:roles')->name('admin.roles.update');
     Route::delete('/admin/roles/{role}', [RoleController::class, 'destroy'])->middleware('admin:roles,delete')->name('admin.roles.destroy');
@@ -148,9 +153,9 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin/sorties/creer', [AdminOutingController::class, 'create'])->middleware('admin:outings')->name('admin.sorties.create');
     Route::post('/admin/sorties', [AdminOutingController::class, 'store'])->middleware('admin:outings')->name('admin.sorties.store');
     Route::get('/admin/sorties/corbeille', [AdminOutingController::class, 'trash'])->middleware('admin:outings')->name('admin.sorties.trash');
-    Route::delete('/admin/sorties/corbeille', [AdminOutingController::class, 'emptyTrash'])->middleware('admin:outings,delete')->name('admin.sorties.empty-trash');
+    Route::delete('/admin/sorties/corbeille', [AdminOutingController::class, 'emptyTrash'])->middleware('admin:outings,force-delete')->name('admin.sorties.empty-trash');
     Route::patch('/admin/sorties/corbeille/{outing}/restaurer', [AdminOutingController::class, 'restore'])->middleware('admin:outings')->name('admin.sorties.restore');
-    Route::delete('/admin/sorties/corbeille/{outing}', [AdminOutingController::class, 'forceDelete'])->middleware('admin:outings,delete')->name('admin.sorties.force-delete');
+    Route::delete('/admin/sorties/corbeille/{outing}', [AdminOutingController::class, 'forceDelete'])->middleware('admin:outings,force-delete')->name('admin.sorties.force-delete');
     Route::get('/admin/sorties/{outing}/modifier', [AdminOutingController::class, 'edit'])->middleware('admin:outings')->name('admin.sorties.edit');
     Route::patch('/admin/sorties/{outing}/valider', [AdminOutingController::class, 'confirm'])->middleware('admin:outings')->name('admin.sorties.confirm');
     Route::patch('/admin/sorties/{outing}', [AdminOutingController::class, 'update'])->middleware('admin:outings')->name('admin.sorties.update');
@@ -160,9 +165,9 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::post('/admin/stuffs', [AdminStuffController::class, 'store'])->middleware('admin:stuffs')->name('admin.stuffs.store');
     Route::post('/admin/stuffs/actions', [AdminStuffController::class, 'bulk'])->middleware('admin:stuffs')->name('admin.stuffs.bulk');
     Route::get('/admin/stuffs/corbeille', [AdminStuffController::class, 'trash'])->middleware('admin:stuffs')->name('admin.stuffs.trash');
-    Route::delete('/admin/stuffs/corbeille', [AdminStuffController::class, 'emptyTrash'])->middleware('admin:stuffs,delete')->name('admin.stuffs.empty-trash');
+    Route::delete('/admin/stuffs/corbeille', [AdminStuffController::class, 'emptyTrash'])->middleware('admin:stuffs,force-delete')->name('admin.stuffs.empty-trash');
     Route::patch('/admin/stuffs/corbeille/{stuff}/restaurer', [AdminStuffController::class, 'restore'])->middleware('admin:stuffs')->name('admin.stuffs.restore');
-    Route::delete('/admin/stuffs/corbeille/{stuff}', [AdminStuffController::class, 'forceDelete'])->middleware('admin:stuffs,delete')->name('admin.stuffs.force-delete');
+    Route::delete('/admin/stuffs/corbeille/{stuff}', [AdminStuffController::class, 'forceDelete'])->middleware('admin:stuffs,force-delete')->name('admin.stuffs.force-delete');
     Route::get('/admin/stuffs/{stuff}/modifier', [AdminStuffController::class, 'edit'])->middleware('admin:stuffs')->name('admin.stuffs.edit');
     Route::patch('/admin/stuffs/{stuff}', [AdminStuffController::class, 'update'])->middleware('admin:stuffs')->name('admin.stuffs.update');
     Route::delete('/admin/stuffs/{stuff}', [AdminStuffController::class, 'destroy'])->middleware('admin:stuffs,delete')->name('admin.stuffs.destroy');
@@ -171,9 +176,9 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::post('/admin/utilisateurs', [UserController::class, 'store'])->middleware('admin:users')->name('admin.utilisateurs.store');
     Route::post('/admin/utilisateurs/actions', [UserController::class, 'bulk'])->middleware('admin:users')->name('admin.utilisateurs.bulk');
     Route::get('/admin/utilisateurs/corbeille', [UserController::class, 'trash'])->middleware('admin:users')->name('admin.utilisateurs.trash');
-    Route::delete('/admin/utilisateurs/corbeille', [UserController::class, 'emptyTrash'])->middleware('admin:users,delete')->name('admin.utilisateurs.empty-trash');
+    Route::delete('/admin/utilisateurs/corbeille', [UserController::class, 'emptyTrash'])->middleware('admin:users,force-delete')->name('admin.utilisateurs.empty-trash');
     Route::patch('/admin/utilisateurs/corbeille/{user}/restaurer', [UserController::class, 'restore'])->middleware('admin:users')->name('admin.utilisateurs.restore');
-    Route::delete('/admin/utilisateurs/corbeille/{user}', [UserController::class, 'forceDelete'])->middleware('admin:users,delete')->name('admin.utilisateurs.force-delete');
+    Route::delete('/admin/utilisateurs/corbeille/{user}', [UserController::class, 'forceDelete'])->middleware('admin:users,force-delete')->name('admin.utilisateurs.force-delete');
     Route::get('/admin/utilisateurs/{user}/modifier', [UserController::class, 'edit'])->middleware('admin:users')->name('admin.utilisateurs.edit');
     Route::patch('/admin/utilisateurs/{user}/valider', [UserController::class, 'approve'])->middleware('admin:users')->name('admin.utilisateurs.approve');
     Route::patch('/admin/utilisateurs/{user}', [UserController::class, 'update'])->middleware('admin:users')->name('admin.utilisateurs.update');
@@ -183,9 +188,9 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::post('/admin/validations', [ValidationController::class, 'store'])->middleware('admin:validations')->name('admin.validations.store');
     Route::post('/admin/validations/actions', [ValidationController::class, 'bulk'])->middleware('admin:validations')->name('admin.validations.bulk');
     Route::get('/admin/validations/corbeille', [ValidationController::class, 'trash'])->middleware('admin:validations')->name('admin.validations.trash');
-    Route::delete('/admin/validations/corbeille', [ValidationController::class, 'emptyTrash'])->middleware('admin:validations,delete')->name('admin.validations.empty-trash');
+    Route::delete('/admin/validations/corbeille', [ValidationController::class, 'emptyTrash'])->middleware('admin:validations,force-delete')->name('admin.validations.empty-trash');
     Route::patch('/admin/validations/corbeille/{validation}/restaurer', [ValidationController::class, 'restore'])->middleware('admin:validations')->name('admin.validations.restore');
-    Route::delete('/admin/validations/corbeille/{validation}', [ValidationController::class, 'forceDelete'])->middleware('admin:validations,delete')->name('admin.validations.force-delete');
+    Route::delete('/admin/validations/corbeille/{validation}', [ValidationController::class, 'forceDelete'])->middleware('admin:validations,force-delete')->name('admin.validations.force-delete');
     Route::get('/admin/validations/{validation}/modifier', [ValidationController::class, 'edit'])->middleware('admin:validations')->name('admin.validations.edit');
     Route::patch('/admin/validations/{validation}', [ValidationController::class, 'update'])->middleware('admin:validations')->name('admin.validations.update');
     Route::patch('/admin/validations/{validation}/statut', [ValidationController::class, 'setStatus'])->middleware('admin:validations')->name('admin.validations.status');

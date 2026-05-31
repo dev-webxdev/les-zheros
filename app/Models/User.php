@@ -121,6 +121,11 @@ class User extends Authenticatable
             || $this->hasAdminRole(AdminAccess::ADMIN);
     }
 
+    public function canForceDeleteInAdminArea(string $area): bool
+    {
+        return $this->hasAdminRole(AdminAccess::ADMIN);
+    }
+
     public function setAdminRoles(array $roles): void
     {
         $roles = array_values(array_intersect(array_unique($roles), array_keys(AdminAccess::roles())));

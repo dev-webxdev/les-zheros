@@ -13,9 +13,18 @@ const guideChipsInput = document.querySelector("[data-guide-chips-input]");
 const guideCoverPathInput = document.querySelector("[data-guide-cover-path-input]");
 const guideEditorTabs = Array.from(document.querySelectorAll("[data-guide-editor-tab]"));
 const guideEditorPanels = Array.from(document.querySelectorAll("[data-guide-editor-panel]"));
+const guideForm = document.querySelector("#guide-form");
+const guideAutosaveUrl = guideForm?.dataset.guideAutosave || "";
+const guideAutoDraftInput = document.querySelector("[data-guide-auto-draft-id]");
+const guideAutosaveStatus = document.querySelector("[data-guide-autosave-status]");
 
 let checklistIndex = 0;
 let sectionIndex = 0;
+let guideAutosaveTimeout = 0;
+let guideAutosaveMaxTimeout = 0;
+let guideAutosaveInFlight = false;
+let guideAutosaveQueued = false;
+let lastGuideAutosaveSignature = "";
 
 const setActiveGuideEditorTab = (tabName) => {
     if (!tabName || guideEditorTabs.length === 0 || guideEditorPanels.length === 0) {
@@ -78,6 +87,190 @@ const initAutogrow = (root = document) => {
     });
 };
 
+const setGuideAutosaveStatus = (message, state = "") => {
+    if (!guideAutosaveStatus) {
+        return;
+    }
+
+    guideAutosaveStatus.textContent = message;
+    guideAutosaveStatus.classList.toggle("is-saved", state === "saved");
+    guideAutosaveStatus.classList.toggle("is-error", state === "error");
+};
+
+const syncGuideRichEditors = () => {
+    guideForm?.querySelectorAll("[data-rich-editor]").forEach((editor) => {
+        const surface = editor.querySelector("[data-editor-surface]");
+        const input = editor.querySelector("[data-editor-input]");
+
+        if (surface && input) {
+            input.value = surface.innerHTML.trim();
+        }
+    });
+};
+
+const guideFormHasDraftContent = () => {
+    if (!guideForm) {
+        return false;
+    }
+
+    syncGuideRichEditors();
+
+    return Array.from(guideForm.elements).some((field) => {
+        if (!field.name || field.type === "hidden" || field.type === "file" || field.name === "_token") {
+            return false;
+        }
+
+        if ((field.type === "checkbox" || field.type === "radio") && !field.checked) {
+            return false;
+        }
+
+        return String(field.value || "").trim() !== "";
+    });
+};
+
+const buildGuideAutosavePayload = () => {
+    const payload = new FormData();
+
+    if (!guideForm) {
+        return payload;
+    }
+
+    syncGuideRichEditors();
+    updateSectionState();
+
+    Array.from(guideForm.elements).forEach((field) => {
+        if (!field.name || field.disabled || field.type === "file" || field.name === "_method" || field.name === "published") {
+            return;
+        }
+
+        if ((field.type === "checkbox" || field.type === "radio") && !field.checked) {
+            return;
+        }
+
+        payload.append(field.name, field.value);
+    });
+
+    return payload;
+};
+
+const saveGuideDraftNow = async () => {
+    if (!guideAutosaveUrl || !guideForm || !guideFormHasDraftContent()) {
+        return;
+    }
+
+    if (guideAutosaveInFlight) {
+        guideAutosaveQueued = true;
+        return;
+    }
+
+    const payload = buildGuideAutosavePayload();
+    const signature = JSON.stringify(Array.from(payload.entries()));
+
+    if (signature === lastGuideAutosaveSignature) {
+        return;
+    }
+
+    guideAutosaveInFlight = true;
+    setGuideAutosaveStatus("Sauvegarde du brouillon...");
+
+    try {
+        const response = await fetch(guideAutosaveUrl, {
+            method: "POST",
+            body: payload,
+            headers: {
+                "Accept": "application/json",
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("autosave failed");
+        }
+
+        const data = await response.json();
+
+        if (data.id && guideAutoDraftInput) {
+            guideAutoDraftInput.value = data.id;
+        }
+
+        if (data.edit_url && window.location.pathname.includes("/admin/guides/creer")) {
+            window.history.replaceState({}, "", data.edit_url);
+        }
+
+        lastGuideAutosaveSignature = signature;
+        setGuideAutosaveStatus(`Brouillon sauvegardé à ${data.saved_at || ""}`.trim(), "saved");
+    } catch (error) {
+        setGuideAutosaveStatus("Sauvegarde auto impossible", "error");
+    } finally {
+        guideAutosaveInFlight = false;
+
+        if (guideAutosaveQueued) {
+            guideAutosaveQueued = false;
+            saveGuideDraftNow();
+        }
+    }
+};
+
+const queueGuideDraftSave = (delay = 700) => {
+    if (!guideAutosaveUrl) {
+        return;
+    }
+
+    window.clearTimeout(guideAutosaveTimeout);
+    guideAutosaveTimeout = window.setTimeout(() => {
+        window.clearTimeout(guideAutosaveMaxTimeout);
+        guideAutosaveMaxTimeout = 0;
+        saveGuideDraftNow();
+    }, delay);
+};
+
+const scheduleGuideAutosave = () => {
+    if (!guideAutosaveUrl) {
+        return;
+    }
+
+    queueGuideDraftSave();
+
+    if (!guideAutosaveMaxTimeout) {
+        guideAutosaveMaxTimeout = window.setTimeout(() => {
+            window.clearTimeout(guideAutosaveTimeout);
+            guideAutosaveMaxTimeout = 0;
+            saveGuideDraftNow();
+        }, 3000);
+    }
+};
+
+const sendGuideDraftBeforeUnload = () => {
+    if (!guideAutosaveUrl || !guideForm || !guideFormHasDraftContent()) {
+        return;
+    }
+
+    const payload = buildGuideAutosavePayload();
+    const signature = JSON.stringify(Array.from(payload.entries()));
+
+    if (signature === lastGuideAutosaveSignature) {
+        return;
+    }
+
+    if (navigator.sendBeacon) {
+        navigator.sendBeacon(guideAutosaveUrl, payload);
+        lastGuideAutosaveSignature = signature;
+        return;
+    }
+
+    fetch(guideAutosaveUrl, {
+        method: "POST",
+        body: payload,
+        keepalive: true,
+        headers: {
+            "Accept": "application/json",
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    });
+
+    lastGuideAutosaveSignature = signature;
+};
+
 guideCoverInput?.addEventListener("change", () => updateGuidePreview(guideCoverInput, guideCoverPreview));
 guideMapInput?.addEventListener("change", () => updateGuidePreview(guideMapInput, guideMapPreview, guideMapEmpty));
 
@@ -86,7 +279,7 @@ guideMissionSelect?.addEventListener("change", () => {
     const missionCategory = selectedMission?.dataset.missionCategory;
     const missionTitle = selectedMission?.dataset.missionTitle || selectedMission?.textContent.trim();
 
-    if (!selectedMission || !["donjon", "expedition"].includes(missionCategory)) {
+    if (!selectedMission || !missionCategory) {
         return;
     }
 
@@ -112,6 +305,8 @@ guideMissionSelect?.addEventListener("change", () => {
             guideCoverPathInput.value = selectedMission.dataset.missionImage;
         }
     }
+
+    scheduleGuideAutosave();
 });
 
 const updateChecklistState = () => {
@@ -153,6 +348,7 @@ const addChecklistPoint = () => {
     `);
 
     updateChecklistState();
+    scheduleGuideAutosave();
 };
 
 const sectionCards = () => Array.from(document.querySelectorAll("[data-guide-section-card]"));
@@ -284,6 +480,7 @@ document.addEventListener("click", (event) => {
     if (removeCheckButton) {
         removeCheckButton.closest("[data-guide-check-row]")?.remove();
         updateChecklistState();
+        scheduleGuideAutosave();
         return;
     }
 
@@ -292,6 +489,7 @@ document.addEventListener("click", (event) => {
     if (removeSectionButton) {
         removeSectionButton.closest("[data-guide-section-card]")?.remove();
         updateSectionState();
+        scheduleGuideAutosave();
         return;
     }
 
@@ -300,6 +498,7 @@ document.addEventListener("click", (event) => {
     if (removeImageButton) {
         removeImageButton.closest("[data-guide-section-media-item]")?.remove();
         updateSectionState();
+        scheduleGuideAutosave();
         return;
     }
 
@@ -315,6 +514,7 @@ document.addEventListener("click", (event) => {
     addImageButton.insertAdjacentHTML("beforebegin", mediaItemHtml(cardIndex));
     initAutogrow(slot);
     updateSectionState();
+    scheduleGuideAutosave();
 });
 
 document.addEventListener("change", (event) => {
@@ -378,6 +578,7 @@ const enableGuideDragSort = (container, itemSelector, afterSort) => {
             document.removeEventListener("pointermove", moveItem);
             document.removeEventListener("pointerup", stopMove);
             afterSort();
+            scheduleGuideAutosave();
         };
 
         document.addEventListener("pointermove", moveItem);
@@ -391,3 +592,16 @@ sectionLists().forEach((list) => enableGuideDragSort(list, "[data-guide-section-
 initAutogrow();
 updateChecklistState();
 updateSectionState();
+
+if (guideAutosaveUrl && guideForm) {
+    guideForm.addEventListener("input", scheduleGuideAutosave);
+    guideForm.addEventListener("change", scheduleGuideAutosave);
+    guideForm.addEventListener("submit", () => {
+        window.clearTimeout(guideAutosaveTimeout);
+        window.clearTimeout(guideAutosaveMaxTimeout);
+        syncGuideRichEditors();
+    });
+
+    window.addEventListener("pagehide", sendGuideDraftBeforeUnload);
+    window.addEventListener("beforeunload", sendGuideDraftBeforeUnload);
+}

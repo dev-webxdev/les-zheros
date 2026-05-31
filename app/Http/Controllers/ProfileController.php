@@ -7,8 +7,6 @@ use App\Models\MissionValidation;
 use App\Models\Outing;
 use App\Models\OutingVote;
 use App\Models\User;
-use App\Support\AdminNotifier;
-use App\Support\MissionCycle;
 use App\Support\PublicUploadManager;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
@@ -24,9 +22,8 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    public function show(MissionCycle $missionCycle): View
+    public function show(): View
     {
-        $missionCycle->sync();
         $user = auth()->user();
         $profileStats = $this->profileStats($user);
 
@@ -197,15 +194,6 @@ class ProfileController extends Controller
                 ]);
             }
         });
-
-        $mission = Mission::find($validated['mission_name']);
-        AdminNotifier::notify(
-            'validations',
-            'Nouvelle validation',
-            $request->user()->name.' a envoye une declaration'.($mission ? ' pour '.$mission->title : '').'.',
-            route('admin.validations.index'),
-            'info',
-        );
 
         return redirect()->route('profil', ['tab' => 'missions'])->with('toast', [
             'title' => 'Déclaration envoyée',

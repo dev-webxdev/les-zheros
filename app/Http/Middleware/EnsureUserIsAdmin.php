@@ -18,11 +18,15 @@ class EnsureUserIsAdmin
             abort(403);
         }
 
-        if ($action && $action !== 'delete' && ! $user->canAccessAdminPermission($area.'.'.$action)) {
+        if ($action && ! in_array($action, ['delete', 'force-delete'], true) && ! $user->canAccessAdminPermission($area.'.'.$action)) {
             abort(403);
         }
 
         if ($action === 'delete' && $area && ! $user->canDeleteInAdminArea($area)) {
+            abort(403);
+        }
+
+        if ($action === 'force-delete' && $area && ! $user->canForceDeleteInAdminArea($area)) {
             abort(403);
         }
 

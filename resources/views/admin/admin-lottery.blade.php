@@ -31,6 +31,7 @@
             </header>
 
             <script id="lottery-participants-data" type="application/json">@json($lotteryParticipantsByWeek ?? [])</script>
+            <script id="lottery-pending-validations-data" type="application/json">@json($lotteryPendingValidationsByWeek ?? [])</script>
             <script id="lottery-settings-data" type="application/json">@json($lotterySettings ?? \App\Models\GuildSetting::lotterySettings())</script>
 
             <section class="admin-content admin-lottery" data-lottery data-lottery-author="{{ auth()->user()?->name ?? 'Admin' }}">

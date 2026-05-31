@@ -21,7 +21,7 @@
                 <span>Categorie</span>
                 <select id="guide-filter-category" data-guide-filter="category">
                     <option value="">Toutes</option>
-                    @foreach (array_intersect_key(\App\Models\Guide::CATEGORIES, array_flip(['donjon', 'expedition'])) as $category => $label)
+                    @foreach (\App\Models\Guide::CATEGORIES as $category => $label)
                         <option value="{{ $category }}">{{ $label }}</option>
                     @endforeach
                 </select>

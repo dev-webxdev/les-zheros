@@ -144,25 +144,42 @@
                                 <td><span @class(['admin-tag', $validation->statusTagClass()])>{{ $validation->statusLabel() }}</span></td>
                                 <td><time datetime="{{ $validation->created_at?->toIso8601String() }}">{{ $validation->created_at?->translatedFormat('d M H:i') }}</time></td>
                                 <td>
-                                    <details class="admin-action-menu">
-                                        <summary><i class="fa-solid fa-ellipsis"></i><span>Actions</span></summary>
-                                        <div>
-                                            <a href="{{ route('admin.validations.edit', $validation) }}"><i class="fa-regular fa-pen-to-square"></i> Modifier</a>
-                                            @foreach ($statusLabels as $status => $label)
-                                                <form action="{{ route('admin.validations.status', $validation) }}" method="post" data-real-form>
-                                                    @csrf
-                                                    @method('patch')
-                                                    <input type="hidden" name="status" value="{{ $status }}">
-                                                    <button type="submit"><i class="{{ $statusIcons[$status] ?? 'fa-regular fa-circle' }}"></i> {{ $label }}</button>
-                                                </form>
-                                            @endforeach
-                                            <form action="{{ route('admin.validations.destroy', $validation) }}" method="post" data-real-form>
+                                    <div class="admin-row-actions">
+                                        @if ($validation->status !== \App\Models\MissionValidation::VALIDATED)
+                                            <form action="{{ route('admin.validations.status', $validation) }}" method="post" data-real-form>
                                                 @csrf
-                                                @method('delete')
-                                                <button type="submit" class="is-danger"><i class="fa-regular fa-trash-can"></i> Corbeille</button>
+                                                @method('patch')
+                                                <input type="hidden" name="status" value="{{ \App\Models\MissionValidation::VALIDATED }}">
+                                                <button class="admin-action-button admin-action-button--confirm" type="submit" aria-label="Valider la déclaration de {{ $validation->user?->name }}" title="Valider">
+                                                    <i class="fa-solid fa-check"></i>
+                                                </button>
                                             </form>
-                                        </div>
-                                    </details>
+                                        @endif
+
+                                        <details class="admin-action-menu">
+                                            <summary aria-label="Options de la validation" title="Options">
+                                                <i class="fa-solid fa-ellipsis"></i>
+                                                <span>Actions</span>
+                                            </summary>
+                                            <div>
+                                                <a href="{{ route('admin.validations.edit', $validation) }}"><i class="fa-regular fa-pen-to-square"></i> Modifier</a>
+                                                @foreach ($statusLabels as $status => $label)
+                                                    @continue($status === \App\Models\MissionValidation::VALIDATED)
+                                                    <form action="{{ route('admin.validations.status', $validation) }}" method="post" data-real-form>
+                                                        @csrf
+                                                        @method('patch')
+                                                        <input type="hidden" name="status" value="{{ $status }}">
+                                                        <button type="submit"><i class="{{ $statusIcons[$status] ?? 'fa-regular fa-circle' }}"></i> {{ $label }}</button>
+                                                    </form>
+                                                @endforeach
+                                                <form action="{{ route('admin.validations.destroy', $validation) }}" method="post" data-real-form>
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button type="submit" class="is-danger"><i class="fa-regular fa-trash-can"></i> Corbeille</button>
+                                                </form>
+                                            </div>
+                                        </details>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

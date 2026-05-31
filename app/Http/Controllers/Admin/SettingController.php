@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\GuildSetting;
 use App\Support\AdminActivity;
-use App\Support\MissionCycle;
 use App\Support\SiteBackupManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,10 +12,8 @@ use Illuminate\View\View;
 
 class SettingController extends Controller
 {
-    public function index(MissionCycle $missionCycle, SiteBackupManager $backups): View
+    public function index(SiteBackupManager $backups): View
     {
-        $missionCycle->sync();
-
         return view('admin.admin-settings', [
             'settings' => GuildSetting::values(),
             'backups' => $backups->list(),

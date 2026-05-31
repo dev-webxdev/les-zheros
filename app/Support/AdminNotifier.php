@@ -8,10 +8,15 @@ use Throwable;
 
 class AdminNotifier
 {
+    private const ALLOWED_AREAS = [
+        'lottery',
+        'users',
+    ];
+
     public static function notify(string $area, string $title, ?string $message = null, ?string $url = null, string $type = 'info'): void
     {
         try {
-            if (! Schema::hasTable('admin_notifications')) {
+            if (! in_array($area, self::ALLOWED_AREAS, true) || ! Schema::hasTable('admin_notifications')) {
                 return;
             }
 

@@ -41,6 +41,13 @@ if (lotteryRoot) {
             return {};
         }
     })();
+    const pendingValidationsByWeek = (() => {
+        try {
+            return JSON.parse(document.querySelector("#lottery-pending-validations-data")?.textContent || "{}");
+        } catch (error) {
+            return {};
+        }
+    })();
     const lotterySettings = (() => {
         try {
             return JSON.parse(document.querySelector("#lottery-settings-data")?.textContent || "{}");
@@ -50,6 +57,7 @@ if (lotteryRoot) {
     })();
 
     const getParticipants = () => participantsByWeek[weekSelect?.value] || [];
+    const getPendingValidationCount = () => Number(pendingValidationsByWeek[weekSelect?.value] || 0);
 
     const defaultHistory = [];
 
@@ -200,15 +208,20 @@ if (lotteryRoot) {
         }
 
         const alreadyDrawn = Boolean(getDrawForCurrentWeek());
-        drawButton.disabled = isDrawing || alreadyDrawn;
+        const hasPendingValidations = getPendingValidationCount() > 0;
+        drawButton.disabled = isDrawing || alreadyDrawn || hasPendingValidations;
         drawButton.dataset.lotteryLocked = alreadyDrawn ? "true" : "false";
 
         const label = drawButton.querySelector("span");
         if (label) {
-            label.textContent = alreadyDrawn ? "Loterie déjà lancée" : "Lancer la loterie";
+            label.textContent = hasPendingValidations
+                ? "Validation requise"
+                : alreadyDrawn ? "Loterie déjà lancée" : "Lancer la loterie";
         }
 
-        drawButton.title = alreadyDrawn ? "Un tirage existe déjà pour ce cycle." : "";
+        drawButton.title = hasPendingValidations
+            ? "Valide les missions en attente avant de lancer ce tirage."
+            : alreadyDrawn ? "Un tirage existe déjà pour ce cycle." : "";
     };
 
     const renderParticipants = () => {
@@ -742,6 +755,18 @@ if (lotteryRoot) {
             window.openAdminAlert?.({
                 title: "Loterie déjà lancée",
                 text: "Un tirage existe déjà pour ce cycle. Supprime-le de l'historique si tu dois vraiment le refaire.",
+                type: "warning"
+            });
+            updateDrawButtonState();
+            return;
+        }
+
+        const pendingValidationCount = getPendingValidationCount();
+
+        if (pendingValidationCount > 0) {
+            window.openAdminAlert?.({
+                title: "Validation requise",
+                text: `${pendingValidationCount} déclaration(s) de mission attendent encore une validation avant ce tirage.`,
                 type: "warning"
             });
             updateDrawButtonState();

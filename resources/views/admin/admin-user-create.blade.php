@@ -3,6 +3,7 @@
 @section('title', 'Créer un utilisateur | Les Zheros')
 @section('description', 'Création d\'un utilisateur de la guilde Les Zheros.')
 @php($activeAdmin = 'admin-users')
+@php($canManageUserRoles = auth()->user()?->hasAdminRole(\App\Support\AdminAccess::ADMIN) ?? false)
 @push('scripts')
 <script src="{{ asset('assets/js/admin-users.js') }}" defer></script>
 @endpush
@@ -77,6 +78,7 @@
                             <input id="u-avatar" name="avatar" type="file" accept="image/*">
                         </label>
 
+                        @if ($canManageUserRoles)
                         <div class="admin-user-role-board admin-transfer-board" data-user-role-board>
                             <section class="admin-transfer-board__column admin-transfer-board__column--available">
                                 <div class="admin-transfer-board__head">
@@ -112,6 +114,9 @@
                                 <div data-user-role-inputs></div>
                             </section>
                         </div>
+                        @else
+                        <input type="hidden" name="roles[]" value="{{ \App\Support\AdminAccess::MEMBER }}">
+                        @endif
                     </div>
                 </section>
 

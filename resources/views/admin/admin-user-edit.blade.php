@@ -3,6 +3,7 @@
 @section('title', 'Modifier un utilisateur | Les Zheros')
 @section('description', 'Modification d\'un utilisateur de la guilde Les Zheros.')
 @php($activeAdmin = 'admin-users')
+@php($canManageUserRoles = auth()->user()?->hasAdminRole(\App\Support\AdminAccess::ADMIN) ?? false)
 @push('scripts')
 <script src="{{ asset('assets/js/admin-users.js') }}" defer></script>
 @endpush
@@ -98,6 +99,7 @@
                             @endif
                         </div>
 
+                        @if ($canManageUserRoles)
                         <div class="admin-user-role-board admin-transfer-board" data-user-role-board>
                             <section class="admin-transfer-board__column admin-transfer-board__column--available">
                                 <div class="admin-transfer-board__head">
@@ -133,6 +135,25 @@
                                 <div data-user-role-inputs></div>
                             </section>
                         </div>
+                        @else
+                        <div class="admin-user-role-board admin-transfer-board">
+                            <section class="admin-transfer-board__column admin-transfer-board__column--selected">
+                                <div class="admin-transfer-board__head">
+                                    <h4>RÃ´les de l'utilisateur</h4>
+                                    <span>Lecture seule</span>
+                                </div>
+                                <div class="admin-transfer-board__list" aria-label="RÃ´les de l'utilisateur">
+                                    @foreach ($selectedRoles as $roleValue)
+                                        @if (isset($roleOptions[$roleValue]))
+                                            <span class="admin-transfer-board__chip">
+                                                <span>{{ $roleOptions[$roleValue] }}</span>
+                                            </span>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </section>
+                        </div>
+                        @endif
                     </div>
                 </section>
 

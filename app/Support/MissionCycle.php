@@ -30,7 +30,6 @@ class MissionCycle
      */
     public function current(): array
     {
-        $this->sync();
         $end = $this->configuredEnd();
         $start = $end->subWeek();
 

@@ -17,6 +17,23 @@
     font-weight: 700;
 }
 
+.admin-guide-autosave-status {
+    margin: -4px 2px 0;
+    color: var(--admin-muted-foreground);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.35;
+    text-align: center;
+}
+
+.admin-guide-autosave-status.is-saved {
+    color: var(--admin-success);
+}
+
+.admin-guide-autosave-status.is-error {
+    color: var(--admin-danger);
+}
+
 .admin-switch {
     position: relative;
     display: inline-flex;

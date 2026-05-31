@@ -1629,34 +1629,6 @@ document.querySelectorAll(".form-block, .form-stack").forEach((form) => {
     });
 });
 
-document.querySelectorAll(".profile-security-block .btn").forEach((button) => {
-    button.addEventListener("click", () => {
-        if (button.closest("[data-delete-account-form]")) {
-            return;
-        }
-
-        const isDanger = button.classList.contains("btn--danger");
-
-        if (isDanger) {
-            const isConfirmed = window.confirm("Supprimer le compte ? Cette action supprimera les informations associées à ton compte.");
-
-            if (isConfirmed) {
-                showSiteToast({
-                    title: "Demande enregistrée",
-                    text: "La suppression du compte est prête à être traitée.",
-                    type: "warning"
-                });
-            }
-            return;
-        }
-
-        showSiteToast({
-            title: "Double authentification",
-            text: "L'activation de la 2FA est prête. Il restera à scanner le QR code côté backend."
-        });
-    });
-});
-
 document.querySelectorAll(".account-action--logout a").forEach((link) => {
     link.addEventListener("click", (event) => {
         event.preventDefault();

@@ -77,7 +77,9 @@ class GalleryController extends Controller
             'ids.*' => ['integer'],
         ]);
 
-        if (in_array($data['action'], ['trash', 'force_delete'], true)) {
+        if ($data['action'] === 'force_delete') {
+            abort_unless($request->user()?->canForceDeleteInAdminArea('gallery'), 403);
+        } elseif ($data['action'] === 'trash') {
             abort_unless($request->user()?->canDeleteInAdminArea('gallery'), 403);
         }
 

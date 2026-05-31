@@ -150,16 +150,6 @@
                 </div>
             </form>
 
-            <section class="content-section profile-security-block">
-                <div class="profile-security-content">
-                    <h2 class="section-title profile-security-title"><i class="fa-solid fa-mobile-screen-button"></i> Authentification à deux facteurs</h2>
-                    <p class="profile-security-text">Protégez votre compte en activant la double authentification. Vous aurez besoin d'une application comme <a class="profile-security-link" href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&pcampaignid=web_share">google authenticator</a>.</p>
-                </div>
-                <div class="action-row">
-                    <button type="button" class="btn btn--primary"><i class="fa-solid fa-mobile-screen-button"></i><span>Activer la 2FA</span></button>
-                </div>
-            </section>
-
             <section class="content-section profile-security-block profile-security-block--danger">
                 <div class="profile-security-content">
                     <h2 class="section-title profile-security-title profile-security-title--danger"><i class="fa-solid fa-triangle-exclamation"></i> Zone de non retour</h2>

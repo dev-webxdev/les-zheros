@@ -54,10 +54,12 @@ class UserController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $canManageRoles = $request->user()?->hasAdminRole(AdminAccess::ADMIN) ?? false;
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:users,name'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'roles' => ['required', 'array', 'min:1'],
+            'roles' => [$canManageRoles ? 'required' : 'nullable', 'array', 'min:1'],
             'roles.*' => ['required', Rule::in(array_keys(AdminAccess::roles()))],
             'password' => ['required', Password::min(6)],
             'avatar' => ['nullable', 'image', 'max:4096'],
@@ -77,7 +79,7 @@ class UserController extends Controller
             $user->avatar_path = $this->storeAvatar($request->file('avatar'));
         }
 
-        $user->setAdminRoles($validated['roles']);
+        $user->setAdminRoles($canManageRoles ? $validated['roles'] : [AdminAccess::MEMBER]);
         $user->save();
 
         AdminActivity::log('users', 'created', 'Utilisateur cree', 'Compte cree depuis lâ€™administration.', $user);
@@ -99,10 +101,12 @@ class UserController extends Controller
 
     public function update(Request $request, User $user): RedirectResponse
     {
+        $canManageRoles = $request->user()?->hasAdminRole(AdminAccess::ADMIN) ?? false;
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'roles' => ['required', 'array', 'min:1'],
+            'roles' => [$canManageRoles ? 'required' : 'nullable', 'array', 'min:1'],
             'roles.*' => ['required', Rule::in(array_keys(AdminAccess::roles()))],
             'password' => ['nullable', Password::min(6)],
             'avatar' => ['nullable', 'image', 'max:4096'],
@@ -113,7 +117,9 @@ class UserController extends Controller
             'avatar.max' => 'La photo de profil ne doit pas depasser 4 Mo.',
         ]);
 
-        if ($request->user()->is($user) && ! in_array(AdminAccess::ADMIN, $validated['roles'], true)) {
+        $roles = $canManageRoles ? $validated['roles'] : $user->adminRoles();
+
+        if ($request->user()->is($user) && ! in_array(AdminAccess::ADMIN, $roles, true)) {
             return back()->withInput()->with('admin_toast', [
                 'title' => 'Action impossible',
                 'text' => 'Tu ne peux pas retirer tes propres droits admin.',
@@ -126,7 +132,10 @@ class UserController extends Controller
             'email' => $validated['email'],
             'is_approved' => $request->boolean('is_approved'),
         ]);
-        $user->setAdminRoles($validated['roles']);
+
+        if ($canManageRoles) {
+            $user->setAdminRoles($roles);
+        }
 
         if (! empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
@@ -201,7 +210,9 @@ class UserController extends Controller
             'ids.*' => ['integer'],
         ]);
 
-        if (in_array($data['action'], ['trash', 'force_delete'], true)) {
+        if ($data['action'] === 'force_delete') {
+            abort_unless($request->user()?->canForceDeleteInAdminArea('users'), 403);
+        } elseif ($data['action'] === 'trash') {
             abort_unless($request->user()?->canDeleteInAdminArea('users'), 403);
         }
 
@@ -262,7 +273,7 @@ class UserController extends Controller
 
     public function forceDelete(int $user): RedirectResponse
     {
-        abort_unless(request()->user()?->canDeleteInAdminArea('users'), 403);
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('users'), 403);
 
         $trashedUser = User::onlyTrashed()->findOrFail($user);
         $this->deleteAvatar($trashedUser->avatar_path);
@@ -278,7 +289,7 @@ class UserController extends Controller
 
     public function emptyTrash(): RedirectResponse
     {
-        abort_unless(request()->user()?->canDeleteInAdminArea('users'), 403);
+        abort_unless(request()->user()?->canForceDeleteInAdminArea('users'), 403);
 
         $count = User::onlyTrashed()->count();
         User::onlyTrashed()->get()->each(function (User $user): void {

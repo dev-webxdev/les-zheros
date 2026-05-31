@@ -13,7 +13,6 @@ class GuideController extends Controller
         return view('pages.guides', [
             'guides' => Guide::query()
                 ->where('is_published', true)
-                ->whereIn('category', ['donjon', 'expedition'])
                 ->latest('published_at')
                 ->latest()
                 ->get(),
