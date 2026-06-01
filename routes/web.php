@@ -95,7 +95,6 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin/annonces/{announcement}/modifier', [AdminAnnouncementController::class, 'edit'])->middleware('admin:announcements')->name('admin.annonces.edit');
     Route::patch('/admin/annonces/{announcement}', [AdminAnnouncementController::class, 'update'])->middleware('admin:announcements')->name('admin.annonces.update');
     Route::delete('/admin/annonces/{announcement}', [AdminAnnouncementController::class, 'destroy'])->middleware('admin:announcements,delete')->name('admin.annonces.destroy');
-    Route::view('/admin/commentaires', 'admin.admin-comments')->middleware('admin:comments')->name('admin.commentaires.index');
     Route::get('/admin/galerie', [AdminGalleryController::class, 'index'])->middleware('admin:gallery')->name('admin.galerie.index');
     Route::get('/admin/galerie/creer', [AdminGalleryController::class, 'create'])->middleware('admin:gallery')->name('admin.galerie.create');
     Route::post('/admin/galerie', [AdminGalleryController::class, 'store'])->middleware('admin:gallery')->name('admin.galerie.store');

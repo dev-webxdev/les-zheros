@@ -95,7 +95,7 @@
             @endif
         @endif
 
-        @if ($can('users') || $can('comments'))
+        @if ($can('users'))
             <p class="admin-nav__label">Communauté</p>
 
             @if ($can('users'))
@@ -105,12 +105,6 @@
                 </a>
             @endif
 
-            @if ($can('comments'))
-                <a @class(['admin-nav__link', 'is-active' => str_starts_with($activeAdmin, 'admin-comments')]) href="{{ route('admin.commentaires.index') }}">
-                    <i class="fa-solid fa-comments"></i>
-                    <span>Commentaires</span>
-                </a>
-            @endif
         @endif
 
         @if ($can('roles') || $can('settings') || $can('activity') || $can('notifications'))

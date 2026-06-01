@@ -61,7 +61,6 @@ const adminPageKeyByPath = {
     "/admin/annonces/creer": "admin.annonces.create",
     "/admin/annonces/modifier": "admin.annonces.edit",
     "/admin/annonces/corbeille": "admin.annonces.trash",
-    "/admin/commentaires": "admin.commentaires.index",
     "/admin/galerie": "admin.galerie.index",
     "/admin/galerie/creer": "admin.galerie.create",
     "/admin/galerie/modifier": "admin.galerie.edit",

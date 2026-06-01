@@ -106,8 +106,6 @@ final class AdminAccess
             'announcements.manage' => 'Ajouter / modifier les annonces',
             'announcements.delete' => 'Mettre en corbeille les annonces',
             'dashboard.view' => 'Voir le dashboard',
-            'comments.manage' => 'Ajouter / modifier les commentaires',
-            'comments.delete' => 'Mettre en corbeille les commentaires',
             'gallery.manage' => 'Ajouter / modifier les photos',
             'gallery.delete' => 'Mettre en corbeille les photos',
             'guides.manage' => 'Ajouter / modifier les guides',
@@ -236,14 +234,6 @@ final class AdminAccess
                     'users.delete',
                 ],
             ],
-            'comments' => [
-                'label' => 'Commentaires',
-                'icon' => 'fa-solid fa-comments',
-                'permissions' => [
-                    'comments.manage',
-                    'comments.delete',
-                ],
-            ],
             'notifications' => [
                 'label' => 'Notifications',
                 'icon' => 'fa-solid fa-bell',
@@ -359,7 +349,6 @@ final class AdminAccess
             ->filter(fn (string $area): bool => in_array($area, [
                 'announcements',
                 'activity',
-                'comments',
                 'dashboard',
                 'gallery',
                 'guides',

@@ -42,7 +42,6 @@ class EnsureUserIsAdmin
             Str::startsWith($routeName, 'admin.guides') => 'guides',
             Str::startsWith($routeName, 'admin.galerie') => 'gallery',
             Str::startsWith($routeName, 'admin.annonces') => 'announcements',
-            Str::startsWith($routeName, 'admin.commentaires') => 'comments',
             Str::startsWith($routeName, 'admin.loterie') => 'lottery',
             Str::startsWith($routeName, 'admin.classement') => 'ranking',
             Str::startsWith($routeName, 'admin.roles') => 'roles',
