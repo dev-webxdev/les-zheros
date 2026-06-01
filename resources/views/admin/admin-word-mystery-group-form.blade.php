@@ -1,6 +1,8 @@
 @extends('layouts.admin')
 
-@php($activeAdmin = 'admin-word-mystery')
+@php
+    $activeAdmin = 'admin-word-mystery';
+@endphp
 
 @section('title', 'Modifier '.$difficultyLabel.' '.$monthLabel.' | Les Zheros')
 @section('description', 'Modification groupee des mots Mot Mystere.')
@@ -27,6 +29,22 @@
             <form class="admin-mission-form" action="{{ route('admin.mot-mystere.groups.update', [$month, $difficulty]) }}" method="post" data-real-form>
                 @csrf
                 @method('patch')
+                @if ($errors->any())
+                    @php
+                        $visibleErrors = collect($errors->all())->unique()->take(6);
+                    @endphp
+                    <div class="admin-form-error-summary" role="alert">
+                        <strong>Impossible d'enregistrer</strong>
+                        <ul>
+                            @foreach ($visibleErrors as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                            @if ($errors->count() > $visibleErrors->count())
+                                <li>Corrige les autres champs signales puis reessaie.</li>
+                            @endif
+                        </ul>
+                    </div>
+                @endif
 
                 <div class="admin-table-card admin-word-week-card">
                     <table class="admin-table admin-table--word-week">
@@ -39,7 +57,9 @@
                         </thead>
                         <tbody>
                             @forelse($words as $index => $word)
-                                @php($fieldPrefix = "words.$index")
+                                @php
+                                    $fieldPrefix = "words.$index";
+                                @endphp
                                 <tr>
                                     <td>
                                         <strong>{{ ucfirst($word->active_date->translatedFormat('l')) }}</strong>
@@ -50,7 +70,7 @@
                                         <input name="words[{{ $index }}][word]" type="text" value="{{ old("$fieldPrefix.word", $word->word) }}" placeholder="Mot" required>
                                     </td>
                                     <td>
-                                        <input name="words[{{ $index }}][hint]" type="text" value="{{ old("$fieldPrefix.hint", $word->hint) }}" placeholder="Indice visible par les joueurs" required>
+                                        <input name="words[{{ $index }}][hint]" type="text" value="{{ old("$fieldPrefix.hint", $word->hint) }}" placeholder="Indice" required>
                                     </td>
                                 </tr>
                             @empty

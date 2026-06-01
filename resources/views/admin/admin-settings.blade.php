@@ -5,6 +5,7 @@
 @php($activeAdmin = 'admin-settings')
 @php($settings = $settings ?? \App\Models\GuildSetting::values())
 @php($backups = collect($backups ?? []))
+@php($backupCoverage = $backupCoverage ?? app(\App\Support\SiteBackupManager::class)->coverage())
 @php($canSetting = fn (string $setting): bool => (bool) auth()->user()?->canAccessAdminPermission('settings.'.$setting))
 @php($settingsTabs = collect([
     'missions' => ['label' => 'Missions', 'icon' => 'fa-solid fa-sliders', 'visible' => $canSetting('cycle') || $canSetting('points')],
@@ -284,6 +285,24 @@
                                 <span>Créer une sauvegarde</span>
                             </button>
                         </form>
+
+                        <div class="admin-backup-coverage" aria-label="Contenu des sauvegardes">
+                            <div class="admin-backup-coverage__head">
+                                <strong>Sauvegarde automatique</strong>
+                                <span>{{ $backupCoverage['automatic'] }} Conservation : {{ $backupCoverage['keep'] }} archives.</span>
+                            </div>
+                            <div class="admin-backup-coverage__grid">
+                                @foreach($backupCoverage['includes'] as $included)
+                                    <article>
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        <div>
+                                            <strong>{{ $included['label'] }}</strong>
+                                            <span>{{ $included['detail'] }}</span>
+                                        </div>
+                                    </article>
+                                @endforeach
+                            </div>
+                        </div>
 
                         <div class="admin-backup-list">
                             @forelse ($backups as $backup)

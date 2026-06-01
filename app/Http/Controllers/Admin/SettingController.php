@@ -17,6 +17,7 @@ class SettingController extends Controller
         return view('admin.admin-settings', [
             'settings' => GuildSetting::values(),
             'backups' => $backups->list(),
+            'backupCoverage' => $backups->coverage(),
         ]);
     }
 

@@ -36,6 +36,33 @@
     gap: 0;
 }
 
+.admin-form-error-summary {
+    display: grid;
+    gap: 8px;
+    margin: 18px;
+    padding: 14px 16px;
+    border: 1px solid color-mix(in srgb, var(--admin-danger) 28%, var(--admin-border));
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--admin-danger) 7%, var(--admin-card));
+    color: var(--admin-text);
+}
+
+.admin-form-error-summary strong {
+    color: var(--admin-danger);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.admin-form-error-summary ul {
+    display: grid;
+    gap: 5px;
+    margin: 0;
+    padding-left: 18px;
+    color: var(--admin-muted-foreground);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
 .admin-form-grid {
     display: grid;
     grid-template-columns: minmax(420px, 1.35fr) minmax(280px, .8fr) 170px 170px;

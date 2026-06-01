@@ -21,6 +21,19 @@
     @stack('scripts')
 </head>
 <body @class(['admin-body', 'admin-no-delete' => auth()->user()?->hasAdminRole(\App\Support\AdminAccess::MODERATOR) && ! auth()->user()?->hasAdminRole(\App\Support\AdminAccess::ADMIN)])>
+    @php($adminRolePreview = auth()->user()?->adminRolePreview())
+    @if($adminRolePreview)
+        <aside class="admin-role-preview-banner" aria-label="Mode test de role">
+            <span>
+                <i class="fa-solid fa-eye"></i>
+                Test en cours : {{ \App\Support\AdminAccess::roles()[$adminRolePreview] ?? $adminRolePreview }}
+            </span>
+            <form action="{{ route('admin.roles.preview.stop') }}" method="post" data-real-form data-skip-confirm>
+                @csrf
+                <button type="submit">Quitter le test</button>
+            </form>
+        </aside>
+    @endif
     <div class="admin-app">
         @include('partials.admin-sidebar')
         @yield('admin')

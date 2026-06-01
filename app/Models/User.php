@@ -59,9 +59,39 @@ class User extends Authenticatable
         return array_values(array_unique($roles));
     }
 
-    public function hasAdminRole(string $role): bool
+    /**
+     * @return list<string>
+     */
+    public function effectiveAdminRoles(): array
+    {
+        $preview = $this->adminRolePreview();
+
+        return $preview ? [$preview] : $this->adminRoles();
+    }
+
+    public function adminRolePreview(): ?string
+    {
+        if (! app()->bound('session')) {
+            return null;
+        }
+
+        $preview = session('admin_role_preview');
+
+        if (! is_string($preview) || ! array_key_exists($preview, AdminAccess::roles())) {
+            return null;
+        }
+
+        return $this->realCanAccessAdminPermission('roles.manage') ? $preview : null;
+    }
+
+    public function realHasAdminRole(string $role): bool
     {
         return in_array($role, $this->adminRoles(), true);
+    }
+
+    public function hasAdminRole(string $role): bool
+    {
+        return in_array($role, $this->effectiveAdminRoles(), true);
     }
 
     public function hasAdminAccess(): bool
@@ -84,7 +114,7 @@ class User extends Authenticatable
             return true;
         }
 
-        foreach ($this->adminRoles() as $role) {
+        foreach ($this->effectiveAdminRoles() as $role) {
             $areas = AdminAccess::roleAreas()[$role] ?? [];
 
             if (in_array('*', $areas, true) || in_array($area, $areas, true)) {
@@ -97,7 +127,20 @@ class User extends Authenticatable
 
     public function canAccessAdminPermission(string $permission): bool
     {
-        foreach ($this->adminRoles() as $role) {
+        return $this->canAccessAdminPermissionForRoles($permission, $this->effectiveAdminRoles());
+    }
+
+    public function realCanAccessAdminPermission(string $permission): bool
+    {
+        return $this->canAccessAdminPermissionForRoles($permission, $this->adminRoles());
+    }
+
+    /**
+     * @param list<string> $roles
+     */
+    private function canAccessAdminPermissionForRoles(string $permission, array $roles): bool
+    {
+        foreach ($roles as $role) {
             $permissions = AdminAccess::rolePermissions($role);
 
             if (in_array($permission, $permissions, true)) {
@@ -146,7 +189,7 @@ class User extends Authenticatable
     {
         $labels = AdminAccess::roles();
 
-        return collect(AdminAccess::displayRoles($this->adminRoles()))
+        return collect(AdminAccess::displayRoles($this->effectiveAdminRoles()))
             ->map(fn (string $role): string => $labels[$role] ?? $role)
             ->join(', ');
     }

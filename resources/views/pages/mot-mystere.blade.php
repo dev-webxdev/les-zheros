@@ -5,8 +5,8 @@
     $activePage = 'mot-mystere';
     $difficultyMeta = [
         'easy' => ['label' => 'Facile', 'icon' => 'fa-regular fa-face-smile', 'copy' => '4 lettres'],
-        'normal' => ['label' => 'Normal', 'icon' => 'fa-solid fa-scale-balanced', 'copy' => '5 lettres'],
-        'hard' => ['label' => 'Difficile', 'icon' => 'fa-solid fa-skull', 'copy' => '6 lettres'],
+        'normal' => ['label' => 'Normal', 'icon' => 'fa-solid fa-scale-balanced', 'copy' => '6 lettres'],
+        'hard' => ['label' => 'Difficile', 'icon' => 'fa-solid fa-skull', 'copy' => '8 lettres'],
     ];
     $wordsByDifficulty = $wordsByDifficulty ?? [];
     $difficulties = [];
@@ -20,7 +20,7 @@
             'available' => $currentWord !== null,
         ];
     }
-    $wordLength = $word ? mb_strlen(\Illuminate\Support\Str::of($word->word)->ascii()->replaceMatches('/[^A-Za-z]/', '')->toString()) : (config("word_mystery.lengths.$difficulty") ?? 5);
+    $wordLength = $word ? mb_strlen(\Illuminate\Support\Str::of($word->word)->ascii()->replaceMatches('/[^A-Za-z]/', '')->toString()) : (WordMysteryWord::expectedLength($difficulty) ?? 6);
     $guesses = $attempt?->guesses ?? [];
     $attemptsByDifficulty = $attemptsByDifficulty ?? [];
     $rewardPreviews = $rewardPreviews ?? [];
@@ -88,7 +88,7 @@
                 @php
                     $panelWord = $item['word'];
                     $panelAttempt = $attemptsByDifficulty[$key] ?? null;
-                    $panelWordLength = $panelWord ? mb_strlen(\Illuminate\Support\Str::of($panelWord->word)->ascii()->replaceMatches('/[^A-Za-z]/', '')->toString()) : (config("word_mystery.lengths.$key") ?? 5);
+                    $panelWordLength = $panelWord ? mb_strlen(\Illuminate\Support\Str::of($panelWord->word)->ascii()->replaceMatches('/[^A-Za-z]/', '')->toString()) : (WordMysteryWord::expectedLength($key) ?? 6);
                     $panelGuesses = $panelAttempt?->guesses ?? [];
                 @endphp
                 <section data-word-mystery-panel="{{ $key }}" @if($difficulty !== $key) hidden @endif>

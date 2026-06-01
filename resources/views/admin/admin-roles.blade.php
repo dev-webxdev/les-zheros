@@ -70,6 +70,14 @@
                             <td>{{ $role['userCount'] }}</td>
                             <td>
                                 <div class="admin-row-actions">
+                                    <form action="{{ route('admin.roles.preview') }}" method="post" data-real-form>
+                                        @csrf
+                                        <input type="hidden" name="role" value="{{ $role['key'] }}">
+                                        <button @class(['admin-secondary-button', 'admin-role-preview-button', 'is-active' => ($rolePreview ?? null) === $role['key']]) type="submit" title="Tester comme ce role">
+                                            <i class="fa-solid fa-eye"></i>
+                                            <span>{{ ($rolePreview ?? null) === $role['key'] ? 'En test' : 'Tester' }}</span>
+                                        </button>
+                                    </form>
                                     <a class="admin-action-button admin-action-button--edit" href="{{ route('admin.roles.edit', $role['key']) }}" aria-label="Modifier {{ $role['label'] }}" title="Modifier">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </a>

@@ -26,6 +26,12 @@ class WordMysteryWord extends Model
         'hard' => 'Difficile',
     ];
 
+    public const EXPECTED_LENGTHS = [
+        'easy' => 4,
+        'normal' => 6,
+        'hard' => 8,
+    ];
+
     protected function casts(): array
     {
         return [
@@ -44,5 +50,10 @@ class WordMysteryWord extends Model
     public function difficultyLabel(): string
     {
         return self::DIFFICULTIES[$this->difficulty] ?? ucfirst($this->difficulty);
+    }
+
+    public static function expectedLength(string $difficulty): ?int
+    {
+        return self::EXPECTED_LENGTHS[$difficulty] ?? null;
     }
 }

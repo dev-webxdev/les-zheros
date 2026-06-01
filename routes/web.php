@@ -77,6 +77,11 @@ Route::post('/deconnexion', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
     ->name('deconnexion');
 
+Route::middleware('auth')->group(function (): void {
+    Route::post('/admin/roles/tester', [RoleController::class, 'preview'])->name('admin.roles.preview');
+    Route::post('/admin/roles/tester/arreter', [RoleController::class, 'stopPreview'])->name('admin.roles.preview.stop');
+});
+
 Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin', DashboardController::class)->name('admin.dashboard');
     Route::delete('/admin/activite', [ActivityController::class, 'destroy'])->middleware('admin:activity')->name('admin.activite.destroy');
@@ -122,7 +127,6 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin/mot-mystere/creer', [AdminWordMysteryController::class, 'create'])->name('admin.mot-mystere.create');
     Route::post('/admin/mot-mystere', [AdminWordMysteryController::class, 'store'])->name('admin.mot-mystere.store');
     Route::post('/admin/mot-mystere/actions', [AdminWordMysteryController::class, 'bulk'])->name('admin.mot-mystere.bulk');
-    Route::post('/admin/mot-mystere/generer-semaine', [AdminWordMysteryController::class, 'generateWeek'])->name('admin.mot-mystere.generate-week');
     Route::get('/admin/mot-mystere/corbeille', [AdminWordMysteryController::class, 'trash'])->name('admin.mot-mystere.trash');
     Route::delete('/admin/mot-mystere/corbeille', [AdminWordMysteryController::class, 'emptyTrash'])->name('admin.mot-mystere.empty-trash');
     Route::patch('/admin/mot-mystere/corbeille/mots/{word}/restaurer', [AdminWordMysteryController::class, 'restoreWord'])->name('admin.mot-mystere.words.restore');

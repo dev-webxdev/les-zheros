@@ -2,7 +2,9 @@
 
 @section('title', 'Mot Mystere | Les Zheros')
 @section('description', 'Gestion du jeu Mot Mystere.')
-@php($activeAdmin = 'admin-word-mystery')
+@php
+    $activeAdmin = 'admin-word-mystery';
+@endphp
 
 @section('admin')
 <main class="admin-main">
@@ -93,6 +95,49 @@
         @include('partials.admin-pagination', ['paginator' => $wordRows])
 
         <div class="admin-title" style="margin-top: 28px;">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <h1>Historique joueurs</h1>
+        </div>
+
+        @component('admin.components.table-card')
+            @component('admin.components.table', ['class' => 'admin-table--word-mystery-history'])
+                <thead>
+                    <tr>
+                        <th>Joueur</th>
+                        <th>Mot</th>
+                        <th>Difficulte</th>
+                        <th>Essais</th>
+                        <th>Gain</th>
+                        <th>Resultat</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($history as $attempt)
+                        @php
+                            $historyStatus = $attempt->has_won ? 'Trouve' : ($attempt->hasLost() ? 'Perdu' : 'En cours');
+                            $historyStatusClass = $attempt->has_won ? 'admin-tag--success' : ($attempt->hasLost() ? 'admin-tag--danger' : 'admin-tag--warning');
+                        @endphp
+                        <tr>
+                            <td><strong>{{ $attempt->user?->name ?? 'Utilisateur supprime' }}</strong></td>
+                            <td><strong>{{ $attempt->word?->word ?? '-' }}</strong></td>
+                            <td>{{ $attempt->word?->difficultyLabel() ?? $attempt->difficulty }}</td>
+                            <td>{{ $attempt->attempts_count }}</td>
+                            <td>{{ $attempt->reward_earned > 0 ? number_format($attempt->reward_earned, 0, ',', ' ').' kamas' : '-' }}</td>
+                            <td>@component('admin.components.badge', ['class' => $historyStatusClass, 'label' => $historyStatus])@endcomponent</td>
+                            <td>{{ optional($attempt->played_at ?? $attempt->updated_at)->format('d/m/Y H:i') }}</td>
+                        </tr>
+                    @empty
+                        @component('admin.components.table-empty-row', ['colspan' => 7])
+                            @component('admin.components.empty-state', ['icon' => 'fa-solid fa-clock-rotate-left', 'title' => 'Aucun historique', 'text' => 'Les essais des joueurs apparaitront ici.'])@endcomponent
+                        @endcomponent
+                    @endforelse
+                </tbody>
+            @endcomponent
+        @endcomponent
+        @include('partials.admin-pagination', ['paginator' => $history])
+
+        <div class="admin-title" style="margin-top: 28px;">
             <i class="fa-solid fa-coins"></i>
             <h1>Recompenses</h1>
         </div>
@@ -118,15 +163,17 @@
                             <td>{{ $reward->attempt?->word?->difficultyLabel() ?? $reward->attempt?->difficulty }}</td>
                             <td>{{ $reward->attempt?->attempts_count ?? '-' }}</td>
                             <td>{{ number_format($reward->amount, 0, ',', ' ') }} kamas</td>
-                            @php($rewardStatusClass = match ($reward->status) {
+                            @php
+                                $rewardStatusClass = match ($reward->status) {
                                 'paid' => 'admin-tag--success',
                                 'cancelled' => 'admin-tag--danger',
                                 default => 'admin-tag--warning',
-                            })
+                                };
+                            @endphp
                             <td>@component('admin.components.badge', ['class' => $rewardStatusClass, 'label' => \App\Models\WordMysteryReward::STATUSES[$reward->status] ?? $reward->status])@endcomponent</td>
                             <td>
                                 <div class="admin-row-actions">
-                                    @foreach(['pending' => 'En attente', 'paid' => 'Payee', 'cancelled' => 'Annulee'] as $status => $label)
+                                    @foreach(['pending' => 'En attente', 'paid' => 'Payée', 'cancelled' => 'Annulée'] as $status => $label)
                                         @if($reward->status !== $status)
                                             <form action="{{ route('admin.mot-mystere.rewards.update', $reward) }}" method="post" data-real-form>
                                                 @csrf

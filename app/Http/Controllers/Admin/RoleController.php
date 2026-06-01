@@ -41,7 +41,34 @@ class RoleController extends Controller
 
         return view('admin.admin-roles', [
             'roles' => $this->paginateCollection($roles, $request),
+            'rolePreview' => $request->user()?->adminRolePreview(),
         ]);
+    }
+
+    public function preview(Request $request): RedirectResponse
+    {
+        abort_unless($request->user()?->realCanAccessAdminPermission('roles.manage'), 403);
+
+        $validated = $request->validate([
+            'role' => ['required', Rule::in(array_keys(AdminAccess::roles()))],
+        ]);
+
+        session(['admin_role_preview' => $validated['role']]);
+
+        return redirect()->route('admin.dashboard')->with('admin_toast', [
+            'title' => 'Test de role actif',
+            'text' => 'Tu vois maintenant l admin comme le role '.(AdminAccess::roles()[$validated['role']] ?? $validated['role']).'.',
+            'type' => 'success',
+        ]);
+    }
+
+    public function stopPreview(Request $request): RedirectResponse
+    {
+        abort_unless($request->user()?->hasAdminAccess(), 403);
+
+        session()->forget('admin_role_preview');
+
+        return redirect()->route('admin.dashboard');
     }
 
     public function trash(): View

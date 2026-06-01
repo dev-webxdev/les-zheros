@@ -27,6 +27,31 @@ class SiteBackupManager
             ->values();
     }
 
+    /**
+     * @return array{automatic: string, keep: int, includes: list<array{label: string, detail: string}>}
+     */
+    public function coverage(): array
+    {
+        return [
+            'automatic' => 'Tous les jours a 03:00 si le cron Laravel tourne.',
+            'keep' => 10,
+            'includes' => [
+                [
+                    'label' => 'Base de donnees SQLite',
+                    'detail' => 'Roles, permissions, Mot Mystere, recompenses, missions, validations, guides, loterie et parametres.',
+                ],
+                [
+                    'label' => 'Uploads admin',
+                    'detail' => 'Images missions, guides, validations, galerie et avatars dans assets/uploads.',
+                ],
+                [
+                    'label' => 'Images publiques',
+                    'detail' => 'Dossier assets/img utilise par le site.',
+                ],
+            ],
+        ];
+    }
+
     public function create(string $prefix = 'sauvegarde-site', int $keep = 10): string
     {
         File::ensureDirectoryExists($this->backupsPath());

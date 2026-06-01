@@ -8,7 +8,6 @@ use App\Models\WordMysteryAttempt;
 use App\Models\WordMysteryReward;
 use App\Models\WordMysteryWord;
 use Carbon\CarbonImmutable;
-use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -297,232 +296,22 @@ class WordMysteryService
         return (int) str_replace(' ', '', (string) $value);
     }
 
-    public function generateWeek(CarbonInterface|string $weekStart, ?array $rewardSteps = null): int
-    {
-        $weekStart = $weekStart instanceof CarbonInterface
-            ? CarbonImmutable::parse($weekStart)->startOfWeek(CarbonInterface::MONDAY)
-            : CarbonImmutable::parse($weekStart)->startOfWeek(CarbonInterface::MONDAY);
-
-        return $this->generateRange($weekStart, $weekStart->addDays(6), $rewardSteps);
-    }
-
-    public function generateRange(CarbonInterface|string $startDate, CarbonInterface|string $endDate, ?array $rewardSteps = null): int
-    {
-        $created = 0;
-        $startDate = CarbonImmutable::parse($startDate)->startOfDay();
-        $endDate = CarbonImmutable::parse($endDate)->startOfDay();
-        $weekCursor = $startDate->startOfWeek(CarbonInterface::MONDAY);
-
-        while ($weekCursor->lte($endDate)) {
-            foreach ($this->generatedWeekRows($weekCursor, $rewardSteps) as $difficulty => $rows) {
-                foreach ($rows as $row) {
-                    $activeDate = CarbonImmutable::parse($row['active_date']);
-
-                    if ($activeDate->lt($startDate) || $activeDate->gt($endDate)) {
-                        continue;
-                    }
-
-                    $word = $this->wordForDate($difficulty, $row['active_date']);
-
-                    if (! $word) {
-                        $word = new WordMysteryWord([
-                            'difficulty' => $difficulty,
-                            'active_date' => $row['active_date'],
-                            'word' => $row['word'],
-                            'hint' => $row['hint'],
-                            'reward_base' => $row['reward_base'],
-                            'reward_steps' => $row['reward_steps'],
-                            'is_active' => true,
-                        ]);
-                    } else {
-                        $word->fill([
-                            'word' => $row['word'],
-                            'hint' => $row['hint'],
-                            'reward_base' => $row['reward_base'],
-                            'reward_steps' => $row['reward_steps'],
-                            'is_active' => true,
-                        ]);
-                    }
-
-                    if ($word->trashed()) {
-                        $word->restore();
-                    }
-
-                    $word->save();
-                    $created++;
-                }
-            }
-
-            $weekCursor = $weekCursor->addWeek();
-        }
-
-        return $created;
-    }
-
     /**
      * @return array{generated: int, restored: int, deleted: int}
      */
     public function syncCalendar(int $months = 6): array
     {
         $today = CarbonImmutable::parse(today());
-        $endDate = $today->addMonthsNoOverflow($months)->endOfMonth();
         $deleted = WordMysteryWord::query()
             ->whereNotNull('active_date')
             ->whereDate('active_date', '<', $today->toDateString())
             ->delete();
-        $generated = 0;
-        $restored = 0;
-        $weekCursor = $today->startOfWeek(CarbonInterface::MONDAY);
-
-        while ($weekCursor->lte($endDate)) {
-            foreach ($this->generatedWeekRows($weekCursor) as $difficulty => $rows) {
-                foreach ($rows as $row) {
-                    $activeDate = CarbonImmutable::parse($row['active_date']);
-
-                    if ($activeDate->lt($today) || $activeDate->gt($endDate)) {
-                        continue;
-                    }
-
-                    $word = $this->wordForDate($difficulty, $row['active_date']);
-
-                    if (! $word) {
-                        WordMysteryWord::create([
-                            'difficulty' => $difficulty,
-                            'active_date' => $row['active_date'],
-                            'word' => $row['word'],
-                            'hint' => $row['hint'],
-                            'reward_base' => $row['reward_base'],
-                            'reward_steps' => $row['reward_steps'],
-                            'is_active' => true,
-                        ]);
-                        $generated++;
-                    } elseif ($word->trashed()) {
-                        $word->restore();
-                        $restored++;
-                    }
-                }
-            }
-
-            $weekCursor = $weekCursor->addWeek();
-        }
 
         return [
-            'generated' => $generated,
-            'restored' => $restored,
+            'generated' => 0,
+            'restored' => 0,
             'deleted' => $deleted,
         ];
     }
 
-    /**
-     * @return array<string, list<array{word: string, hint: string, reward_base: int, reward_steps: array<int, int>, active_date: string}>>
-     */
-    public function generatedWeekRows(CarbonInterface|string $weekStart, ?array $rewardSteps = null): array
-    {
-        $weekStart = $weekStart instanceof CarbonInterface
-            ? CarbonImmutable::parse($weekStart)->startOfWeek(CarbonInterface::MONDAY)
-            : CarbonImmutable::parse($weekStart)->startOfWeek(CarbonInterface::MONDAY);
-        $rows = [];
-
-        foreach (WordMysteryWord::DIFFICULTIES as $difficulty => $label) {
-            $words = $this->availableBankForWeek($difficulty, $weekStart);
-            $steps = $rewardSteps[$difficulty] ?? $this->rewardSteps($difficulty);
-
-            foreach (range(0, 6) as $dayIndex) {
-                $entry = $words === [] ? null : $words[$dayIndex % count($words)];
-
-                if (! $entry) {
-                    continue;
-                }
-
-                $rows[$difficulty][] = [
-                    'word' => $entry['word'],
-                    'hint' => $entry['hint'],
-                    'reward_base' => $steps[3] ?? max($steps),
-                    'reward_steps' => $steps,
-                    'active_date' => $weekStart->addDays($dayIndex)->format('Y-m-d'),
-                ];
-            }
-        }
-
-        return $rows;
-    }
-
-    /**
-     * @return list<array{word: string, hint: string}>
-     */
-    private function availableBankForWeek(string $difficulty, CarbonImmutable $weekStart): array
-    {
-        $weekEnd = $weekStart->addDays(6);
-        $usedWords = WordMysteryWord::withTrashed()
-            ->where('difficulty', $difficulty)
-            ->whereNotNull('active_date')
-            ->where(function ($query) use ($weekStart, $weekEnd): void {
-                $query->whereDate('active_date', '<', $weekStart->toDateString())
-                    ->orWhereDate('active_date', '>', $weekEnd->toDateString());
-            })
-            ->pluck('word')
-            ->map(fn (string $word): string => $this->normalizeWord($word))
-            ->all();
-        $usedWords = array_flip($usedWords);
-
-        $availableWords = array_values(array_filter(
-            config("word_mystery.bank.$difficulty", []),
-            fn (array $entry): bool => $this->hasExpectedLength($difficulty, $entry['word'])
-                && ! isset($usedWords[$this->normalizeWord($entry['word'])]),
-        ));
-        $availableWords = $this->uniqueBankEntries($availableWords);
-
-        if (count($availableWords) < 7) {
-            $availableWords = array_values(array_filter(
-                config("word_mystery.bank.$difficulty", []),
-                fn (array $entry): bool => $this->hasExpectedLength($difficulty, $entry['word']),
-            ));
-            $availableWords = $this->uniqueBankEntries($availableWords);
-        }
-
-        usort($availableWords, fn (array $first, array $second): int => strcmp(
-            md5($weekStart->format('Y-m-d').$difficulty.$first['word']),
-            md5($weekStart->format('Y-m-d').$difficulty.$second['word']),
-        ));
-
-        return $availableWords;
-    }
-
-    /**
-     * @param list<array{word: string, hint: string}> $entries
-     * @return list<array{word: string, hint: string}>
-     */
-    private function uniqueBankEntries(array $entries): array
-    {
-        $seen = [];
-
-        return array_values(array_filter($entries, function (array $entry) use (&$seen): bool {
-            $word = $this->normalizeWord($entry['word']);
-
-            if (isset($seen[$word])) {
-                return false;
-            }
-
-            $seen[$word] = true;
-
-            return true;
-        }));
-    }
-
-    private function hasExpectedLength(string $difficulty, string $word): bool
-    {
-        $length = config("word_mystery.lengths.$difficulty");
-
-        return ! is_int($length) || mb_strlen($this->normalizeWord($word)) === $length;
-    }
-
-    private function wordForDate(string $difficulty, string $activeDate): ?WordMysteryWord
-    {
-        return WordMysteryWord::withTrashed()
-            ->where('difficulty', $difficulty)
-            ->whereDate('active_date', $activeDate)
-            ->orderByRaw('case when deleted_at is null then 0 else 1 end')
-            ->latest('updated_at')
-            ->first();
-    }
 }

@@ -589,7 +589,11 @@ document.addEventListener("submit", (event) => {
         return;
     }
 
-    if (form.dataset.confirmedSubmit === "true" || (!form.hasAttribute("data-confirm-form") && getFormSpoofedMethod(form) !== "delete")) {
+    if (
+        form.dataset.confirmedSubmit === "true"
+        || form.hasAttribute("data-skip-confirm")
+        || (!form.hasAttribute("data-confirm-form") && getFormSpoofedMethod(form) !== "delete")
+    ) {
         return;
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\WordMysteryAttempt;
 use App\Models\WordMysteryReward;
 use App\Models\WordMysteryWord;
 use App\Services\WordMysteryService;
@@ -71,6 +72,12 @@ class WordMysteryController extends Controller
                 ->with(['user', 'attempt.word'])
                 ->latest()
                 ->paginate(12, ['*'], 'recompenses'),
+            'history' => WordMysteryAttempt::query()
+                ->with(['user', 'word', 'reward'])
+                ->where('has_won', false)
+                ->where('attempts_count', '>=', 6)
+                ->latest('updated_at')
+                ->paginate(12, ['*'], 'historique'),
             'canForceDeleteWordMystery' => $this->canManageWordMysteryTrash($request),
         ]);
     }
@@ -108,14 +115,35 @@ class WordMysteryController extends Controller
             'words' => ['required', 'array'],
             'words.*.id' => ['required', 'integer'],
             'words.*.word' => ['required', 'string', 'max:40', 'regex:/^[\pL\'-]+$/u'],
-            'words.*.hint' => ['required', 'string', 'max:255'],
+            'words.*.hint' => ['required', 'string', 'max:40'],
         ], [
+            'words.required' => 'Aucun mot n a ete envoye.',
+            'words.*.word.required' => 'Chaque ligne doit avoir un mot.',
             'words.*.word.regex' => 'Les mots ne peuvent contenir que des lettres.',
+            'words.*.hint.required' => 'Chaque ligne doit avoir un indice.',
+            'words.*.hint.max' => 'Un indice ne peut pas depasser 40 caracteres.',
         ]);
-        $validator->after(function ($validator) use ($request, $difficulty): void {
+        $originalRows = WordMysteryWord::query()
+            ->whereKey(collect($request->input('words', []))->pluck('id')->filter()->all())
+            ->get(['id', 'word', 'hint'])
+            ->keyBy('id');
+        $originalWords = $originalRows->map(fn (WordMysteryWord $word): string => $this->wordMystery->normalizeWord($word->word));
+        $originalHints = $originalRows->map(fn (WordMysteryWord $word): string => $this->wordMystery->normalizeWord($word->hint));
+
+        $validator->after(function ($validator) use ($request, $difficulty, $originalWords, $originalHints): void {
             foreach ($request->input('words', []) as $index => $row) {
-                if (! $this->wordHasExpectedLength($difficulty, (string) ($row['word'] ?? ''))) {
+                $word = (string) ($row['word'] ?? '');
+                $hint = (string) ($row['hint'] ?? '');
+                $wordId = (int) ($row['id'] ?? 0);
+                $wordWasChanged = $this->wordMystery->normalizeWord($word) !== ($originalWords[$wordId] ?? null);
+                $hintWasChanged = $this->wordMystery->normalizeWord($hint) !== ($originalHints[$wordId] ?? null);
+
+                if ($wordWasChanged && ! $this->wordHasExpectedLength($difficulty, $word)) {
                     $validator->errors()->add("words.$index.word", $this->wordLengthMessage($difficulty));
+                }
+
+                if ($hintWasChanged && ! $this->hintIsSingleWord($hint)) {
+                    $validator->errors()->add("words.$index.hint", $this->hintMessage());
                 }
             }
         });
@@ -152,24 +180,11 @@ class WordMysteryController extends Controller
     {
         $weekStart = CarbonImmutable::parse($request->query('semaine', today()))
             ->startOfWeek(CarbonInterface::MONDAY);
-        $generationScope = $request->query('generer');
-        $generationScope = in_array($generationScope, ['week', 'month', 'six_months'], true)
-            ? $generationScope
-            : null;
-        [$periodStart, $periodEnd] = match ($generationScope) {
-            'month' => [$weekStart->startOfMonth(), $weekStart->endOfMonth()],
-            'six_months' => [$weekStart, $weekStart->addMonthsNoOverflow(6)->endOfMonth()],
-            default => [$weekStart, $weekStart->addDays(6)],
-        };
+        $periodStart = $weekStart;
+        $periodEnd = $weekStart->addDays(6);
         $today = CarbonImmutable::parse(today());
         $periodStart = $periodStart->lt($today) ? $today : $periodStart;
         $periodEnd = $periodEnd->lt($periodStart) ? $periodStart : $periodEnd;
-        $previewRows = $generationScope
-            ? collect($this->generatedRowsForPeriod($periodStart, $periodEnd))
-            : collect();
-        $weekWords = $previewRows
-            ->map(fn (array $row): WordMysteryWord => new WordMysteryWord($row))
-            ->keyBy(fn (WordMysteryWord $word): string => $word->difficulty.'|'.$word->active_date?->format('Y-m-d'));
         $daysCount = $periodStart->diffInDays($periodEnd) + 1;
 
         return view('admin.admin-word-mystery-form', [
@@ -185,7 +200,7 @@ class WordMysteryController extends Controller
             'weekDays' => collect(range(0, $daysCount - 1))
                 ->map(fn (int $day): CarbonImmutable => $periodStart->addDays($day))
                 ->all(),
-            'weekWords' => $weekWords,
+            'weekWords' => collect(),
         ]);
     }
 
@@ -202,47 +217,6 @@ class WordMysteryController extends Controller
             'text' => 'Le mot mystere est pret pour les joueurs.',
             'type' => 'success',
         ]);
-    }
-
-    public function generateWeek(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'week_start' => ['required', 'date'],
-            'generation_scope' => ['required', Rule::in(['week', 'month', 'six_months'])],
-        ]);
-        $weekStart = CarbonImmutable::parse($validated['week_start'])
-            ->startOfWeek(CarbonInterface::MONDAY);
-        $scope = $validated['generation_scope'];
-
-        if ($scope === 'month') {
-            $periodStart = $weekStart->startOfMonth();
-            $periodEnd = $weekStart->endOfMonth();
-            $title = 'Mois prepare';
-        } elseif ($scope === 'six_months') {
-            $periodStart = $weekStart;
-            $periodEnd = $weekStart->addMonthsNoOverflow(6)->endOfMonth();
-            $title = 'Six mois prepares';
-        } else {
-            $periodStart = $weekStart;
-            $periodEnd = $weekStart->addDays(6);
-            $title = 'Semaine preparee';
-        }
-        $today = CarbonImmutable::parse(today());
-        $periodStart = $periodStart->lt($today) ? $today : $periodStart;
-        $periodEnd = $periodEnd->lt($periodStart) ? $periodStart : $periodEnd;
-        $rows = $this->generatedRowsForPeriod($periodStart, $periodEnd);
-        $count = count($rows);
-
-        return redirect()
-            ->route('admin.mot-mystere.create', [
-                'semaine' => $weekStart->toDateString(),
-                'generer' => $scope,
-            ])
-            ->with('admin_toast', [
-                'title' => $title,
-                'text' => $count.' mot(s) ont rempli le formulaire. Clique sur Enregistrer pour les sauvegarder.',
-                'type' => 'success',
-            ]);
     }
 
     public function edit(WordMysteryWord $word): View
@@ -420,12 +394,16 @@ class WordMysteryController extends Controller
     {
         $validated = $request->validate([
             'word' => ['required', 'string', 'max:40', 'regex:/^[\pL\'-]+$/u'],
-            'hint' => ['required', 'string', 'max:255'],
+            'hint' => ['required', 'string', 'max:40', 'regex:/^[\pL\'-]+$/u'],
             'difficulty' => ['required', Rule::in(array_keys(WordMysteryWord::DIFFICULTIES))],
             'active_date' => ['nullable', 'date'],
             'is_active' => ['nullable'],
         ], [
+            'word.required' => 'Le mot est obligatoire.',
             'word.regex' => 'Le mot ne peut contenir que des lettres.',
+            'hint.required' => 'L indice est obligatoire.',
+            'hint.regex' => $this->hintMessage(),
+            'difficulty.required' => 'La difficulte est obligatoire.',
         ]);
         if (! $this->wordHasExpectedLength($validated['difficulty'], $validated['word'])) {
             throw ValidationException::withMessages([
@@ -451,10 +429,15 @@ class WordMysteryController extends Controller
             'weekly_words' => ['required', 'array'],
             'weekly_words.*' => ['required', 'array'],
             'weekly_words.*.*.word' => ['required', 'string', 'max:40', 'regex:/^[\pL\'-]+$/u'],
-            'weekly_words.*.*.hint' => ['required', 'string', 'max:255'],
+            'weekly_words.*.*.hint' => ['required', 'string', 'max:40', 'regex:/^[\pL\'-]+$/u'],
             'weekly_words.*.*.active_date' => ['required', 'date'],
         ], [
+            'weekly_words.required' => 'Aucune semaine n a ete envoyee.',
+            'weekly_words.*.*.word.required' => 'Chaque jour doit avoir un mot.',
             'weekly_words.*.*.word.regex' => 'Les mots ne peuvent contenir que des lettres.',
+            'weekly_words.*.*.hint.required' => 'Chaque jour doit avoir un indice.',
+            'weekly_words.*.*.hint.regex' => $this->hintMessage(),
+            'weekly_words.*.*.active_date.required' => 'Chaque jour doit avoir une date.',
         ]);
         $validator->after(function ($validator) use ($request): void {
             foreach ($request->input('weekly_words', []) as $difficulty => $rows) {
@@ -518,19 +501,29 @@ class WordMysteryController extends Controller
 
     private function wordHasExpectedLength(string $difficulty, string $word): bool
     {
-        $length = config("word_mystery.lengths.$difficulty");
+        $length = WordMysteryWord::expectedLength($difficulty);
 
         return ! is_int($length) || mb_strlen($this->wordMystery->normalizeWord($word)) === $length;
     }
 
     private function wordLengthMessage(string $difficulty): string
     {
-        $length = config("word_mystery.lengths.$difficulty");
+        $length = WordMysteryWord::expectedLength($difficulty);
         $label = $this->difficultyLabel($difficulty);
 
         return is_int($length)
             ? "Un mot $label doit contenir $length lettres."
             : 'La longueur du mot est invalide.';
+    }
+
+    private function hintIsSingleWord(string $hint): bool
+    {
+        return preg_match('/^[\pL\'-]+$/u', trim($hint)) === 1;
+    }
+
+    private function hintMessage(): string
+    {
+        return 'L indice doit etre un seul mot.';
     }
 
     private function canManageWordMysteryTrash(Request $request): bool
@@ -540,41 +533,6 @@ class WordMysteryController extends Controller
         return (bool) (
             $user?->canForceDeleteInAdminArea('word_mystery')
         );
-    }
-
-    /**
-     * @return list<array<string, mixed>>
-     */
-    private function generatedRowsForPeriod(CarbonImmutable $periodStart, CarbonImmutable $periodEnd): array
-    {
-        $rows = [];
-        $weekCursor = $periodStart->startOfWeek(CarbonInterface::MONDAY);
-
-        while ($weekCursor->lte($periodEnd)) {
-            foreach ($this->wordMystery->generatedWeekRows($weekCursor) as $difficulty => $weekRows) {
-                foreach ($weekRows as $row) {
-                    $activeDate = CarbonImmutable::parse($row['active_date']);
-
-                    if ($activeDate->lt($periodStart) || $activeDate->gt($periodEnd)) {
-                        continue;
-                    }
-
-                    $rows[] = [
-                        'word' => $row['word'],
-                        'hint' => $row['hint'],
-                        'difficulty' => $difficulty,
-                        'reward_base' => $row['reward_base'],
-                        'reward_steps' => $row['reward_steps'],
-                        'active_date' => $row['active_date'],
-                        'is_active' => true,
-                    ];
-                }
-            }
-
-            $weekCursor = $weekCursor->addWeek();
-        }
-
-        return $rows;
     }
 
 }
