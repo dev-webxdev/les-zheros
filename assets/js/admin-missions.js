@@ -635,8 +635,8 @@ if (missionForm) {
         ensureMediaPicker();
         mediaPicker.hidden = false;
         const searchInput = mediaPicker.querySelector("[data-media-picker-search]");
-        searchInput.value = missionTitle?.value?.trim() || "";
-        loadMediaPickerImages(searchInput.value.trim());
+        searchInput.value = "";
+        loadMediaPickerImages();
         searchInput.focus();
     };
 
@@ -739,6 +739,7 @@ if (missionForm) {
             if (!selectedImage?.value) {
                 setCategoryBadgePreview();
             }
+            setImageMode(missionForm.querySelector("[data-image-mode]:checked")?.value || "api");
             setResultsMessage("Tape le nom d'un monstre ou choisis une autre source d'image.");
         }
 

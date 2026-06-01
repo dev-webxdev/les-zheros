@@ -10,8 +10,24 @@
     'anomalie' => asset('assets/img/card-mission/anomalie.png'),
     'songe' => asset('assets/img/card-mission/songe.png'),
 ])
+@php
+    $missionImagePath = old('selected_image', $mission->image_path);
+    $missionImageMode = old('image_mode', $mission->image_mode ?: null);
+
+    if (! $missionImageMode && is_string($missionImagePath)) {
+        $missionImageMode = str_starts_with($missionImagePath, 'assets/uploads/missions/')
+            ? 'upload'
+            : (str_starts_with($missionImagePath, 'http') ? 'url' : 'api');
+    }
+
+    if ($missionImageMode === 'api' && is_string($missionImagePath) && str_starts_with($missionImagePath, 'assets/uploads/missions/')) {
+        $missionImageMode = 'upload';
+    }
+
+    $missionImageMode ??= 'api';
+@endphp
 @push('scripts')
-<script src="{{ asset('assets/js/admin-missions.js') }}" defer></script>
+<script src="{{ asset('assets/js/admin-missions.js') }}?v={{ filemtime(public_path('assets/js/admin-missions.js')) }}" defer></script>
 @endpush
 
 @section('admin')
@@ -132,9 +148,9 @@
                             <div class="admin-image-workspace">
                                 <div class="admin-image-main">
                                     <div class="admin-image-mode" role="radiogroup" aria-label="Source de l'image">
-                                        <label><input type="radio" name="image_mode" value="api" @checked(old('image_mode', $mission->image_mode ?: 'api') === 'api') data-image-mode disabled> Recherche DofusDB</label>
-                                        <label><input type="radio" name="image_mode" value="upload" @checked(old('image_mode', $mission->image_mode) === 'upload') data-image-mode disabled> Depuis mon PC</label>
-                                        <label><input type="radio" name="image_mode" value="url" @checked(old('image_mode', $mission->image_mode) === 'url') data-image-mode disabled> Lien image</label>
+                                        <label><input type="radio" name="image_mode" value="api" @checked($missionImageMode === 'api') data-image-mode disabled> Recherche DofusDB</label>
+                                        <label><input type="radio" name="image_mode" value="upload" @checked($missionImageMode === 'upload') data-image-mode disabled> Depuis mon PC</label>
+                                        <label><input type="radio" name="image_mode" value="url" @checked($missionImageMode === 'url') data-image-mode disabled> Lien image</label>
                                     </div>
 
                                     <div class="admin-image-source is-active" data-image-source="api">
@@ -154,22 +170,26 @@
                                                 <span>Choisir depuis la médiathèque</span>
                                             </button>
                                         </div>
-                                        <label class="admin-field" for="m-image-file">
-                                            <span>Image depuis ton PC</span>
-                                            <input id="m-image-file" name="image_file" type="file" accept="image/*" data-image-file disabled>
+                                        <label class="admin-field admin-field--file-hidden" for="m-image-file">
+                                            <span>Images depuis ton PC</span>
+                                            <input id="m-image-file" name="image_files[]" type="file" accept="image/*" multiple data-image-file disabled>
                                         </label>
+                                        <div class="admin-upload-preview-list" data-upload-preview-list aria-live="polite"></div>
                                     </div>
 
                                     <div class="admin-image-source" data-image-source="url" hidden>
                                         <label class="admin-field" for="m-image-url">
                                             <span>Lien de l'image</span>
-                                            <input id="m-image-url" name="image_url" type="url" value="{{ old('image_url', $mission->image_mode === 'url' ? $mission->image_path : '') }}" placeholder="https://..." data-image-url disabled>
+                                            <input id="m-image-url" name="image_url" type="url" value="{{ old('image_url', $missionImageMode === 'url' ? $mission->image_path : '') }}" placeholder="https://..." data-image-url disabled>
                                         </label>
                                     </div>
                                 </div>
 
                                 <aside class="admin-image-preview" aria-label="Aperçu de l'image">
                                     <img src="{{ $mission->imageUrl() }}" alt="" data-image-preview>
+                                    <button class="admin-image-preview__remove" type="button" data-remove-main-upload aria-label="Retirer l'image" hidden>
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
                                 </aside>
                             </div>
 

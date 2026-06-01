@@ -2,6 +2,7 @@
 
 use App\Support\MissionCycle;
 use App\Support\SiteBackupManager;
+use App\Services\WordMysteryService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
@@ -22,4 +23,16 @@ Artisan::command('site:backup', function () {
     $this->info('Sauvegarde creee : '.basename($path));
 })->purpose('Cree une sauvegarde du site et conserve les 10 dernieres');
 
+Artisan::command('mot-mystere:sync', function () {
+    $result = app(WordMysteryService::class)->syncCalendar(6);
+
+    $this->info(
+        'Mot Mystere synchronise : '
+        .$result['generated'].' genere(s), '
+        .$result['restored'].' restaure(s), '
+        .$result['deleted'].' ancien(s) en corbeille.'
+    );
+})->purpose('Genere 6 mois de mots mystere et met les anciens mots en corbeille');
+
 Schedule::command('site:backup')->dailyAt('03:00');
+Schedule::command('mot-mystere:sync')->dailyAt('00:05');

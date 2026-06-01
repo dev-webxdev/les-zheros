@@ -9,95 +9,21 @@ use App\Models\Guide;
 use App\Models\Mission;
 use App\Models\MissionValidation;
 use App\Models\User;
-use App\Support\AdminActivity;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
 use SplFileInfo;
 
 class MediaController extends Controller
 {
     private const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif', 'svg'];
 
-    public function index(Request $request): View|RedirectResponse
-    {
-        $normalizedQuery = $request->query();
-
-        if (array_key_exists('source', $normalizedQuery)) {
-            unset($normalizedQuery['source']);
-        }
-
-        foreach (['search', 'status'] as $key) {
-            if (! array_key_exists($key, $normalizedQuery)) {
-                continue;
-            }
-
-            $normalizedQuery[$key] = trim((string) $normalizedQuery[$key]);
-
-            if ($normalizedQuery[$key] === '' || in_array($normalizedQuery[$key], ['all', 'tous'], true)) {
-                unset($normalizedQuery[$key]);
-            }
-        }
-
-        if ($normalizedQuery !== $request->query()) {
-            return redirect()->route('admin.mediatheque.index', $normalizedQuery);
-        }
-
-        $filters = [
-            'search' => trim((string) $request->query('search', '')),
-            'status' => $request->query('status', 'all'),
-        ];
-        $usedReferences = $this->usedReferences();
-        $images = collect($this->scanImages($usedReferences, includeMissionUploads: false))
-            ->when($filters['status'] !== 'all', function ($items) use ($filters) {
-                return match ($filters['status']) {
-                    'used' => $items->where('used', true),
-                    'unused' => $items->where('used', false)->where('deletable', true),
-                    default => $items,
-                };
-            })
-            ->when($filters['search'] !== '', function ($items) use ($filters) {
-                $search = Str::lower($filters['search']);
-
-                return $items->filter(fn (array $image): bool => str_contains(Str::lower($image['name']), $search)
-                    || str_contains(Str::lower($image['path']), $search)
-                    || str_contains(Str::lower($image['directory']), $search));
-            })
-            ->values();
-        $page = max(1, (int) $request->query('page', 1));
-        $perPage = 16;
-        $paginatedImages = new LengthAwarePaginator(
-            $images->forPage($page, $perPage)->values(),
-            $images->count(),
-            $perPage,
-            $page,
-            [
-                'path' => $request->url(),
-                'query' => $request->query(),
-            ],
-        );
-
-        return view('admin.admin-media', [
-            'images' => $paginatedImages,
-            'filters' => $filters,
-            'stats' => [
-                'total' => $images->count(),
-                'size' => $this->humanSize($images->sum('size')),
-                'unused' => $images->where('used', false)->where('deletable', true)->count(),
-            ],
-        ]);
-    }
-
     public function picker(Request $request): JsonResponse
     {
         $search = trim((string) $request->query('search', ''));
         $directory = $this->pickerDirectory((string) $request->query('directory', ''));
-        $usedReferences = $this->usedReferences();
-        $images = collect($this->scanImages($usedReferences))
+        $images = collect($this->scanImages($this->usedReferences()))
             ->when($directory !== null, fn ($items) => $items->filter(
                 fn (array $image): bool => Str::startsWith($image['path'], 'assets/uploads/'.$directory.'/')
             ))
@@ -118,9 +44,7 @@ class MediaController extends Controller
                 'used' => $image['used'],
             ]);
 
-        return response()->json([
-            'images' => $images,
-        ]);
+        return response()->json(['images' => $images]);
     }
 
     private function pickerDirectory(string $directory): ?string
@@ -132,107 +56,27 @@ class MediaController extends Controller
             : null;
     }
 
-    public function destroy(Request $request): RedirectResponse
-    {
-        $data = $request->validate([
-            'path' => ['required', 'string'],
-        ]);
-        $path = $this->normalizePublicPath($data['path']);
-        $fullPath = public_path($path);
-        $uploadsRoot = realpath(public_path('assets/uploads'));
-        $target = realpath($fullPath);
-
-        if (! $uploadsRoot || ! $target || ! Str::startsWith($target, $uploadsRoot) || ! File::isFile($target)) {
-            return back()->with('admin_toast', [
-                'title' => 'Suppression impossible',
-                'text' => 'Seules les images uploadées peuvent être supprimées depuis la médiathèque.',
-                'type' => 'error',
-            ]);
-        }
-
-        if (! in_array(Str::lower(File::extension($target)), self::IMAGE_EXTENSIONS, true)) {
-            abort(404);
-        }
-
-        if ($this->isUsed($path, $this->usedReferences())) {
-            return back()->with('admin_toast', [
-                'title' => 'Image utilisée',
-                'text' => 'Cette image est encore référencée sur le site.',
-                'type' => 'warning',
-            ]);
-        }
-
-        File::delete($target);
-        AdminActivity::log('media', 'deleted', 'Image supprimée', $path);
-
-        return redirect()->route('admin.mediatheque.index')->with('admin_toast', [
-            'title' => 'Image supprimée',
-            'text' => 'Le fichier inutilisé a bien été retiré.',
-            'type' => 'warning',
-        ]);
-    }
-
-    public function bulk(Request $request): RedirectResponse
-    {
-        $data = $request->validate([
-            'action' => ['required', 'in:delete'],
-            'ids' => ['required', 'array', 'min:1'],
-            'ids.*' => ['string'],
-        ]);
-        $usedReferences = $this->usedReferences();
-        $deleted = 0;
-
-        foreach ($data['ids'] as $rawPath) {
-            $path = $this->normalizePublicPath($rawPath);
-            $fullPath = public_path($path);
-            $uploadsRoot = realpath(public_path('assets/uploads'));
-            $target = realpath($fullPath);
-
-            if (! $uploadsRoot || ! $target || ! Str::startsWith($target, $uploadsRoot) || ! File::isFile($target)) {
-                continue;
-            }
-
-            if (! in_array(Str::lower(File::extension($target)), self::IMAGE_EXTENSIONS, true) || $this->isUsed($path, $usedReferences)) {
-                continue;
-            }
-
-            File::delete($target);
-            AdminActivity::log('media', 'deleted', 'Image supprimée', $path);
-            $deleted++;
-        }
-
-        return back()->with('admin_toast', [
-            'title' => 'Suppression groupée terminée',
-            'text' => $deleted.' image(s) supprimée(s).',
-            'type' => 'warning',
-        ]);
-    }
-
     /**
      * @param list<string> $usedReferences
      * @return list<array<string, mixed>>
      */
-    private function scanImages(array $usedReferences, bool $includeMissionUploads = true): array
+    private function scanImages(array $usedReferences): array
     {
         return collect([
-            ['root' => public_path('assets/uploads'), 'public' => 'assets/uploads', 'label' => 'Uploads', 'key' => 'uploads', 'deletable' => true],
+            ['root' => public_path('assets/uploads'), 'public' => 'assets/uploads', 'label' => 'Uploads', 'key' => 'uploads_public'],
+            ['root' => base_path('assets/uploads'), 'public' => 'assets/uploads', 'label' => 'Uploads', 'key' => 'uploads_root'],
         ])
-            ->flatMap(function (array $source) use ($usedReferences, $includeMissionUploads) {
+            ->flatMap(function (array $source) use ($usedReferences) {
                 if (! File::isDirectory($source['root'])) {
                     return [];
                 }
 
                 return collect(File::allFiles($source['root']))
                     ->filter(fn (SplFileInfo $file): bool => in_array(Str::lower($file->getExtension()), self::IMAGE_EXTENSIONS, true))
-                    ->when(! $includeMissionUploads, fn ($files) => $files->reject(
-                        fn (SplFileInfo $file): bool => Str::startsWith(
-                            str_replace('\\', '/', $file->getPathname()),
-                            str_replace('\\', '/', public_path('assets/uploads/missions')).'/',
-                        )
-                    ))
                     ->map(function (SplFileInfo $file) use ($source, $usedReferences): array {
-                        $path = $this->normalizePublicPath($source['public'].'/'.Str::after($file->getPathname(), $source['root']));
-                        $used = $source['deletable'] ? $this->isUsed($path, $usedReferences) : true;
+                        $filePath = $this->normalizePublicPath($file->getPathname());
+                        $rootPath = $this->normalizePublicPath($source['root']);
+                        $path = $this->normalizePublicPath($source['public'].'/'.Str::after($filePath, $rootPath));
 
                         return [
                             'name' => $file->getFilename(),
@@ -243,13 +87,12 @@ class MediaController extends Controller
                             'source_key' => $source['key'],
                             'size' => $file->getSize(),
                             'size_human' => $this->humanSize($file->getSize()),
-                            'modified_at' => date('d/m/Y H:i', $file->getMTime()),
-                            'used' => $used,
-                            'deletable' => $source['deletable'] && ! $used,
+                            'used' => $this->isUsed($path, $usedReferences),
                         ];
                     });
             })
             ->sortBy([['source_key', 'asc'], ['directory', 'asc'], ['name', 'asc']])
+            ->unique('path')
             ->values()
             ->all();
     }

@@ -10,6 +10,44 @@
     align-items: start;
 }
 
+.admin-settings-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: var(--admin-card);
+}
+
+.admin-settings-tabs button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 0 13px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--admin-muted-foreground);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.admin-settings-tabs button:hover,
+.admin-settings-tabs button.is-active {
+    border-color: color-mix(in srgb, var(--admin-primary) 25%, var(--admin-border));
+    background: color-mix(in srgb, var(--admin-primary) 8%, var(--admin-card));
+    color: var(--admin-primary);
+}
+
+.admin-settings-panel[hidden] {
+    display: none;
+}
+
 .admin-settings-card {
     min-width: 0;
     padding: 16px;
@@ -68,6 +106,65 @@
 
 .admin-settings .admin-field input {
     min-height: 42px;
+}
+
+.admin-word-mystery-reward-input {
+    width: 100%;
+    min-height: 38px;
+    padding: 0 10px;
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    background: var(--admin-card);
+    color: var(--admin-text);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-word-mystery-reward-field {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: center;
+    max-width: 180px;
+    margin-inline: auto;
+}
+
+.admin-word-mystery-reward-field span {
+    color: var(--admin-muted-foreground);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.admin-settings .admin-table--word-rewards {
+    table-layout: fixed;
+}
+
+.admin-settings .admin-table--word-rewards th,
+.admin-settings .admin-table--word-rewards td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.admin-settings .admin-table--word-rewards th:first-child,
+.admin-settings .admin-table--word-rewards td:first-child {
+    width: 120px;
+    text-align: left;
+}
+
+.admin-settings .admin-table--word-rewards th:not(:first-child),
+.admin-settings .admin-table--word-rewards td:not(:first-child) {
+    width: calc((100% - 120px) / 6);
+}
+
+.admin-settings .admin-table--word-rewards th {
+    white-space: nowrap;
+}
+
+.admin-word-mystery-reward-input:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--admin-primary) 55%, var(--admin-border));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--admin-primary) 12%, transparent);
 }
 
 .admin-settings-help,

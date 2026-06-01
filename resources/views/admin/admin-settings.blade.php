@@ -6,6 +6,14 @@
 @php($settings = $settings ?? \App\Models\GuildSetting::values())
 @php($backups = collect($backups ?? []))
 @php($canSetting = fn (string $setting): bool => (bool) auth()->user()?->canAccessAdminPermission('settings.'.$setting))
+@php($settingsTabs = collect([
+    'missions' => ['label' => 'Missions', 'icon' => 'fa-solid fa-sliders', 'visible' => $canSetting('cycle') || $canSetting('points')],
+    'lottery' => ['label' => 'Loterie', 'icon' => 'fa-solid fa-dice', 'visible' => $canSetting('lottery')],
+    'word-mystery' => ['label' => 'Mot Mystere', 'icon' => 'fa-solid fa-key', 'visible' => $canSetting('word_mystery')],
+    'maintenance' => ['label' => 'Maintenance', 'icon' => 'fa-solid fa-screwdriver-wrench', 'visible' => $canSetting('maintenance')],
+    'backups' => ['label' => 'Sauvegardes', 'icon' => 'fa-solid fa-box-archive', 'visible' => $canSetting('backups')],
+])->filter(fn ($tab) => $tab['visible']))
+@php($activeSettingsTab = $settingsTabs->keys()->first())
 @push('scripts')
 <script src="{{ asset('assets/js/admin-settings.js') }}" defer></script>
 @endpush
@@ -31,6 +39,13 @@
                     <p>Réglages globaux du cycle des missions et du calcul des points.</p>
                 </div>
 
+                <nav class="admin-settings-tabs" aria-label="Onglets des parametres">
+                    @foreach($settingsTabs as $tabKey => $tab)
+                        <button @class(['is-active' => $activeSettingsTab === $tabKey]) type="button" data-settings-tab="{{ $tabKey }}" aria-pressed="{{ $activeSettingsTab === $tabKey ? 'true' : 'false' }}"><i class="{{ $tab['icon'] }}"></i><span>{{ $tab['label'] }}</span></button>
+                    @endforeach
+                </nav>
+
+                <section @class(['admin-settings-panel', 'is-active' => $activeSettingsTab === 'missions']) data-settings-panel="missions" @if($activeSettingsTab !== 'missions') hidden @endif>
                 <div class="admin-settings-grid">
                     @if ($canSetting('cycle'))
                     <article class="admin-settings-card">
@@ -104,6 +119,11 @@
                     </article>
                     @endif
 
+                </div>
+                </section>
+
+                <section @class(['admin-settings-panel', 'is-active' => $activeSettingsTab === 'lottery']) data-settings-panel="lottery" @if($activeSettingsTab !== 'lottery') hidden @endif>
+                <div class="admin-settings-grid">
                     @if ($canSetting('lottery'))
                     <article class="admin-settings-card">
                         <header class="admin-settings-card__head">
@@ -147,7 +167,71 @@
                     </article>
                     @endif
 
-                    @if ($canSetting('maintenance'))
+                </div>
+                </section>
+
+                <section @class(['admin-settings-panel', 'is-active' => $activeSettingsTab === 'word-mystery']) data-settings-panel="word-mystery" @if($activeSettingsTab !== 'word-mystery') hidden @endif>
+                <div class="admin-settings-grid">
+                    <article class="admin-settings-card admin-settings-card--wide">
+                        <header class="admin-settings-card__head">
+                            <span class="admin-settings-card__icon"><i class="fa-solid fa-key"></i></span>
+                            <div>
+                                <h2>Mot Mystere</h2>
+                                <p>Configure un gain de base par difficulte, puis un bonus en pourcentage selon le nombre d essais.</p>
+                            </div>
+                        </header>
+
+                        <form class="admin-settings-form" action="{{ route('admin.parametres.word-mystery.update') }}" method="post" data-real-form>
+                            @csrf
+                            @method('patch')
+                            <div class="admin-table-card admin-word-week-card">
+                                <table class="admin-table admin-table--word-rewards">
+                                    <thead>
+                                        <tr>
+                                            <th>Difficulte</th>
+                                            <th>Gain de base</th>
+                                            @foreach(range(1, \App\Services\WordMysteryService::MAX_ATTEMPTS) as $attempt)
+                                                <th>Bonus {{ $attempt }} essai{{ $attempt > 1 ? 's' : '' }}</th>
+                                            @endforeach
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach(\App\Models\WordMysteryWord::DIFFICULTIES as $difficultyKey => $difficultyLabel)
+                                            <tr>
+                                                <td><strong>{{ $difficultyLabel }}</strong></td>
+                                                <td>
+                                                    <label class="admin-word-mystery-reward-field">
+                                                        <input class="admin-word-mystery-reward-input" name="word_mystery_rewards[{{ $difficultyKey }}][base]" type="text" inputmode="numeric" value="{{ old("word_mystery_rewards.$difficultyKey.base", number_format((int) ($settings[\App\Models\GuildSetting::WORD_MYSTERY_REWARDS][$difficultyKey]['base'] ?? 0), 0, ',', ' ')) }}" required>
+                                                        <span>kamas</span>
+                                                    </label>
+                                                </td>
+                                                @foreach(range(1, \App\Services\WordMysteryService::MAX_ATTEMPTS) as $attempt)
+                                                    <td>
+                                                        <label class="admin-word-mystery-reward-field">
+                                                            <input class="admin-word-mystery-reward-input" name="word_mystery_rewards[{{ $difficultyKey }}][bonuses][{{ $attempt }}]" type="number" min="-100" max="500" step="1" value="{{ old("word_mystery_rewards.$difficultyKey.bonuses.$attempt", (int) ($settings[\App\Models\GuildSetting::WORD_MYSTERY_REWARDS][$difficultyKey]['bonuses'][$attempt] ?? 0)) }}" required>
+                                                            <span>%</span>
+                                                        </label>
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <button class="admin-create-button admin-settings-submit" type="submit">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                <span>Sauvegarder Mot Mystere</span>
+                            </button>
+                        </form>
+                    </article>
+
+                </div>
+                </section>
+
+                @if($canSetting('maintenance'))
+                <section @class(['admin-settings-panel', 'is-active' => $activeSettingsTab === 'maintenance']) data-settings-panel="maintenance" @if($activeSettingsTab !== 'maintenance') hidden @endif>
+                <div class="admin-settings-grid">
                     <article class="admin-settings-card">
                         <header class="admin-settings-card__head">
                             <span class="admin-settings-card__icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>
@@ -176,9 +260,14 @@
                             </button>
                         </form>
                     </article>
-                    @endif
 
-                    @if ($canSetting('backups'))
+                </div>
+                </section>
+                @endif
+
+                @if($canSetting('backups'))
+                <section @class(['admin-settings-panel', 'is-active' => $activeSettingsTab === 'backups']) data-settings-panel="backups" @if($activeSettingsTab !== 'backups') hidden @endif>
+                <div class="admin-settings-grid">
                     <article class="admin-settings-card admin-settings-card--wide">
                         <header class="admin-settings-card__head">
                             <span class="admin-settings-card__icon"><i class="fa-solid fa-box-archive"></i></span>
@@ -233,8 +322,9 @@
                             @endforelse
                         </div>
                     </article>
-                    @endif
                 </div>
+                </section>
+                @endif
 
             </section>
         </main>

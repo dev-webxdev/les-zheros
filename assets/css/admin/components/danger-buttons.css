@@ -15,8 +15,14 @@
     cursor: pointer;
 }
 
+.admin-danger-button i,
+.admin-danger-button span {
+    color: #fff;
+}
+
 .admin-danger-button:hover {
     background: color-mix(in srgb, var(--admin-danger) 88%, #000);
+    color: #fff;
 }
 
 .admin-no-delete .admin-action-button--delete,

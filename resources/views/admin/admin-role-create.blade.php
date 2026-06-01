@@ -107,11 +107,24 @@
                                 <span>À ajouter</span>
                             </div>
                             <div class="admin-transfer-board__list" data-permission-list="available" aria-label="Permissions disponibles">
-                                @foreach ($availablePermissions as $permission => $label)
-                                    <button class="admin-transfer-board__chip" type="button" draggable="true" data-permission="{{ $permission }}">
-                                        <i class="fa-solid fa-grip-vertical"></i>
-                                        <span>{{ $label }}</span>
-                                    </button>
+                                @foreach ($permissionCategories as $categoryKey => $category)
+                                    @php($categoryPermissions = $availablePermissions->only($category['permissions']))
+                                    @if ($categoryPermissions->isNotEmpty())
+                                        <div class="admin-permission-group" data-permission-category-list="{{ $categoryKey }}">
+                                            <div class="admin-permission-group__head">
+                                                <i class="{{ $category['icon'] }}"></i>
+                                                <span>{{ $category['label'] }}</span>
+                                            </div>
+                                            <div class="admin-permission-group__items">
+                                                @foreach ($categoryPermissions as $permission => $label)
+                                                    <button class="admin-transfer-board__chip" type="button" draggable="true" data-permission="{{ $permission }}" data-permission-category="{{ $categoryKey }}">
+                                                        <i class="fa-solid fa-grip-vertical"></i>
+                                                        <span>{{ $label }}</span>
+                                                    </button>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </section>
@@ -123,12 +136,23 @@
                             </div>
                             <div class="admin-transfer-board__list" data-permission-list="selected" aria-label="Permissions du rôle">
                                 <p class="admin-transfer-board__empty" data-permission-empty>Glisse les droits ici.</p>
-                                @foreach ($selectedPermissionKeys as $permission)
-                                    @if (isset($permissions[$permission]))
-                                        <button class="admin-transfer-board__chip" type="button" draggable="true" data-permission="{{ $permission }}">
-                                            <i class="fa-solid fa-grip-vertical"></i>
-                                            <span>{{ $permissions[$permission] }}</span>
-                                        </button>
+                                @foreach ($permissionCategories as $categoryKey => $category)
+                                    @php($categorySelectedPermissions = collect($selectedPermissionKeys)->filter(fn (string $permission): bool => in_array($permission, $category['permissions'], true) && isset($permissions[$permission])))
+                                    @if ($categorySelectedPermissions->isNotEmpty())
+                                        <div class="admin-permission-group" data-permission-category-list="{{ $categoryKey }}">
+                                            <div class="admin-permission-group__head">
+                                                <i class="{{ $category['icon'] }}"></i>
+                                                <span>{{ $category['label'] }}</span>
+                                            </div>
+                                            <div class="admin-permission-group__items">
+                                                @foreach ($categorySelectedPermissions as $permission)
+                                                    <button class="admin-transfer-board__chip" type="button" draggable="true" data-permission="{{ $permission }}" data-permission-category="{{ $categoryKey }}">
+                                                        <i class="fa-solid fa-grip-vertical"></i>
+                                                        <span>{{ $permissions[$permission] }}</span>
+                                                    </button>
+                                                @endforeach
+                                            </div>
+                                        </div>
                                     @endif
                                 @endforeach
                             </div>

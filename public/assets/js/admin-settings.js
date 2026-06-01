@@ -9,6 +9,8 @@ if (adminSettingsRoot) {
     const pointsBonusInput = adminSettingsRoot.querySelector("[data-points-bonus]");
     const helpPointsInput = adminSettingsRoot.querySelector("[data-help-points]");
     const pointsPreview = adminSettingsRoot.querySelector("[data-points-preview]");
+    const settingsTabs = Array.from(adminSettingsRoot.querySelectorAll("[data-settings-tab]"));
+    const settingsPanels = Array.from(adminSettingsRoot.querySelectorAll("[data-settings-panel]"));
     const backupActionMessages = {
         create: {
             title: "Sauvegarde en cours",
@@ -41,6 +43,20 @@ if (adminSettingsRoot) {
     };
 
     const formatPoints = (value) => `${decimalFormatter.format(value)} pt${value > 1 ? "s" : ""}`;
+
+    const activateSettingsTab = (name) => {
+        settingsTabs.forEach((tab) => {
+            const active = tab.dataset.settingsTab === name;
+            tab.classList.toggle("is-active", active);
+            tab.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+
+        settingsPanels.forEach((panel) => {
+            const active = panel.dataset.settingsPanel === name;
+            panel.classList.toggle("is-active", active);
+            panel.hidden = !active;
+        });
+    };
 
     const updateCycleSummary = () => {
         if (!cycleEndInput || !cycleSummary) {
@@ -148,6 +164,9 @@ if (adminSettingsRoot) {
     });
     cycleForm?.addEventListener("submit", updateCycleSummary);
     pointsForm?.addEventListener("submit", updatePointsPreview);
+    settingsTabs.forEach((tab) => {
+        tab.addEventListener("click", () => activateSettingsTab(tab.dataset.settingsTab));
+    });
     updateCycleSummary();
     updatePointsPreview();
 }

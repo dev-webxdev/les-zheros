@@ -66,7 +66,6 @@ const adminPageKeyByPath = {
     "/admin/galerie/creer": "admin.galerie.create",
     "/admin/galerie/modifier": "admin.galerie.edit",
     "/admin/galerie/corbeille": "admin.galerie.trash",
-    "/admin/mediatheque": "admin.mediatheque.index",
     "/admin/guides": "admin.guides.index",
     "/admin/guides/creer": "admin.guides.create",
     "/admin/guides/corbeille": "admin.guides.trash",
@@ -428,6 +427,10 @@ document.querySelectorAll('button[type="submit"]').forEach((button) => {
 
         if (form) {
             syncAdminRichEditors(form);
+        }
+
+        if (button.formNoValidate) {
+            return;
         }
 
         if (!form || form.checkValidity()) {
@@ -894,7 +897,8 @@ document.querySelectorAll("[data-bulk-form]").forEach((form) => {
     const checkboxes = Array.from(document.querySelectorAll(`[form="${form.id}"][data-bulk-item]`));
     const masters = Array.from(document.querySelectorAll(`[data-bulk-check-all="${form.id}"]`));
     const count = form.querySelector("[data-bulk-count]");
-    const submit = form.querySelector("[data-bulk-submit]");
+    const submits = Array.from(form.querySelectorAll("[data-bulk-submit]"));
+    const filteredScope = form.querySelector("[data-bulk-filtered-scope]");
 
     if (!checkboxes.length) {
         form.hidden = true;
@@ -903,15 +907,18 @@ document.querySelectorAll("[data-bulk-form]").forEach((form) => {
 
     const sync = () => {
         const selected = checkboxes.filter((checkbox) => checkbox.checked);
-        form.hidden = selected.length < 2;
+        const filteredSelected = filteredScope?.checked ?? false;
+        form.hidden = selected.length < 2 && !filteredSelected;
 
         if (count) {
-            count.textContent = `${selected.length} sélectionné${selected.length > 1 ? "s" : ""}`;
+            count.textContent = filteredSelected
+                ? "Tous les filtres"
+                : `${selected.length} sélectionné${selected.length > 1 ? "s" : ""}`;
         }
 
-        if (submit) {
-            submit.disabled = selected.length === 0;
-        }
+        submits.forEach((submit) => {
+            submit.disabled = selected.length < 2 && !filteredSelected;
+        });
 
         masters.forEach((master) => {
             master.checked = selected.length > 0 && selected.length === checkboxes.length;
@@ -929,6 +936,7 @@ document.querySelectorAll("[data-bulk-form]").forEach((form) => {
     });
 
     checkboxes.forEach((checkbox) => checkbox.addEventListener("change", sync));
+    filteredScope?.addEventListener("change", sync);
 
     form.addEventListener("submit", () => {
         form.querySelectorAll("[data-bulk-generated]").forEach((input) => input.remove());
@@ -936,12 +944,18 @@ document.querySelectorAll("[data-bulk-form]").forEach((form) => {
         checkboxes
             .filter((checkbox) => checkbox.checked)
             .forEach((checkbox) => {
-                const input = document.createElement("input");
-                input.type = "hidden";
-                input.name = checkbox.name;
-                input.value = checkbox.value;
-                input.dataset.bulkGenerated = "true";
-                form.appendChild(input);
+                const values = checkbox.dataset.bulkValues
+                    ? checkbox.dataset.bulkValues.split(",").map((value) => value.trim()).filter(Boolean)
+                    : [checkbox.value];
+
+                values.forEach((value) => {
+                    const input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = checkbox.name || "ids[]";
+                    input.value = value;
+                    input.dataset.bulkGenerated = "true";
+                    form.appendChild(input);
+                });
             });
     });
 

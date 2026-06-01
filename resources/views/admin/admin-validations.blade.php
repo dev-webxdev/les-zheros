@@ -85,8 +85,9 @@
                 \App\Models\MissionValidation::VALIDATED => 'Valider',
                 \App\Models\MissionValidation::REFUSED => 'Refuser',
                 \App\Models\MissionValidation::PENDING => 'Remettre en attente',
-                'trash' => 'Mettre en corbeille',
+                'trash' => 'Corbeille',
             ],
+            'label' => 'Choisir une action',
         ])
 
         <section class="admin-validation-layout">

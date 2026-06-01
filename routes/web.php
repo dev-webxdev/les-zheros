@@ -35,8 +35,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/guides', [GuideController::class, 'index'])->name('guides.index');
 Route::get('/guides/{guide:slug}', [GuideController::class, 'show'])->name('guides.show');
 Route::get('/stuffs', [StuffController::class, 'index'])->name('stuffs.index');
-Route::get('/mot-mystere', [WordMysteryController::class, 'show'])->name('mot-mystere');
-Route::post('/mot-mystere', [WordMysteryController::class, 'submit'])->middleware('auth')->name('mot-mystere.submit');
 Route::redirect('/login', '/connexion')->name('login');
 Route::get('/', function () {
     if (! auth()->check()) {
@@ -51,6 +49,8 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/classement', [RankingController::class, 'index'])->name('classement');
     Route::get('/galerie', [GalleryController::class, 'index'])->name('galerie');
     Route::get('/missions', [MissionController::class, 'index'])->name('missions.index');
+    Route::get('/mot-mystere', [WordMysteryController::class, 'show'])->name('mot-mystere');
+    Route::post('/mot-mystere', [WordMysteryController::class, 'submit'])->name('mot-mystere.submit');
     Route::get('/profil', [ProfileController::class, 'show'])->name('profil');
     Route::patch('/profil', [ProfileController::class, 'update'])->name('profil.update');
     Route::post('/profil/avatar', [ProfileController::class, 'updateAvatar'])->name('profil.avatar.update');
@@ -82,8 +82,6 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::delete('/admin/activite', [ActivityController::class, 'destroy'])->middleware('admin:activity')->name('admin.activite.destroy');
     Route::get('/admin/activite/{area?}', [ActivityController::class, 'index'])->middleware('admin:activity')->name('admin.activite.index');
     Route::get('/admin/mediatheque/images', [MediaController::class, 'picker'])->name('admin.mediatheque.images');
-    Route::get('/admin/mediatheque', [MediaController::class, 'index'])->middleware('admin:media')->name('admin.mediatheque.index');
-    Route::delete('/admin/mediatheque', [MediaController::class, 'destroy'])->middleware('admin:media')->name('admin.mediatheque.destroy');
     Route::get('/admin/notifications', [NotificationController::class, 'index'])->middleware('admin:notifications')->name('admin.notifications.index');
     Route::patch('/admin/notifications/lues', [NotificationController::class, 'markAllRead'])->middleware('admin:notifications')->name('admin.notifications.read-all');
     Route::delete('/admin/notifications', [NotificationController::class, 'destroy'])->middleware('admin:notifications')->name('admin.notifications.destroy');
@@ -124,10 +122,21 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::get('/admin/mot-mystere', [AdminWordMysteryController::class, 'index'])->name('admin.mot-mystere.index');
     Route::get('/admin/mot-mystere/creer', [AdminWordMysteryController::class, 'create'])->name('admin.mot-mystere.create');
     Route::post('/admin/mot-mystere', [AdminWordMysteryController::class, 'store'])->name('admin.mot-mystere.store');
+    Route::post('/admin/mot-mystere/actions', [AdminWordMysteryController::class, 'bulk'])->name('admin.mot-mystere.bulk');
+    Route::post('/admin/mot-mystere/generer-semaine', [AdminWordMysteryController::class, 'generateWeek'])->name('admin.mot-mystere.generate-week');
+    Route::get('/admin/mot-mystere/corbeille', [AdminWordMysteryController::class, 'trash'])->name('admin.mot-mystere.trash');
+    Route::delete('/admin/mot-mystere/corbeille', [AdminWordMysteryController::class, 'emptyTrash'])->name('admin.mot-mystere.empty-trash');
+    Route::patch('/admin/mot-mystere/corbeille/mots/{word}/restaurer', [AdminWordMysteryController::class, 'restoreWord'])->name('admin.mot-mystere.words.restore');
+    Route::delete('/admin/mot-mystere/corbeille/mots/{word}', [AdminWordMysteryController::class, 'forceDeleteWord'])->name('admin.mot-mystere.words.force-delete');
+    Route::patch('/admin/mot-mystere/corbeille/recompenses/{reward}/restaurer', [AdminWordMysteryController::class, 'restoreReward'])->name('admin.mot-mystere.rewards.restore');
+    Route::delete('/admin/mot-mystere/corbeille/recompenses/{reward}', [AdminWordMysteryController::class, 'forceDeleteReward'])->name('admin.mot-mystere.rewards.force-delete');
+    Route::delete('/admin/mot-mystere/recompenses/{reward}', [AdminWordMysteryController::class, 'destroyReward'])->name('admin.mot-mystere.rewards.destroy');
+    Route::patch('/admin/mot-mystere/recompenses/{reward}', [AdminWordMysteryController::class, 'updateReward'])->name('admin.mot-mystere.rewards.update');
+    Route::get('/admin/mot-mystere/groupes/{month}/{difficulty}/modifier', [AdminWordMysteryController::class, 'editGroup'])->name('admin.mot-mystere.groups.edit');
+    Route::patch('/admin/mot-mystere/groupes/{month}/{difficulty}', [AdminWordMysteryController::class, 'updateGroup'])->name('admin.mot-mystere.groups.update');
     Route::get('/admin/mot-mystere/{word}/modifier', [AdminWordMysteryController::class, 'edit'])->name('admin.mot-mystere.edit');
     Route::patch('/admin/mot-mystere/{word}', [AdminWordMysteryController::class, 'update'])->name('admin.mot-mystere.update');
     Route::delete('/admin/mot-mystere/{word}', [AdminWordMysteryController::class, 'destroy'])->name('admin.mot-mystere.destroy');
-    Route::patch('/admin/mot-mystere/recompenses/{reward}', [AdminWordMysteryController::class, 'updateReward'])->name('admin.mot-mystere.rewards.update');
     Route::get('/admin/missions', [AdminMissionController::class, 'index'])->middleware('admin:missions')->name('admin.missions.index');
     Route::get('/admin/missions/creer', [AdminMissionController::class, 'create'])->middleware('admin:missions')->name('admin.missions.create');
     Route::post('/admin/missions', [AdminMissionController::class, 'store'])->middleware('admin:missions')->name('admin.missions.store');
@@ -154,12 +163,12 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::patch('/admin/parametres/cycle', [SettingController::class, 'updateCycle'])->middleware('admin:settings,cycle')->name('admin.parametres.cycle.update');
     Route::patch('/admin/parametres/points', [SettingController::class, 'updatePoints'])->middleware('admin:settings,points')->name('admin.parametres.points.update');
     Route::patch('/admin/parametres/loterie', [SettingController::class, 'updateLottery'])->middleware('admin:settings,lottery')->name('admin.parametres.lottery.update');
+    Route::patch('/admin/parametres/mot-mystere', [SettingController::class, 'updateWordMystery'])->middleware('admin:settings,word_mystery')->name('admin.parametres.word-mystery.update');
     Route::patch('/admin/parametres/maintenance', [SettingController::class, 'updateMaintenance'])->middleware('admin:settings,maintenance')->name('admin.parametres.maintenance.update');
     Route::post('/admin/parametres/sauvegardes', [BackupController::class, 'store'])->middleware('admin:settings,backups')->name('admin.parametres.backups.store');
     Route::get('/admin/parametres/sauvegardes/{backup}', [BackupController::class, 'download'])->middleware('admin:settings,backups')->name('admin.parametres.backups.download');
     Route::post('/admin/parametres/sauvegardes/{backup}/restaurer', [BackupController::class, 'restore'])->middleware('admin:settings,backups')->name('admin.parametres.backups.restore');
     Route::delete('/admin/parametres/sauvegardes/{backup}', [BackupController::class, 'destroy'])->middleware('admin:settings,backups')->name('admin.parametres.backups.destroy');
-    Route::post('/admin/mediatheque/actions', [MediaController::class, 'bulk'])->middleware('admin:media')->name('admin.mediatheque.bulk');
     Route::get('/admin/sorties', [AdminOutingController::class, 'index'])->middleware('admin:outings')->name('admin.sorties.index');
     Route::get('/admin/sorties/creer', [AdminOutingController::class, 'create'])->middleware('admin:outings')->name('admin.sorties.create');
     Route::post('/admin/sorties', [AdminOutingController::class, 'store'])->middleware('admin:outings')->name('admin.sorties.store');

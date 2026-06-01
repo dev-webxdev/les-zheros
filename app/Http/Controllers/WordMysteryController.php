@@ -2,35 +2,59 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\WordMysteryAttempt;
-use App\Models\WordMysteryReward;
 use App\Models\WordMysteryWord;
+use App\Services\WordMysteryService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use InvalidArgumentException;
 
 class WordMysteryController extends Controller
 {
+    public function __construct(private readonly WordMysteryService $wordMystery)
+    {
+    }
+
     public function show(Request $request): View
     {
-        $difficulty = $this->validDifficulty((string) $request->query('difficulte', 'normal'));
-        $word = $this->wordOfTheDay($difficulty);
+        $difficulty = $this->wordMystery->validDifficulty((string) $request->query('difficulte', 'normal'));
+        $wordsByDifficulty = $this->wordMystery->wordsOfTheDay();
+
+        $word = $wordsByDifficulty[$difficulty] ?? null;
+
+        if (! $word && $wordsByDifficulty !== []) {
+            $difficulty = array_key_first($wordsByDifficulty);
+            $word = $wordsByDifficulty[$difficulty];
+        }
+
         $attempt = $word && $request->user()
-            ? $this->currentAttempt($request, $word)
+            ? $this->wordMystery->currentAttempt($request->user(), $word)
             : null;
+        $attemptsByDifficulty = [];
+        $rewardPreviews = [];
+
+        foreach ($wordsByDifficulty as $key => $dayWord) {
+            $attemptsByDifficulty[$key] = $request->user()
+                ? $this->wordMystery->currentAttempt($request->user(), $dayWord)
+                : null;
+            $rewardPreviews[$key] = $this->wordMystery->rewardRows($dayWord);
+        }
 
         return view('pages.mot-mystere', [
             'difficulty' => $difficulty,
             'word' => $word,
+            'wordsByDifficulty' => $wordsByDifficulty,
             'attempt' => $attempt,
-            'hasWonToday' => $request->user() ? $this->hasWonToday($request) : false,
-            'rewardPreview' => $word ? $this->rewardRows($word->reward_base) : [],
+            'attemptsByDifficulty' => $attemptsByDifficulty,
+            'hasWonToday' => $request->user() ? $this->wordMystery->hasWonToday($request->user()) : false,
+            'rewardPreview' => $word ? $this->wordMystery->rewardRows($word) : [],
+            'rewardPreviews' => $rewardPreviews,
         ]);
     }
 
-    public function submit(Request $request): RedirectResponse
+    public function submit(Request $request): RedirectResponse|JsonResponse
     {
         $validated = $request->validate([
             'difficulty' => ['required', Rule::in(array_keys(WordMysteryWord::DIFFICULTIES))],
@@ -39,9 +63,18 @@ class WordMysteryController extends Controller
             'guess.regex' => 'Le mot propose ne peut contenir que des lettres.',
         ]);
 
-        $word = $this->wordOfTheDay($validated['difficulty']);
+        $word = $this->wordMystery->wordOfTheDay($validated['difficulty']);
 
         if (! $word) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'ok' => false,
+                    'title' => 'Mot indisponible',
+                    'message' => 'Aucun mot actif n est configure pour cette difficulte aujourd hui.',
+                    'type' => 'warning',
+                ], 404);
+            }
+
             return back()->with('toast', [
                 'title' => 'Mot indisponible',
                 'text' => 'Aucun mot actif n est configure pour cette difficulte aujourd hui.',
@@ -49,185 +82,106 @@ class WordMysteryController extends Controller
             ]);
         }
 
-        $guess = trim($validated['guess']);
-        $normalizedGuess = $this->normalizeWord($guess);
-        $normalizedWord = $this->normalizeWord($word->word);
+        try {
+            $result = $this->wordMystery->submitGuess($request->user(), $word, $validated['guess']);
+        } catch (InvalidArgumentException $exception) {
+            if ($request->expectsJson()) {
+                return $this->guessErrorJsonResponse($exception, $word);
+            }
 
-        if (mb_strlen($normalizedGuess) !== mb_strlen($normalizedWord)) {
-            return back()->withInput()->with('toast', [
-                'title' => 'Longueur incorrecte',
-                'text' => 'Le mot mystere contient '.mb_strlen($normalizedWord).' lettres.',
-                'type' => 'warning',
-            ]);
+            return $this->guessErrorResponse($exception, $word);
         }
 
-        $attempt = $this->currentAttempt($request, $word);
+        $hasWon = $result['has_won'];
+        $attemptsCount = $result['attempts_count'];
+        $reward = $result['reward'];
 
-        if ($this->hasWonToday($request) && ! $attempt?->has_won) {
-            return back()->with('toast', [
-                'title' => 'Gain deja obtenu',
-                'text' => 'Tu as deja gagne une recompense aujourd hui. Reviens demain pour un nouveau gain.',
-                'type' => 'warning',
+        if ($request->expectsJson()) {
+            return response()->json([
+                'ok' => true,
+                'difficulty' => $word->difficulty,
+                'word_length' => mb_strlen($this->wordMystery->normalizeWord($word->word)),
+                'guesses' => $result['attempt']->guesses ?? [],
+                'attempts_count' => $attemptsCount,
+                'remaining' => max(WordMysteryService::MAX_ATTEMPTS - $attemptsCount, 0),
+                'has_won' => $hasWon,
+                'has_lost' => ! $hasWon && $attemptsCount >= WordMysteryService::MAX_ATTEMPTS,
+                'reward' => $reward,
+                'title' => $hasWon ? 'Mot trouve' : ($attemptsCount >= WordMysteryService::MAX_ATTEMPTS ? 'Partie terminee' : 'Essai enregistre'),
+                'message' => $hasWon
+                    ? 'Mot trouve en '.$attemptsCount.' essai(s). Gain en attente : '.number_format($reward, 0, ',', ' ').' kamas.'
+                    : ($attemptsCount >= WordMysteryService::MAX_ATTEMPTS ? 'Les 6 essais sont utilises. Reviens demain pour retenter ta chance.' : 'Continue, il te reste '.(WordMysteryService::MAX_ATTEMPTS - $attemptsCount).' essai(s).'),
+                'type' => $hasWon ? 'success' : ($attemptsCount >= WordMysteryService::MAX_ATTEMPTS ? 'warning' : 'success'),
             ]);
-        }
-
-        if ($attempt?->has_won || $attempt?->hasLost()) {
-            return back()->with('toast', [
-                'title' => 'Partie terminee',
-                'text' => $attempt->has_won ? 'Tu as deja trouve le mot du jour.' : 'Tes 6 essais sont deja utilises.',
-                'type' => 'warning',
-            ]);
-        }
-
-        $attempt ??= WordMysteryAttempt::create([
-            'user_id' => $request->user()->id,
-            'word_id' => $word->id,
-            'difficulty' => $word->difficulty,
-            'guesses' => [],
-            'played_at' => now(),
-        ]);
-
-        $guesses = $attempt->guesses ?? [];
-        $hasWon = $normalizedGuess === $normalizedWord;
-        $attemptsCount = $attempt->attempts_count + 1;
-        $reward = $hasWon ? $this->calculateReward($word->reward_base, $attemptsCount) : 0;
-
-        $guesses[] = [
-            'word' => $guess,
-            'result' => $this->evaluateGuess($normalizedGuess, $normalizedWord),
-        ];
-
-        $attempt->update([
-            'attempts_count' => $attemptsCount,
-            'guesses' => $guesses,
-            'has_won' => $hasWon,
-            'reward_earned' => $reward,
-            'played_at' => now(),
-        ]);
-
-        if ($hasWon && $reward > 0) {
-            WordMysteryReward::firstOrCreate(
-                ['game_attempt_id' => $attempt->id],
-                [
-                    'user_id' => $request->user()->id,
-                    'amount' => $reward,
-                    'status' => 'pending',
-                ],
-            );
         }
 
         return redirect()
             ->route('mot-mystere', ['difficulte' => $word->difficulty])
             ->with('toast', [
-                'title' => $hasWon ? 'Mot trouve' : ($attemptsCount >= 6 ? 'Partie terminee' : 'Essai enregistre'),
+                'title' => $hasWon ? 'Mot trouve' : ($attemptsCount >= WordMysteryService::MAX_ATTEMPTS ? 'Partie terminee' : 'Essai enregistre'),
                 'text' => $hasWon
                     ? 'Bravo, recompense en attente: '.number_format($reward, 0, ',', ' ').' kamas.'
-                    : ($attemptsCount >= 6 ? 'Tu pourras retenter ta chance demain.' : 'Continue, il te reste '.(6 - $attemptsCount).' essai(s).'),
-                'type' => $hasWon ? 'success' : ($attemptsCount >= 6 ? 'warning' : 'success'),
+                    : ($attemptsCount >= WordMysteryService::MAX_ATTEMPTS ? 'Tu pourras retenter ta chance demain.' : 'Continue, il te reste '.(WordMysteryService::MAX_ATTEMPTS - $attemptsCount).' essai(s).'),
+                'type' => $hasWon ? 'success' : ($attemptsCount >= WordMysteryService::MAX_ATTEMPTS ? 'warning' : 'success'),
             ]);
     }
 
-    private function wordOfTheDay(string $difficulty): ?WordMysteryWord
+    private function guessErrorResponse(InvalidArgumentException $exception, WordMysteryWord $word): RedirectResponse
     {
-        return WordMysteryWord::query()
-            ->where('difficulty', $difficulty)
-            ->where('is_active', true)
-            ->where(function ($query): void {
-                $query->whereDate('active_date', today())
-                    ->orWhereNull('active_date');
-            })
-            ->orderByRaw('case when active_date is null then 1 else 0 end')
-            ->latest('active_date')
-            ->latest()
-            ->first();
-    }
+        $message = $exception->getMessage();
 
-    private function currentAttempt(Request $request, WordMysteryWord $word): ?WordMysteryAttempt
-    {
-        return WordMysteryAttempt::query()
-            ->where('user_id', $request->user()->id)
-            ->where('word_id', $word->id)
-            ->where('difficulty', $word->difficulty)
-            ->first();
-    }
-
-    private function hasWonToday(Request $request): bool
-    {
-        return WordMysteryAttempt::query()
-            ->where('user_id', $request->user()->id)
-            ->where('has_won', true)
-            ->whereDate('played_at', today())
-            ->exists();
-    }
-
-    private function validDifficulty(string $difficulty): string
-    {
-        return array_key_exists($difficulty, WordMysteryWord::DIFFICULTIES) ? $difficulty : 'normal';
-    }
-
-    private function normalizeWord(string $word): string
-    {
-        return Str::of($word)
-            ->ascii()
-            ->lower()
-            ->replaceMatches('/[^a-z]/', '')
-            ->toString();
-    }
-
-    /**
-     * @return list<string>
-     */
-    private function evaluateGuess(string $guess, string $word): array
-    {
-        $guessLetters = mb_str_split($guess);
-        $wordLetters = mb_str_split($word);
-        $result = array_fill(0, count($guessLetters), 'absent');
-        $remaining = [];
-
-        foreach ($wordLetters as $index => $letter) {
-            if (($guessLetters[$index] ?? null) === $letter) {
-                $result[$index] = 'correct';
-            } else {
-                $remaining[$letter] = ($remaining[$letter] ?? 0) + 1;
-            }
+        if (str_starts_with($message, 'length:')) {
+            return back()->withInput()->with('toast', [
+                'title' => 'Longueur incorrecte',
+                'text' => 'Le mot mystere contient '.substr($message, 7).' lettres.',
+                'type' => 'warning',
+            ]);
         }
 
-        foreach ($guessLetters as $index => $letter) {
-            if ($result[$index] === 'correct') {
-                continue;
-            }
-
-            if (($remaining[$letter] ?? 0) > 0) {
-                $result[$index] = 'present';
-                $remaining[$letter] -= 1;
-            }
-        }
-
-        return $result;
-    }
-
-    private function calculateReward(int $baseReward, int $attemptsCount): int
-    {
-        if ($attemptsCount <= 2) {
-            return (int) round($baseReward * 1.2);
-        }
-
-        if ($attemptsCount <= 4) {
-            return $baseReward;
-        }
-
-        return (int) round($baseReward * 0.8);
-    }
-
-    /**
-     * @return list<array{label: string, amount: int}>
-     */
-    private function rewardRows(int $baseReward): array
-    {
-        return [
-            ['label' => '1-2 essais', 'amount' => (int) round($baseReward * 1.2)],
-            ['label' => '3-4 essais', 'amount' => $baseReward],
-            ['label' => '5-6 essais', 'amount' => (int) round($baseReward * 0.8)],
+        $errors = [
+            'already_won_today' => ['Gain deja obtenu', 'Tu as deja gagne une recompense aujourd hui. Reviens demain pour un nouveau gain.'],
+            'already_won_word' => ['Partie terminee', 'Tu as deja trouve le mot du jour.'],
+            'attempts_used' => ['Partie terminee', 'Tes 6 essais sont deja utilises.'],
         ];
+
+        [$title, $text] = $errors[$message] ?? ['Action impossible', 'La proposition n a pas pu etre enregistree.'];
+
+        return redirect()
+            ->route('mot-mystere', ['difficulte' => $word->difficulty])
+            ->with('toast', [
+                'title' => $title,
+                'text' => $text,
+                'type' => 'warning',
+            ]);
+    }
+
+    private function guessErrorJsonResponse(InvalidArgumentException $exception, WordMysteryWord $word): JsonResponse
+    {
+        $message = $exception->getMessage();
+
+        if (str_starts_with($message, 'length:')) {
+            return response()->json([
+                'ok' => false,
+                'title' => 'Longueur incorrecte',
+                'message' => 'Le mot mystere contient '.substr($message, 7).' lettres.',
+                'type' => 'warning',
+            ], 422);
+        }
+
+        $errors = [
+            'already_won_today' => ['Gain deja obtenu', 'Tu as deja gagne une recompense aujourd hui. Reviens demain pour un nouveau gain.'],
+            'already_won_word' => ['Partie terminee', 'Tu as deja trouve le mot du jour.'],
+            'attempts_used' => ['Partie terminee', 'Tes 6 essais sont deja utilises.'],
+        ];
+
+        [$title, $text] = $errors[$message] ?? ['Action impossible', 'La proposition n a pas pu etre enregistree.'];
+
+        return response()->json([
+            'ok' => false,
+            'title' => $title,
+            'message' => $text,
+            'type' => 'warning',
+            'difficulty' => $word->difficulty,
+        ], 422);
     }
 }

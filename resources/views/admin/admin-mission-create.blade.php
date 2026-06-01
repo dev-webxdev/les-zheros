@@ -11,7 +11,7 @@
     'songe' => asset('assets/img/card-mission/songe.png'),
 ])
 @push('scripts')
-<script src="{{ asset('assets/js/admin-missions.js') }}" defer></script>
+<script src="{{ asset('assets/js/admin-missions.js') }}?v={{ filemtime(public_path('assets/js/admin-missions.js')) }}" defer></script>
 @endpush
 
 @section('admin')

@@ -104,36 +104,181 @@ final class AdminAccess
         return [
             'activity.view' => 'Voir le journal d’activité',
             'announcements.manage' => 'Ajouter / modifier les annonces',
-            'announcements.delete' => 'Supprimer les annonces',
-            'comments.manage' => 'Gérer les commentaires',
-            'comments.delete' => 'Supprimer les commentaires',
+            'announcements.delete' => 'Mettre en corbeille les annonces',
+            'dashboard.view' => 'Voir le dashboard',
+            'comments.manage' => 'Ajouter / modifier les commentaires',
+            'comments.delete' => 'Mettre en corbeille les commentaires',
             'gallery.manage' => 'Ajouter / modifier les photos',
-            'gallery.delete' => 'Supprimer les photos',
+            'gallery.delete' => 'Mettre en corbeille les photos',
             'guides.manage' => 'Ajouter / modifier les guides',
-            'guides.delete' => 'Supprimer les guides',
-            'lottery.manage' => 'Gérer la loterie',
-            'media.manage' => 'Gérer la médiathèque',
+            'guides.delete' => 'Mettre en corbeille les guides',
+            'lottery.manage' => 'Ajouter / modifier la loterie',
             'missions.manage' => 'Ajouter / modifier les missions',
-            'missions.delete' => 'Supprimer les missions',
+            'missions.delete' => 'Mettre en corbeille les missions',
             'notifications.view' => 'Voir les notifications internes',
             'outings.manage' => 'Ajouter / modifier les sorties',
-            'outings.delete' => 'Supprimer les sorties',
-            'ranking.manage' => 'Gérer le classement',
-            'roles.manage' => 'Gérer les rôles',
-            'roles.delete' => 'Supprimer les rôles',
-            'settings.manage' => 'Gérer tous les paramètres',
-            'settings.cycle' => 'Gérer la fin du cycle',
-            'settings.points' => 'Gérer le barème de points',
-            'settings.lottery' => 'Gérer les paramètres de loterie',
+            'outings.delete' => 'Mettre en corbeille les sorties',
+            'ranking.manage' => 'Ajouter / modifier le classement',
+            'roles.manage' => 'Ajouter / modifier les rôles',
+            'roles.delete' => 'Mettre en corbeille les rôles',
+            'settings.manage' => 'Ajouter / modifier tous les paramètres',
+            'settings.cycle' => 'Ajouter / modifier la fin du cycle',
+            'settings.points' => 'Ajouter / modifier le barème de points',
+            'settings.lottery' => 'Ajouter / modifier les paramètres de loterie',
             'settings.maintenance' => 'Gérer la maintenance',
             'settings.backups' => 'Gérer les sauvegardes',
+            'settings.word_mystery' => 'Ajouter / modifier les paramètres Mot Mystere',
             'stuffs.manage' => 'Ajouter / modifier les stuffs',
-            'stuffs.delete' => 'Supprimer les stuffs',
-            'users.manage' => 'Gérer les utilisateurs',
-            'users.delete' => 'Supprimer les utilisateurs',
-            'validations.manage' => 'Gérer les validations',
-            'validations.delete' => 'Supprimer les validations',
-            'word_mystery.manage' => 'Gérer Mot Mystère',
+            'stuffs.delete' => 'Mettre en corbeille les stuffs',
+            'users.manage' => 'Ajouter / modifier les utilisateurs',
+            'users.delete' => 'Mettre en corbeille les utilisateurs',
+            'validations.manage' => 'Ajouter / modifier les validations',
+            'validations.delete' => 'Mettre en corbeille les validations',
+            'word_mystery.manage' => 'Ajouter / modifier Mot Mystere',
+            'word_mystery.delete' => 'Mettre en corbeille Mot Mystere',
+        ];
+    }
+
+    /**
+     * @return array<string, array{label: string, icon: string, permissions: list<string>}>
+     */
+    public static function permissionCategories(): array
+    {
+        return [
+            'dashboard' => [
+                'label' => 'Dashboard',
+                'icon' => 'fa-solid fa-gauge-high',
+                'permissions' => ['dashboard.view'],
+            ],
+            'announcements' => [
+                'label' => 'Annonces',
+                'icon' => 'fa-solid fa-bullhorn',
+                'permissions' => [
+                    'announcements.manage',
+                    'announcements.delete',
+                ],
+            ],
+            'missions' => [
+                'label' => 'Missions',
+                'icon' => 'fa-solid fa-scroll',
+                'permissions' => [
+                    'missions.manage',
+                    'missions.delete',
+                ],
+            ],
+            'validations' => [
+                'label' => 'Validations',
+                'icon' => 'fa-solid fa-circle-check',
+                'permissions' => [
+                    'validations.manage',
+                    'validations.delete',
+                ],
+            ],
+            'guides' => [
+                'label' => 'Guides',
+                'icon' => 'fa-solid fa-book-open',
+                'permissions' => [
+                    'guides.manage',
+                    'guides.delete',
+                ],
+            ],
+            'gallery' => [
+                'label' => 'Galerie',
+                'icon' => 'fa-regular fa-images',
+                'permissions' => [
+                    'gallery.manage',
+                    'gallery.delete',
+                ],
+            ],
+            'stuffs' => [
+                'label' => 'Catalogue stuffs',
+                'icon' => 'fa-solid fa-shield-halved',
+                'permissions' => [
+                    'stuffs.manage',
+                    'stuffs.delete',
+                ],
+            ],
+            'outings' => [
+                'label' => 'Sorties',
+                'icon' => 'fa-solid fa-users',
+                'permissions' => [
+                    'outings.manage',
+                    'outings.delete',
+                ],
+            ],
+            'lottery' => [
+                'label' => 'Loterie',
+                'icon' => 'fa-solid fa-dice',
+                'permissions' => [
+                    'lottery.manage',
+                ],
+            ],
+            'word_mystery' => [
+                'label' => 'Mot Mystere',
+                'icon' => 'fa-solid fa-key',
+                'permissions' => [
+                    'word_mystery.manage',
+                    'word_mystery.delete',
+                ],
+            ],
+            'ranking' => [
+                'label' => 'Classement',
+                'icon' => 'fa-solid fa-trophy',
+                'permissions' => [
+                    'ranking.manage',
+                ],
+            ],
+            'users' => [
+                'label' => 'Utilisateurs',
+                'icon' => 'fa-solid fa-users',
+                'permissions' => [
+                    'users.manage',
+                    'users.delete',
+                ],
+            ],
+            'comments' => [
+                'label' => 'Commentaires',
+                'icon' => 'fa-solid fa-comments',
+                'permissions' => [
+                    'comments.manage',
+                    'comments.delete',
+                ],
+            ],
+            'notifications' => [
+                'label' => 'Notifications',
+                'icon' => 'fa-solid fa-bell',
+                'permissions' => [
+                    'notifications.view',
+                ],
+            ],
+            'activity' => [
+                'label' => 'Activite',
+                'icon' => 'fa-solid fa-clock-rotate-left',
+                'permissions' => [
+                    'activity.view',
+                ],
+            ],
+            'roles' => [
+                'label' => 'Roles',
+                'icon' => 'fa-solid fa-user-shield',
+                'permissions' => [
+                    'roles.manage',
+                    'roles.delete',
+                ],
+            ],
+            'settings' => [
+                'label' => 'Parametres',
+                'icon' => 'fa-solid fa-gears',
+                'permissions' => [
+                    'settings.manage',
+                    'settings.cycle',
+                    'settings.points',
+                    'settings.lottery',
+                    'settings.word_mystery',
+                    'settings.maintenance',
+                    'settings.backups',
+                ],
+            ],
         ];
     }
 
@@ -162,7 +307,6 @@ final class AdminAccess
                 $allPermissions,
                 fn (string $permission): bool => ! str_ends_with($permission, '.delete')
                     && $permission !== 'activity.view'
-                    && $permission !== 'media.manage'
                     && $permission !== 'notifications.view'
                     && ! in_array($permission, self::DEVELOPER_ONLY_PERMISSIONS, true),
             )),
@@ -194,6 +338,10 @@ final class AdminAccess
         ])->except(self::deletedDefaultRoleKeys())->all();
 
         foreach (self::storedRoles() as $role) {
+            if ($role['key'] === self::ADMIN) {
+                continue;
+            }
+
             $areas[$role['key']] = self::areasFromPermissions($role['permissions']);
         }
 
@@ -212,10 +360,10 @@ final class AdminAccess
                 'announcements',
                 'activity',
                 'comments',
+                'dashboard',
                 'gallery',
                 'guides',
                 'lottery',
-                'media',
                 'missions',
                 'notifications',
                 'outings',

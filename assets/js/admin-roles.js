@@ -49,7 +49,60 @@ if (permissionBoard) {
     const permissionInputs = permissionBoard.querySelector("[data-permission-inputs]");
     const emptyState = permissionBoard.querySelector("[data-permission-empty]");
     const canTapMovePermissions = window.matchMedia("(pointer: coarse)").matches;
+    const categoryLabels = {};
     let draggedPermission = null;
+
+    permissionBoard.querySelectorAll("[data-permission-category-list]").forEach((group) => {
+        const label = group.querySelector(".admin-permission-group__head span")?.textContent?.trim();
+        if (label) {
+            categoryLabels[group.dataset.permissionCategoryList] = label;
+        }
+    });
+
+    const removeEmptyCategoryGroups = () => {
+        permissionBoard.querySelectorAll(".admin-permission-group").forEach((group) => {
+            if (!group.querySelector("[data-permission]")) {
+                group.remove();
+            }
+        });
+    };
+
+    const ensureCategoryGroup = (list, category) => {
+        if (!category) {
+            return list;
+        }
+
+        let group = list.querySelector(`[data-permission-category-list="${category}"]`);
+
+        if (!group) {
+            group = document.createElement("div");
+            group.className = "admin-permission-group";
+            group.dataset.permissionCategoryList = category;
+
+            const head = document.createElement("div");
+            head.className = "admin-permission-group__head";
+
+            const icon = document.createElement("i");
+            icon.className = "fa-solid fa-folder";
+
+            const label = document.createElement("span");
+            label.textContent = categoryLabels[category] || category;
+
+            const items = document.createElement("div");
+            items.className = "admin-permission-group__items";
+
+            head.append(icon, label);
+            group.append(head, items);
+            list.appendChild(group);
+        }
+
+        return group.querySelector(".admin-permission-group__items") || group;
+    };
+
+    const movePermissionToList = (permission, list) => {
+        ensureCategoryGroup(list, permission.dataset.permissionCategory).appendChild(permission);
+        removeEmptyCategoryGroups();
+    };
 
     const syncPermissionInputs = () => {
         if (!selectedList || !permissionInputs) {
@@ -93,7 +146,7 @@ if (permissionBoard) {
                 return;
             }
 
-            targetList.appendChild(permission);
+            movePermissionToList(permission, targetList);
             syncPermissionInputs();
         });
     });
@@ -112,11 +165,11 @@ if (permissionBoard) {
             event.preventDefault();
             list.classList.remove("is-drag-over");
 
-            if (!draggedPermission || draggedPermission.parentElement === list) {
+            if (!draggedPermission || draggedPermission.closest("[data-permission-list]") === list) {
                 return;
             }
 
-            list.appendChild(draggedPermission);
+            movePermissionToList(draggedPermission, list);
             syncPermissionInputs();
         });
     });

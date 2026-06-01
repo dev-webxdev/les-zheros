@@ -38,7 +38,6 @@ class EnsureUserIsAdmin
         return match (true) {
             Str::startsWith($routeName, 'admin.missions') => 'missions',
             Str::startsWith($routeName, 'admin.activite') => 'activity',
-            Str::startsWith($routeName, 'admin.mediatheque') => 'media',
             Str::startsWith($routeName, 'admin.notifications') => 'notifications',
             Str::startsWith($routeName, 'admin.guides') => 'guides',
             Str::startsWith($routeName, 'admin.galerie') => 'gallery',
@@ -52,7 +51,7 @@ class EnsureUserIsAdmin
             Str::startsWith($routeName, 'admin.stuffs') => 'stuffs',
             Str::startsWith($routeName, 'admin.utilisateurs') => 'users',
             Str::startsWith($routeName, 'admin.validations') => 'validations',
-            Str::startsWith($routeName, 'admin.mot-mystere') => null,
+            Str::startsWith($routeName, 'admin.mot-mystere') => 'word_mystery',
             default => null,
         };
     }

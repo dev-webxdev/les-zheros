@@ -3,6 +3,10 @@
 @import url(profil.css);
 @import url(login.css);
 
+[hidden] {
+    display: none !important;
+}
+
 body {
     background-color: var(--color-body-bg);
     font-family: "Inter", sans-serif;
@@ -2472,6 +2476,7 @@ body.home-page {
 .news-modal__content {
     position: relative;
     z-index: 1;
+    color: #c0c8f7;
 }
 
 .news-modal__content p,
@@ -4095,6 +4100,17 @@ body.home-page {
     color: #fff;
 }
 
+.word-mystery-difficulty-tabs a.is-unavailable {
+    opacity: .58;
+}
+
+.word-mystery-difficulty-tabs a.is-unavailable span::after {
+    content: " indispo";
+    color: #f7d488;
+    font-size: 11px;
+    font-weight: 800;
+}
+
 .word-mystery-hint {
     display: grid;
     gap: 8px;
@@ -4312,6 +4328,228 @@ body.home-page {
 .word-mystery-final-cta .word-mystery-panel {
     display: grid;
     justify-items: start;
+}
+
+.word-mystery-game {
+    padding: 132px 0 116px;
+    color: #f0f3ff;
+}
+
+.word-mystery-game__layout {
+    display: grid;
+    grid-template-columns: minmax(420px, 620px) minmax(260px, 360px);
+    gap: 64px;
+    align-items: start;
+    margin-top: 22px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(124, 196, 255, .18);
+}
+
+.word-mystery-game__intro {
+    max-width: 720px;
+    margin-bottom: 48px;
+}
+
+.word-mystery-game__intro h1 {
+    margin: 10px 0 14px;
+    color: var(--color-text-primary);
+    font-family: "Crimson Pro", serif;
+    font-size: clamp(42px, 5vw, 66px);
+    font-weight: 900;
+    line-height: .92;
+}
+
+.word-mystery-game__intro h1 span {
+    color: #63a8ff;
+}
+
+.word-mystery-game__intro p,
+.word-mystery-side p {
+    color: #b9c6f7;
+    max-width: 620px;
+    line-height: 1.65;
+}
+
+.word-mystery-rules-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.word-mystery-rules-inline span {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 32px;
+    padding: 0 10px;
+    border: 1px solid rgba(124, 196, 255, .18);
+    border-radius: 7px;
+    background: rgba(12, 17, 38, .4);
+    color: #dce8ff;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.word-mystery-rules-inline i {
+    color: #63a8ff;
+}
+
+.word-mystery-play,
+.word-mystery-side {
+    min-width: 0;
+}
+
+.word-mystery-side {
+    position: sticky;
+    top: 96px;
+    padding: 20px 0 0 34px;
+    border-left: 1px solid rgba(124, 196, 255, .18);
+}
+
+.word-mystery-side h2 {
+    margin: 10px 0 8px;
+    color: #f0f3ff;
+    font-family: "Crimson Pro", serif;
+    font-size: 34px;
+    line-height: 1;
+}
+
+.word-mystery-difficulty-tabs {
+    gap: 8px;
+    margin-bottom: 34px;
+}
+
+.word-mystery-difficulty-tabs a {
+    flex-direction: column;
+    gap: 4px;
+    min-height: 62px;
+    padding: 8px 10px;
+}
+
+.word-mystery-difficulty-tabs a em {
+    color: #92a7dc;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 800;
+}
+
+.word-mystery-hint {
+    gap: 6px;
+    margin-bottom: 30px;
+    padding: 18px;
+    border-width: 0 0 1px;
+    border: 1px solid rgba(247, 212, 136, .22);
+    border-radius: 8px;
+    background: rgba(108, 82, 32, .16);
+}
+
+.word-mystery-grid {
+    width: min(100%, calc(var(--word-size, 5) * 52px + (var(--word-size, 5) - 1) * 8px));
+    margin: 0 0 34px;
+}
+
+.word-mystery-row span {
+    border-radius: 6px;
+    font-size: clamp(18px, 2.5vw, 25px);
+}
+
+.word-mystery-reward-list div,
+.word-mystery-result,
+.word-mystery-login-callout {
+    border-radius: 8px;
+}
+
+.word-mystery-result,
+.word-mystery-login-callout {
+    margin-top: 8px;
+    padding: 16px;
+    border-radius: 8px;
+    background: rgba(12, 17, 38, .5);
+}
+
+.word-mystery-reward-list div {
+    padding: 10px 0;
+    border-width: 0 0 1px;
+    border-radius: 0;
+    background: transparent;
+}
+
+.word-mystery-side,
+.word-mystery-side p,
+.word-mystery-reward-list {
+    color: #b9c6f7;
+}
+
+.word-mystery-steps {
+    padding: 0;
+    color: #f0f3ff;
+}
+
+.word-mystery-steps__head {
+    margin-bottom: 22px;
+}
+
+.word-mystery-steps__head h2 {
+    margin: 8px 0 0;
+    color: #f0f3ff;
+    font-family: "Crimson Pro", serif;
+    font-size: clamp(32px, 4vw, 44px);
+    line-height: 1;
+}
+
+.word-mystery-steps__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.word-mystery-step {
+    display: grid;
+    gap: 11px;
+    align-content: start;
+    min-height: 168px;
+    padding: 16px;
+    border-top: 1px solid rgba(124, 196, 255, .22);
+    border-radius: 8px;
+    background: rgba(12, 17, 38, .32);
+}
+
+.word-mystery-step i {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border: 1px solid rgba(124, 196, 255, .32);
+    border-radius: 7px;
+    background: rgba(62, 116, 205, .2);
+    color: #7cc4ff;
+}
+
+.word-mystery-step h3 {
+    margin: 0;
+    color: #f0f3ff;
+    font-size: 17px;
+    line-height: 1.2;
+}
+
+.word-mystery-step p {
+    margin: 0;
+    color: #aeb8eb;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.word-mystery-game__play-head {
+    margin-top: 70px;
+}
+
+.word-mystery-game__play-head h2 {
+    margin: 8px 0 0;
+    color: #f0f3ff;
+    font-family: "Crimson Pro", serif;
+    font-size: clamp(34px, 4vw, 48px);
+    line-height: 1;
 }
 
 .stuff-filters {
@@ -5501,6 +5739,26 @@ body.home-page {
 }
 
 @media screen and (max-width: 980px) {
+    .word-mystery-game {
+        padding-top: 36px;
+    }
+
+    .word-mystery-game__layout {
+        grid-template-columns: 1fr;
+        gap: 34px;
+    }
+
+    .word-mystery-game__intro,
+    .word-mystery-side {
+        position: static;
+        padding-top: 0;
+    }
+
+    .word-mystery-side {
+        padding-left: 0;
+        border-left: 0;
+    }
+
     .word-mystery-hero__grid,
     .word-mystery-play-grid,
     .word-mystery-rules-grid {
@@ -5512,7 +5770,8 @@ body.home-page {
     }
 
     .word-mystery-step-grid,
-    .word-mystery-card-grid {
+    .word-mystery-card-grid,
+    .word-mystery-steps__grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
@@ -5521,8 +5780,13 @@ body.home-page {
     .word-mystery-difficulty-tabs,
     .word-mystery-step-grid,
     .word-mystery-card-grid,
+    .word-mystery-steps__grid,
     .word-mystery-form > div {
         grid-template-columns: 1fr;
+    }
+
+    .word-mystery-game__intro h1 {
+        font-size: 42px;
     }
 
     .word-mystery-panel h2,

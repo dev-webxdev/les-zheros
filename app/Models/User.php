@@ -76,12 +76,12 @@ class User extends Authenticatable
             return $this->canAccessAdminPermission('activity.view');
         }
 
-        if ($area === 'media') {
-            return $this->canAccessAdminPermission('media.manage');
-        }
-
         if ($area === 'notifications') {
             return $this->canAccessAdminPermission('notifications.view');
+        }
+
+        if ($this->canAccessAdminPermission($area.'.manage')) {
+            return true;
         }
 
         foreach ($this->adminRoles() as $role) {
@@ -104,6 +104,10 @@ class User extends Authenticatable
                 return true;
             }
 
+            if (str_ends_with($permission, '.delete')) {
+                continue;
+            }
+
             [$area] = explode('.', $permission, 2);
 
             if (in_array($area.'.manage', $permissions, true)) {
@@ -116,9 +120,8 @@ class User extends Authenticatable
 
     public function canDeleteInAdminArea(string $area): bool
     {
-        return $this->canAccessAdminArea($area)
-            && ! $this->hasAdminRole(AdminAccess::MODERATOR)
-            || $this->hasAdminRole(AdminAccess::ADMIN);
+        return $this->hasAdminRole(AdminAccess::ADMIN)
+            || $this->canAccessAdminArea($area);
     }
 
     public function canForceDeleteInAdminArea(string $area): bool

@@ -87,6 +87,36 @@ class SettingController extends Controller
         ]);
     }
 
+    public function updateWordMystery(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'word_mystery_rewards' => ['required', 'array'],
+            'word_mystery_rewards.*' => ['required', 'array'],
+            'word_mystery_rewards.*.base' => ['required', 'string', 'max:16', 'regex:/^[0-9 ]+$/'],
+            'word_mystery_rewards.*.bonuses' => ['required', 'array'],
+            'word_mystery_rewards.*.bonuses.*' => ['required', 'integer', 'min:-100', 'max:500'],
+        ]);
+
+        GuildSetting::setMany([
+            GuildSetting::WORD_MYSTERY_REWARDS => collect($validated['word_mystery_rewards'])
+                ->map(fn (array $settings): array => [
+                    'base' => (int) str_replace(' ', '', $settings['base']),
+                    'bonuses' => collect($settings['bonuses'])
+                        ->map(fn (int|string $bonus): int => (int) $bonus)
+                        ->all(),
+                ])
+                ->all(),
+        ]);
+
+        AdminActivity::log('settings', 'word_mystery_rewards_updated', 'Bareme Mot Mystere modifie', 'Gains de base et bonus par essai mis a jour.');
+
+        return redirect()->route('admin.parametres.index')->with('admin_toast', [
+            'title' => 'Mot Mystere enregistre',
+            'text' => 'Les gains de base et bonus Mot Mystere ont bien ete mis a jour.',
+            'type' => 'success',
+        ]);
+    }
+
     public function updateMaintenance(Request $request): RedirectResponse
     {
         $validated = $request->validate([

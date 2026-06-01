@@ -3,7 +3,9 @@
     'action',
     'method' => 'post',
     'actions' => [],
-    'label' => 'Action groupée',
+    'label' => 'Action groupee',
+    'filterFields' => [],
+    'filteredLabel' => null,
 ])
 
 @if (count($actions) > 0)
@@ -12,13 +14,22 @@
         @if (! in_array(strtolower($method), ['get', 'post'], true))
             @method($method)
         @endif
+        @foreach ($filterFields as $name => $value)
+            <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+        @endforeach
         <label class="admin-bulk-actions__check">
             <input type="checkbox" data-bulk-check-all="{{ $id }}">
-            <span>Tout sélectionner</span>
+            <span>Tout selectionner</span>
         </label>
-        <span data-bulk-count>0 sélectionné</span>
-        <select name="action" aria-label="{{ $label }}" required>
-            <option value="">{{ $label }}</option>
+        @if($filteredLabel)
+            <label class="admin-bulk-actions__check">
+                <input type="checkbox" name="scope" value="filtered" data-bulk-filtered-scope>
+                <span>{{ $filteredLabel }}</span>
+            </label>
+        @endif
+        <span data-bulk-count>0 selectionne</span>
+        <select name="action" aria-label="{{ $label }}" autocomplete="off" required>
+            <option value="" selected disabled>{{ $label }}</option>
             @foreach ($actions as $value => $text)
                 <option value="{{ $value }}">{{ $text }}</option>
             @endforeach

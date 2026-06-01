@@ -132,6 +132,41 @@
     min-height: 52px;
 }
 
+.admin-permission-group {
+    display: grid;
+    gap: 7px;
+}
+
+.admin-permission-group + .admin-permission-group {
+    margin-top: 6px;
+    padding-top: 10px;
+    border-top: 1px solid color-mix(in srgb, var(--admin-border) 80%, transparent);
+}
+
+.admin-permission-group__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 26px;
+    color: var(--admin-muted-foreground);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.admin-permission-group__head i {
+    width: 13px;
+    color: var(--admin-primary);
+    font-size: 12px;
+    text-align: center;
+}
+
+.admin-permission-group__items {
+    display: grid;
+    gap: 8px;
+}
+
 .admin-transfer-board__list.is-drag-over {
     background: color-mix(in srgb, var(--admin-primary) 7%, var(--admin-card));
 }

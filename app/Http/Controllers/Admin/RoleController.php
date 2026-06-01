@@ -196,6 +196,7 @@ class RoleController extends Controller
             'roleColor' => old('color', $this->colorForRole($role)),
             'roleIsLocked' => $role === AdminAccess::ADMIN,
             'permissions' => $permissions,
+            'permissionCategories' => AdminAccess::permissionCategories(),
             'selectedPermissionKeys' => $selectedPermissionKeys,
             'availablePermissions' => collect($permissions)->reject(
                 fn (string $label, string $permission): bool => in_array($permission, $selectedPermissionKeys, true),

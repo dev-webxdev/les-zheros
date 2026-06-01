@@ -2,7 +2,7 @@
     $activeAdmin = $activeAdmin ?? '';
     $adminUser = auth()->user();
     $can = fn (string $area): bool => (bool) $adminUser?->canAccessAdminArea($area);
-    $canWordMystery = (bool) ($adminUser?->hasAdminAccess() || $adminUser?->canAccessAdminArea('word_mystery') || $adminUser?->canAccessAdminPermission('word_mystery.manage'));
+    $canWordMystery = (bool) ($adminUser?->canAccessAdminArea('word_mystery') || $adminUser?->canAccessAdminPermission('word_mystery.manage'));
 @endphp
 
 <aside class="admin-sidebar" aria-label="Navigation administration">
@@ -113,7 +113,7 @@
             @endif
         @endif
 
-        @if ($can('roles') || $can('settings') || $can('activity') || $can('media') || $can('notifications'))
+        @if ($can('roles') || $can('settings') || $can('activity') || $can('notifications'))
             <p class="admin-nav__label">Administration</p>
 
             @if ($can('notifications'))
@@ -132,13 +132,6 @@
                 <a @class(['admin-nav__link', 'is-active' => str_starts_with($activeAdmin, 'admin-activity')]) href="{{ route('admin.activite.index') }}">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     <span>Activité</span>
-                </a>
-            @endif
-
-            @if ($can('media'))
-                <a @class(['admin-nav__link', 'is-active' => str_starts_with($activeAdmin, 'admin-media')]) href="{{ route('admin.mediatheque.index') }}">
-                    <i class="fa-regular fa-image"></i>
-                    <span>Médiathèque</span>
                 </a>
             @endif
 

@@ -37,7 +37,7 @@ class WordMysteryAttempt extends Model
 
     public function word(): BelongsTo
     {
-        return $this->belongsTo(WordMysteryWord::class, 'word_id');
+        return $this->belongsTo(WordMysteryWord::class, 'word_id')->withTrashed();
     }
 
     public function reward(): HasOne
