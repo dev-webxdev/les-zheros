@@ -189,7 +189,7 @@ class MissionController extends Controller
     private function missionPayload(Request $request, ?Mission $mission = null): array
     {
         $validated = $request->validate([
-            'title' => ['nullable', Rule::requiredIf($request->input('category') !== 'anomalie'), 'string', 'max:255'],
+            'title' => ['nullable', Rule::requiredIf(! in_array($request->input('category'), ['anomalie', 'songe'], true)), 'string', 'max:255'],
             'category' => ['required', Rule::in(array_keys(Mission::CATEGORIES))],
             'anomaly_type' => ['nullable', Rule::requiredIf($request->input('category') === 'anomalie'), Rule::in(array_keys(Mission::ANOMALY_TYPES))],
             'anomaly_level' => ['nullable', Rule::requiredIf($request->input('category') === 'anomalie'), Rule::in(Mission::ANOMALY_LEVELS)],
@@ -203,9 +203,12 @@ class MissionController extends Controller
         ]);
 
         $category = $validated['category'];
-        $title = $category === 'anomalie'
-            ? Mission::anomalyTitle($validated['anomaly_type'] ?? null, $validated['anomaly_level'] ?? null)
-            : $validated['title'];
+        $submittedTitle = trim((string) ($validated['title'] ?? ''));
+        $title = match ($category) {
+            'anomalie' => $submittedTitle !== '' ? $submittedTitle : Mission::anomalyTitle($validated['anomaly_type'] ?? null, $validated['anomaly_level'] ?? null),
+            'songe' => $submittedTitle !== '' ? $submittedTitle : Mission::songeTitle($validated['dream_type'] ?? null, $validated['dream_floor'] ?? null),
+            default => $submittedTitle,
+        };
         $imagePath = $mission?->image_path;
 
         if ($category === 'anomalie') {

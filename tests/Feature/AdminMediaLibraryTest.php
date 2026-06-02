@@ -238,6 +238,85 @@ class AdminMediaLibraryTest extends TestCase
         ]);
     }
 
+    public function test_anomaly_mission_keeps_custom_title(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        $this->actingAs($admin)
+            ->post(route('admin.missions.store'), [
+                'title' => 'Gardien anomaly custom',
+                'category' => 'anomalie',
+                'anomaly_type' => 'dungeon_guardian',
+                'anomaly_level' => 130,
+            ])
+            ->assertRedirect(route('admin.missions.index'));
+
+        $this->assertDatabaseHas('missions', [
+            'title' => 'Gardien anomaly custom',
+            'category' => 'anomalie',
+            'anomaly_type' => 'dungeon_guardian',
+            'anomaly_level' => 130,
+        ]);
+    }
+
+    public function test_anomaly_guardian_type_generates_title(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        $this->actingAs($admin)
+            ->post(route('admin.missions.store'), [
+                'category' => 'anomalie',
+                'anomaly_type' => 'anomaly_guardian',
+                'anomaly_level' => 150,
+            ])
+            ->assertRedirect(route('admin.missions.index'));
+
+        $this->assertDatabaseHas('missions', [
+            'title' => "Boss d'anomalie 150 + avec Elixir",
+            'category' => 'anomalie',
+            'anomaly_type' => 'anomaly_guardian',
+            'anomaly_level' => 150,
+        ]);
+    }
+
+    public function test_anomaly_monster_type_generates_title(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        $this->actingAs($admin)
+            ->post(route('admin.missions.store'), [
+                'category' => 'anomalie',
+                'anomaly_type' => 'anomaly_monster',
+                'anomaly_level' => 190,
+            ])
+            ->assertRedirect(route('admin.missions.index'));
+
+        $this->assertDatabaseHas('missions', [
+            'title' => 'Mobs 190 + avec Elixir',
+            'category' => 'anomalie',
+            'anomaly_type' => 'anomaly_monster',
+            'anomaly_level' => 190,
+        ]);
+    }
+
+    public function test_songe_mission_can_be_created_without_title(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        $this->actingAs($admin)
+            ->post(route('admin.missions.store'), [
+                'category' => 'songe',
+                'dream_type' => 'reve_2',
+                'dream_floor' => 4,
+            ])
+            ->assertRedirect(route('admin.missions.index'));
+
+        $mission = Mission::where('category', 'songe')->firstOrFail();
+
+        $this->assertSame('Rêve 2 - Palier 4', $mission->title);
+        $this->assertSame('Terminer Rêve 2, palier 4.', $mission->description());
+    }
+
     private function putFakeImage(string $path): void
     {
         File::ensureDirectoryExists(dirname(public_path($path)));

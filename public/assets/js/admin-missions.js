@@ -301,6 +301,8 @@ if (missionForm) {
     let monsterSearchTimeout = 0;
     let mediaSearchTimeout = 0;
     let mediaPicker = null;
+    let lastAutoAnomalyTitle = "";
+    let lastAutoSongeTitle = "";
 
     const setPreview = (src, label = "Aperçu") => {
         if (imagePreview && src) {
@@ -336,11 +338,15 @@ if (missionForm) {
         }
 
         if (type === "dungeon_guardian") {
-            return `Vaincre un gardien de donjon sous anomalie de niveau ${level} ou +`;
+            return `Boss de donjon ${level} + avec Elixir`;
+        }
+
+        if (type === "anomaly_guardian") {
+            return `Boss d'anomalie ${level} + avec Elixir`;
         }
 
         if (type === "anomaly_monster") {
-            return `Vaincre 50 monstres dans un territoire ${level} ou +`;
+            return `Mobs ${level} + avec Elixir`;
         }
 
         return "";
@@ -353,8 +359,24 @@ if (missionForm) {
 
         const title = anomalyTitle(anomalyType?.value, anomalyLevel?.value);
 
-        if (title) {
+        if (title && (missionTitle.value.trim() === "" || missionTitle.value === lastAutoAnomalyTitle)) {
             missionTitle.value = title;
+            lastAutoAnomalyTitle = title;
+        }
+    };
+
+    const syncSongeTitle = () => {
+        if (!missionTitle || missionCategory?.value !== "songe") {
+            return;
+        }
+
+        const typeLabel = songeType?.selectedOptions?.[0]?.textContent?.trim() || "Songe";
+        const floor = songeFloor?.value;
+        const title = floor ? `${typeLabel} - Palier ${floor}` : typeLabel;
+
+        if (title && (missionTitle.value.trim() === "" || missionTitle.value === lastAutoSongeTitle)) {
+            missionTitle.value = title;
+            lastAutoSongeTitle = title;
         }
     };
 
@@ -376,6 +398,10 @@ if (missionForm) {
         const category = missionCategory?.value || "";
         const isAnomaly = category === "anomalie";
         const isSonge = category === "songe";
+
+        if (missionTitle) {
+            missionTitle.required = !isAnomaly && !isSonge;
+        }
 
         songeFields.forEach((field) => {
             field.hidden = !isSonge;
@@ -447,6 +473,8 @@ if (missionForm) {
             }
             setResultsMessage("Aucune image n'est nécessaire pour une anomalie.");
             syncAnomalyTitle();
+        } else if (isSonge) {
+            syncSongeTitle();
         }
     };
 
@@ -749,6 +777,8 @@ if (missionForm) {
     missionCategory?.addEventListener("change", updateImageInputsState);
     anomalyType?.addEventListener("change", syncAnomalyTitle);
     anomalyLevel?.addEventListener("change", syncAnomalyTitle);
+    songeType?.addEventListener("change", syncSongeTitle);
+    songeFloor?.addEventListener("change", syncSongeTitle);
 
     imageModes.forEach((modeInput) => {
         modeInput.addEventListener("change", () => {
@@ -789,6 +819,11 @@ if (missionForm) {
 
                 if (selectedMonsterId) {
                     selectedMonsterId.value = button.dataset.monsterId || "";
+                }
+
+                if (missionTitle && button.dataset.monsterName) {
+                    missionTitle.value = button.dataset.monsterName;
+                    missionTitle.dispatchEvent(new Event("input", { bubbles: true }));
                 }
 
                 setPreview(button.dataset.monsterImage || defaultPreview, button.dataset.monsterName || "Monstre sélectionné");

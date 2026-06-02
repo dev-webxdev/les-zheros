@@ -37,7 +37,7 @@
         <header class="word-mystery-game__intro">
             <span class="section-kicker">Jeu quotidien</span>
             <h1>Mot <span>Mystere</span></h1>
-            <p>Choisis une difficulte, lis l'indice, puis trouve le mot en 6 essais maximum.</p>
+            <p>Choisis une difficulté, lis l'indice, puis trouve le mot en 6 essais maximum.</p>
             <div class="word-mystery-rules-inline">
                 <span><i class="fa-solid fa-keyboard"></i> 6 essais</span>
                 <span><i class="fa-solid fa-coins"></i> Bonus selon l'essai</span>
@@ -52,7 +52,7 @@
             </div>
             <div class="word-mystery-steps__grid">
                 @foreach([
-                    ['icon' => 'fa-solid fa-sliders', 'title' => 'Choisis une difficulte', 'text' => 'Facile, Normal ou Difficile selon le risque que tu veux prendre.'],
+                    ['icon' => 'fa-solid fa-sliders', 'title' => 'Choisis une difficulté', 'text' => 'Facile, Normal ou Difficile selon le risque que tu veux prendre.'],
                     ['icon' => 'fa-regular fa-lightbulb', 'title' => 'Lis l indice', 'text' => 'Chaque mot a un indice visible pour orienter ta recherche.'],
                     ['icon' => 'fa-solid fa-keyboard', 'title' => 'Propose un mot', 'text' => 'Tu as 6 essais. Les lettres bien placees et presentes sont indiquees.'],
                     ['icon' => 'fa-solid fa-coins', 'title' => 'Gagne tes kamas', 'text' => 'Plus tu trouves vite, plus le bonus de recompense est interessant.'],
@@ -69,7 +69,7 @@
 
     <div class="container word-mystery-game__play-head">
         <span class="section-kicker">Partie du jour</span>
-        <h2>Choisis ta difficulte</h2>
+        <h2>Choisis ta difficulté</h2>
     </div>
 
     <div class="container word-mystery-game__layout">

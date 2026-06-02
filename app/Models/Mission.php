@@ -32,6 +32,7 @@ class Mission extends Model
 
     public const ANOMALY_TYPES = [
         'dungeon_guardian' => 'Gardien de donjon',
+        'anomaly_guardian' => "Gardien d'anomalie",
         'anomaly_monster' => "Monstre d'anomalie",
     ];
 
@@ -94,10 +95,19 @@ class Mission extends Model
         $level = (int) $level;
 
         return match ($type) {
-            'dungeon_guardian' => "Vaincre un gardien de donjon sous anomalie de niveau {$level} ou +",
-            'anomaly_monster' => "Vaincre 50 monstres dans un territoire {$level} ou +",
+            'dungeon_guardian' => "Boss de donjon {$level} + avec Elixir",
+            'anomaly_guardian' => "Boss d'anomalie {$level} + avec Elixir",
+            'anomaly_monster' => "Mobs {$level} + avec Elixir",
             default => '',
         };
+    }
+
+    public static function songeTitle(?string $type, int|string|null $floor): string
+    {
+        $typeLabel = $type ? self::DREAM_TYPES[$type] ?? $type : 'Songe';
+        $floor = (int) $floor;
+
+        return $floor > 0 ? "{$typeLabel} - Palier {$floor}" : $typeLabel;
     }
 
     public function cardClass(): string
@@ -159,7 +169,7 @@ class Mission extends Model
             $type = $this->dreamTypeLabel() ?: 'un songe';
             $floor = $this->dream_floor ? 'palier '.$this->dream_floor : 'palier à définir';
 
-            return "Terminer {$type}, {$floor}, et valider <strong>{$this->title}</strong>.";
+            return "Terminer {$type}, {$floor}.";
         }
 
         if ($this->category === 'anomalie') {

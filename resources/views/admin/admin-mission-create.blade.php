@@ -2,14 +2,16 @@
 
 @section('title', 'Ajouter une mission | Les Zheros')
 @section('description', 'Administration du site de la guilde Les Zheros.')
-@php($activeAdmin = 'admin-missions')
-@php($missionCategoryBadges = [
+@php
+    $activeAdmin = 'admin-missions';
+    $missionCategoryBadges = [
     'donjon' => asset('assets/img/card-mission/type.png'),
     'regulation' => asset('assets/img/card-mission/regulation.png'),
     'expedition' => asset('assets/img/card-mission/expedition.png'),
     'anomalie' => asset('assets/img/card-mission/anomalie.png'),
     'songe' => asset('assets/img/card-mission/songe.png'),
-])
+    ];
+@endphp
 @push('scripts')
 <script src="{{ asset('assets/js/admin-missions.js') }}?v={{ filemtime(public_path('assets/js/admin-missions.js')) }}" defer></script>
 @endpush
