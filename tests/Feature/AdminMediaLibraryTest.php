@@ -272,7 +272,7 @@ class AdminMediaLibraryTest extends TestCase
             ->assertRedirect(route('admin.missions.index'));
 
         $this->assertDatabaseHas('missions', [
-            'title' => "Boss d'anomalie 150 + avec Elixir",
+            'title' => "Gardien d'anomalie 150 + avec Elixir",
             'category' => 'anomalie',
             'anomaly_type' => 'anomaly_guardian',
             'anomaly_level' => 150,

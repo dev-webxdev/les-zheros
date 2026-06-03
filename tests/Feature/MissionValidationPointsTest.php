@@ -83,9 +83,9 @@ class MissionValidationPointsTest extends TestCase
         CarbonImmutable::setTestNow();
     }
 
-    public function test_lottery_uses_configured_cycle_without_auto_advancing_it(): void
+    public function test_lottery_advances_elapsed_cycle_before_listing_participants(): void
     {
-        CarbonImmutable::setTestNow('2026-05-20 10:00:00');
+        CarbonImmutable::setTestNow('2026-06-02 10:00:00');
         $admin = User::factory()->create(['is_admin' => true]);
         $player = User::factory()->create(['name' => 'Adon']);
         $mission = Mission::create([
@@ -95,38 +95,39 @@ class MissionValidationPointsTest extends TestCase
 
         $this->actingAs($admin)
             ->patch(route('admin.parametres.cycle.update'), [
-                'mission_cycle_end' => '2026-05-20T08:00',
+                'mission_cycle_end' => '2026-06-02T08:00',
             ])
             ->assertRedirect(route('admin.parametres.index'));
 
-        $currentCycleValidation = MissionValidation::create([
+        $newCycleValidation = MissionValidation::create([
             'mission_id' => $mission->id,
             'user_id' => $player->id,
             'characters' => 1,
             'status' => MissionValidation::VALIDATED,
         ]);
-        $currentCycleValidation->created_at = CarbonImmutable::parse('2026-05-20 09:00:00');
-        $currentCycleValidation->save();
+        $newCycleValidation->created_at = CarbonImmutable::parse('2026-06-02 09:00:00');
+        $newCycleValidation->save();
 
-        $previousCycleValidation = MissionValidation::create([
+        $elapsedCycleValidation = MissionValidation::create([
             'mission_id' => $mission->id,
             'user_id' => $player->id,
             'characters' => 1,
             'status' => MissionValidation::VALIDATED,
         ]);
-        $previousCycleValidation->created_at = CarbonImmutable::parse('2026-05-19 18:00:00');
-        $previousCycleValidation->save();
+        $elapsedCycleValidation->created_at = CarbonImmutable::parse('2026-06-01 18:00:00');
+        $elapsedCycleValidation->save();
 
         $this->actingAs($admin)
             ->get(route('admin.loterie.index'))
             ->assertOk()
-            ->assertSee('Cycle du 13/05/2026 08:00 au 20/05/2026 08:00')
-            ->assertSee('"points":0.25', false)
-            ->assertDontSee('"points":0.5', false);
+            ->assertSee('Cycle du 02/06/2026 08:00 au 09/06/2026 08:00')
+            ->assertSee('Cycle du 26/05/2026 08:00 au 02/06/2026 08:00')
+            ->assertSee('"2026-06-02_08-00":[{"name":"Adon"', false)
+            ->assertSee('"2026-05-26_08-00":[{"name":"Adon"', false);
 
         $this->assertDatabaseHas('guild_settings', [
             'key' => 'mission_cycle_end',
-            'value' => '2026-05-20T08:00',
+            'value' => '2026-06-09T08:00',
         ]);
 
         CarbonImmutable::setTestNow();

@@ -16,6 +16,8 @@ class LotteryController extends Controller
 {
     public function index(MissionCycle $missionCycle): View
     {
+        $missionCycle->sync();
+
         $cycles = $this->recentCycles($missionCycle)->map(function (array $cycle): array {
             return [
                 'value' => $cycle['value'],

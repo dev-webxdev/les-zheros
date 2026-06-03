@@ -91,7 +91,7 @@
                     $panelWordLength = $panelWord ? mb_strlen(\Illuminate\Support\Str::of($panelWord->word)->ascii()->replaceMatches('/[^A-Za-z]/', '')->toString()) : (WordMysteryWord::expectedLength($key) ?? 6);
                     $panelGuesses = $panelAttempt?->guesses ?? [];
                 @endphp
-                <section data-word-mystery-panel="{{ $key }}" @if($difficulty !== $key) hidden @endif>
+                <section data-word-mystery-panel="{{ $key }}" data-word-mystery-length="{{ $panelWordLength }}" @if($difficulty !== $key) hidden @endif>
                     @if($panelWord)
                         <div class="word-mystery-hint">
                             <span>Indice</span>
@@ -136,7 +136,7 @@
                                     <input type="hidden" name="difficulty" value="{{ $key }}">
                                     <label for="word-mystery-guess-{{ $key }}">Proposition</label>
                                     <div>
-                                        <input id="word-mystery-guess-{{ $key }}" name="guess" value="{{ old('difficulty') === $key ? old('guess') : '' }}" maxlength="{{ $panelWordLength }}" autocomplete="off" required>
+                                        <input id="word-mystery-guess-{{ $key }}" name="guess" value="{{ old('difficulty') === $key ? old('guess') : '' }}" minlength="{{ $panelWordLength }}" maxlength="{{ $panelWordLength }}" data-word-mystery-input autocomplete="off" required>
                                         <button class="btn btn--primary" type="submit"><i class="fa-solid fa-arrow-right"></i><span>Valider</span></button>
                                     </div>
                                     <p>{{ 6 - ($panelAttempt?->attempts_count ?? 0) }} essai(s) restant(s). Mot de {{ $panelWordLength }} lettres.</p>

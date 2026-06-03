@@ -96,7 +96,7 @@ class Mission extends Model
 
         return match ($type) {
             'dungeon_guardian' => "Boss de donjon {$level} + avec Elixir",
-            'anomaly_guardian' => "Boss d'anomalie {$level} + avec Elixir",
+            'anomaly_guardian' => "Gardien d'anomalie {$level} + avec Elixir",
             'anomaly_monster' => "Mobs {$level} + avec Elixir",
             default => '',
         };

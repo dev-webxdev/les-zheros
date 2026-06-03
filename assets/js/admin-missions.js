@@ -342,7 +342,7 @@ if (missionForm) {
         }
 
         if (type === "anomaly_guardian") {
-            return `Boss d'anomalie ${level} + avec Elixir`;
+            return `Gardien d'anomalie ${level} + avec Elixir`;
         }
 
         if (type === "anomaly_monster") {

@@ -11,6 +11,9 @@ use App\Models\MissionValidation;
 use App\Models\Outing;
 use App\Models\Stuff;
 use App\Models\User;
+use App\Models\WordMysteryAttempt;
+use App\Models\WordMysteryReward;
+use App\Models\WordMysteryWord;
 use App\Support\AdminAccess;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -451,5 +454,95 @@ class AdminTrashFlowTest extends TestCase
             $this->actingAs($admin)->delete(route($item['empty']))->assertRedirect(route($item['trash']));
             $this->assertDatabaseMissing($fresh->getTable(), ['id' => $fresh->id]);
         }
+    }
+
+    public function test_word_mystery_word_with_reward_cannot_be_force_deleted_from_trash(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $player = User::factory()->create();
+        $word = WordMysteryWord::create([
+            'word' => 'Koutoulou',
+            'hint' => 'Boss',
+            'difficulty' => 'hard',
+            'reward_base' => 50000,
+            'active_date' => today(),
+            'is_active' => true,
+        ]);
+        $attempt = WordMysteryAttempt::create([
+            'user_id' => $player->id,
+            'word_id' => $word->id,
+            'difficulty' => 'hard',
+            'attempts_count' => 1,
+            'guesses' => [['word' => 'Koutoulou', 'result' => []]],
+            'has_won' => true,
+            'reward_earned' => 60000,
+            'played_at' => now(),
+        ]);
+        $reward = WordMysteryReward::create([
+            'user_id' => $player->id,
+            'game_attempt_id' => $attempt->id,
+            'amount' => 60000,
+            'status' => 'pending',
+        ]);
+
+        $word->delete();
+
+        $this->actingAs($admin)
+            ->delete(route('admin.mot-mystere.words.force-delete', $word->id))
+            ->assertRedirect(route('admin.mot-mystere.trash'));
+
+        $this->assertSoftDeleted('word_mystery_words', ['id' => $word->id]);
+        $this->assertDatabaseHas('word_mystery_attempts', ['id' => $attempt->id]);
+        $this->assertDatabaseHas('word_mystery_rewards', ['id' => $reward->id, 'deleted_at' => null]);
+    }
+
+    public function test_word_mystery_empty_trash_keeps_words_with_rewards(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $player = User::factory()->create();
+        $protectedWord = WordMysteryWord::create([
+            'word' => 'Koutoulou',
+            'hint' => 'Boss',
+            'difficulty' => 'hard',
+            'reward_base' => 50000,
+            'active_date' => today(),
+            'is_active' => true,
+        ]);
+        $plainWord = WordMysteryWord::create([
+            'word' => 'Dofus',
+            'hint' => 'Oeuf',
+            'difficulty' => 'easy',
+            'reward_base' => 10000,
+            'active_date' => today(),
+            'is_active' => true,
+        ]);
+        $attempt = WordMysteryAttempt::create([
+            'user_id' => $player->id,
+            'word_id' => $protectedWord->id,
+            'difficulty' => 'hard',
+            'attempts_count' => 1,
+            'guesses' => [['word' => 'Koutoulou', 'result' => []]],
+            'has_won' => true,
+            'reward_earned' => 60000,
+            'played_at' => now(),
+        ]);
+        $reward = WordMysteryReward::create([
+            'user_id' => $player->id,
+            'game_attempt_id' => $attempt->id,
+            'amount' => 60000,
+            'status' => 'pending',
+        ]);
+
+        $protectedWord->delete();
+        $plainWord->delete();
+
+        $this->actingAs($admin)
+            ->delete(route('admin.mot-mystere.empty-trash'))
+            ->assertRedirect(route('admin.mot-mystere.trash'));
+
+        $this->assertSoftDeleted('word_mystery_words', ['id' => $protectedWord->id]);
+        $this->assertDatabaseMissing('word_mystery_words', ['id' => $plainWord->id]);
+        $this->assertDatabaseHas('word_mystery_attempts', ['id' => $attempt->id]);
+        $this->assertDatabaseHas('word_mystery_rewards', ['id' => $reward->id, 'deleted_at' => null]);
     }
 }

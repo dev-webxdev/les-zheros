@@ -319,7 +319,19 @@ class WordMysteryController extends Controller
     {
         abort_unless($this->canManageWordMysteryTrash(request()), 403);
 
-        WordMysteryWord::onlyTrashed()->findOrFail($word)->forceDelete();
+        $word = WordMysteryWord::onlyTrashed()
+            ->withCount('attempts')
+            ->findOrFail($word);
+
+        if ($word->attempts_count > 0) {
+            return redirect()->route('admin.mot-mystere.trash')->with('admin_toast', [
+                'title' => 'Suppression bloquee',
+                'text' => 'Ce mot conserve des essais ou recompenses. Restaure-le ou garde-le en corbeille pour preserver l historique.',
+                'type' => 'warning',
+            ]);
+        }
+
+        $word->forceDelete();
 
         return redirect()->route('admin.mot-mystere.trash')->with('admin_toast', [
             'title' => 'Mot supprime',
@@ -362,12 +374,31 @@ class WordMysteryController extends Controller
     {
         abort_unless($this->canManageWordMysteryTrash(request()), 403);
 
-        WordMysteryReward::onlyTrashed()->forceDelete();
-        WordMysteryWord::onlyTrashed()->forceDelete();
+        $deletedRewards = WordMysteryReward::onlyTrashed()->forceDelete();
+        $deletedWords = 0;
+        $keptWords = 0;
+
+        WordMysteryWord::onlyTrashed()
+            ->withCount('attempts')
+            ->get()
+            ->each(function (WordMysteryWord $word) use (&$deletedWords, &$keptWords): void {
+                if ($word->attempts_count > 0) {
+                    $keptWords++;
+
+                    return;
+                }
+
+                $word->forceDelete();
+                $deletedWords++;
+            });
+
+        $message = $keptWords > 0
+            ? $deletedWords.' mot(s) et '.$deletedRewards.' recompense(s) supprime(s). '.$keptWords.' mot(s) avec historique ont ete conserves.'
+            : 'Tous les elements Mot Mystere en corbeille ont ete supprimes definitivement.';
 
         return redirect()->route('admin.mot-mystere.trash')->with('admin_toast', [
-            'title' => 'Corbeille videe',
-            'text' => 'Tous les elements Mot Mystere en corbeille ont ete supprimes definitivement.',
+            'title' => $keptWords > 0 ? 'Corbeille partiellement videe' : 'Corbeille videe',
+            'text' => $message,
             'type' => 'warning',
         ]);
     }

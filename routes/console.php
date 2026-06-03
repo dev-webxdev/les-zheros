@@ -33,4 +33,5 @@ Artisan::command('mot-mystere:sync', function () {
 })->purpose('Met les anciens mots mystere en corbeille');
 
 Schedule::command('site:backup')->dailyAt('03:00');
+Schedule::command('missions:sync-cycle')->everyFifteenMinutes();
 Schedule::command('mot-mystere:sync')->dailyAt('00:05');
