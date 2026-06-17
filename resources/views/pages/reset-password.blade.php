@@ -7,7 +7,11 @@
 @section('content')
 <main class="login-page">
     <a href="{{ route('accueil') }}" aria-label="Retour à l'accueil">
-        <img src="{{ asset('assets/img/logo.png') }}" alt="Les Zheros">
+        <picture>
+            <source srcset="{{ $versionedAsset('assets/img/logo-96.avif') }}" type="image/avif">
+            <source srcset="{{ $versionedAsset('assets/img/logo-96.webp') }}" type="image/webp">
+            <img src="{{ $versionedAsset('assets/img/logo.png') }}" alt="Les Zheros">
+        </picture>
     </a>
     <h1 class="auth-title--compact">Nouveau mot de passe</h1>
 

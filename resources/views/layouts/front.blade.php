@@ -9,7 +9,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ filemtime(public_path('assets/css/style.css')) }}">
     @stack('styles')
     @if (session('toast'))
@@ -22,15 +24,27 @@
         <meta name="site-toast-type" content="danger">
     @endif
     <script src="{{ asset('assets/js/main.js') }}?v={{ filemtime(public_path('assets/js/main.js')) }}" defer></script>
+    <script src="{{ $versionedAsset('assets/js/front/front-modules.js') }}" defer></script>
+    <script src="{{ $versionedAsset('assets/js/front/gallery.js') }}" defer></script>
+    <script src="{{ $versionedAsset('assets/js/front/ranking.js') }}" defer></script>
+    <script src="{{ $versionedAsset('assets/js/front/news-modal.js') }}" defer></script>
+    <script src="{{ $versionedAsset('assets/js/front/almanax.js') }}" defer></script>
+    <script src="{{ $versionedAsset('assets/js/front/guides.js') }}" defer></script>
+    <script src="{{ $versionedAsset('assets/js/front/stuffs.js') }}" defer></script>
+    <script src="{{ $versionedAsset('assets/js/front/sorties.js') }}" defer></script>
+    <script src="{{ $versionedAsset('assets/js/front/word-mystery.js') }}" defer></script>
+    <script src="{{ $versionedAsset('assets/js/front/pjax.js') }}" defer></script>
     @stack('scripts')
 </head>
 <body class="{{ $bodyClass ?? 'home-page' }}">
     @include('partials.front-header')
 
-    <main>
+    <main id="app-main">
         @yield('content')
     </main>
 
-    @yield('after_main')
+    <div id="app-after-main">
+        @yield('after_main')
+    </div>
 </body>
 </html>

@@ -125,10 +125,10 @@
                                     <i class="fa-solid fa-hourglass-end"></i>
                                     <span>Les 6 essais sont utilises. Reviens demain pour retenter ta chance.</span>
                                 </div>
-                            @elseif($hasWonToday)
+                            @elseif($hasCompletedToday)
                                 <div class="word-mystery-result is-lost">
                                     <i class="fa-solid fa-circle-info"></i>
-                                    <span>Tu as deja gagne une recompense aujourd'hui. La prochaine sera disponible demain.</span>
+                                    <span>{{ $hasWonToday ? "Tu as deja gagne une recompense aujourd'hui. La prochaine sera disponible demain." : "Tu as deja termine ta partie du jour. Reviens demain pour retenter ta chance." }}</span>
                                 </div>
                             @else
                                 <form class="word-mystery-form" action="{{ route('mot-mystere.submit') }}" method="post" data-real-form data-word-mystery-form>

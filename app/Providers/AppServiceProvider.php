@@ -37,6 +37,12 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
+        View::share('versionedAsset', static function (string $path): string {
+            $publicPath = public_path($path);
+
+            return asset($path).(is_file($publicPath) ? '?v='.filemtime($publicPath) : '');
+        });
+
         ResetPassword::createUrlUsing(function (object $notifiable, string $token): string {
             return rtrim((string) config('app.url'), '/').route('password.reset', [
                 'token' => $token,

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\WordMysteryAttempt;
 use App\Models\WordMysteryReward;
 use App\Models\WordMysteryWord;
 use App\Services\WordMysteryService;
@@ -64,20 +63,26 @@ class WordMysteryController extends Controller
                 'query' => $request->except('mots'),
             ],
         );
+        $rewardTotals = WordMysteryReward::query()
+            ->with('user')
+            ->select('user_id')
+            ->selectRaw("SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) as pending_total")
+            ->selectRaw("SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) as paid_total")
+            ->selectRaw("SUM(CASE WHEN status IN ('pending', 'paid') THEN amount ELSE 0 END) as earned_total")
+            ->groupBy('user_id')
+            ->havingRaw("SUM(CASE WHEN status IN ('pending', 'paid') THEN amount ELSE 0 END) > 0")
+            ->orderByDesc('pending_total')
+            ->orderBy('user_id')
+            ->get();
 
         return view('admin.admin-word-mystery', [
             'wordRows' => $wordRows,
             'wordsCount' => $words->count(),
+            'rewardTotals' => $rewardTotals,
             'rewards' => WordMysteryReward::query()
                 ->with(['user', 'attempt.word'])
                 ->latest()
                 ->paginate(12, ['*'], 'recompenses'),
-            'history' => WordMysteryAttempt::query()
-                ->with(['user', 'word', 'reward'])
-                ->where('has_won', false)
-                ->where('attempts_count', '>=', 6)
-                ->latest('updated_at')
-                ->paginate(12, ['*'], 'historique'),
             'canForceDeleteWordMystery' => $this->canManageWordMysteryTrash($request),
         ]);
     }

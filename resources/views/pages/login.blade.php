@@ -1,13 +1,17 @@
 @extends('layouts.guest')
 
 @section('title', 'Les Zheros | Guilde Dofus')
-@section('description', '')
+@section('description', 'Connexion et inscription à l’espace membre de la guilde Les Zheros.')
 @php($bodyClass = '')
 @php($isRegister = ($authMode ?? 'login') === 'register')
 
 @section('content')
 <main class="login-page">
-    <img src="{{ asset('assets/img/logo.png') }}" alt="">
+    <picture>
+        <source srcset="{{ $versionedAsset('assets/img/logo-96.avif') }}" type="image/avif">
+        <source srcset="{{ $versionedAsset('assets/img/logo-96.webp') }}" type="image/webp">
+        <img src="{{ $versionedAsset('assets/img/logo.png') }}" alt="">
+    </picture>
     <h1>{{ $isRegister ? 'Inscription' : 'Se connecter' }}</h1>
 
     <div class="panel login-card">

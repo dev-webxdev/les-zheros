@@ -5,6 +5,37 @@
 @php
     $activeAdmin = 'admin-word-mystery';
 @endphp
+@push('styles')
+<style>
+    .admin-word-rewards-title {
+        margin-top: 64px !important;
+    }
+
+    .admin-word-reward-totals-title {
+        margin-top: 48px !important;
+    }
+
+    .admin-word-reward-totals-card {
+        width: 100% !important;
+    }
+
+    .admin-table--word-mystery-reward-totals {
+        min-width: 760px !important;
+    }
+
+    .admin-table--word-mystery-reward-totals th:first-child,
+    .admin-table--word-mystery-reward-totals td:first-child {
+        width: 28% !important;
+        white-space: nowrap !important;
+    }
+
+    .admin-table--word-mystery-reward-totals th:not(:first-child),
+    .admin-table--word-mystery-reward-totals td:not(:first-child) {
+        width: 24% !important;
+        white-space: nowrap !important;
+    }
+</style>
+@endpush
 
 @section('admin')
 <main class="admin-main">
@@ -94,50 +125,7 @@
         @endcomponent
         @include('partials.admin-pagination', ['paginator' => $wordRows])
 
-        <div class="admin-title" style="margin-top: 28px;">
-            <i class="fa-solid fa-clock-rotate-left"></i>
-            <h1>Historique joueurs</h1>
-        </div>
-
-        @component('admin.components.table-card')
-            @component('admin.components.table', ['class' => 'admin-table--word-mystery-history'])
-                <thead>
-                    <tr>
-                        <th>Joueur</th>
-                        <th>Mot</th>
-                        <th>Difficulte</th>
-                        <th>Essais</th>
-                        <th>Gain</th>
-                        <th>Resultat</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($history as $attempt)
-                        @php
-                            $historyStatus = $attempt->has_won ? 'Trouve' : ($attempt->hasLost() ? 'Perdu' : 'En cours');
-                            $historyStatusClass = $attempt->has_won ? 'admin-tag--success' : ($attempt->hasLost() ? 'admin-tag--danger' : 'admin-tag--warning');
-                        @endphp
-                        <tr>
-                            <td><strong>{{ $attempt->user?->name ?? 'Utilisateur supprime' }}</strong></td>
-                            <td><strong>{{ $attempt->word?->word ?? '-' }}</strong></td>
-                            <td>{{ $attempt->word?->difficultyLabel() ?? $attempt->difficulty }}</td>
-                            <td>{{ $attempt->attempts_count }}</td>
-                            <td>{{ $attempt->reward_earned > 0 ? number_format($attempt->reward_earned, 0, ',', ' ').' kamas' : '-' }}</td>
-                            <td>@component('admin.components.badge', ['class' => $historyStatusClass, 'label' => $historyStatus])@endcomponent</td>
-                            <td>{{ optional($attempt->played_at ?? $attempt->updated_at)->format('d/m/Y H:i') }}</td>
-                        </tr>
-                    @empty
-                        @component('admin.components.table-empty-row', ['colspan' => 7])
-                            @component('admin.components.empty-state', ['icon' => 'fa-solid fa-clock-rotate-left', 'title' => 'Aucun historique', 'text' => 'Les essais des joueurs apparaitront ici.'])@endcomponent
-                        @endcomponent
-                    @endforelse
-                </tbody>
-            @endcomponent
-        @endcomponent
-        @include('partials.admin-pagination', ['paginator' => $history])
-
-        <div class="admin-title" style="margin-top: 28px;">
+        <div class="admin-title admin-word-rewards-title">
             <i class="fa-solid fa-coins"></i>
             <h1>Recompenses</h1>
         </div>
@@ -202,6 +190,36 @@
             @endcomponent
         @endcomponent
         @include('partials.admin-pagination', ['paginator' => $rewards])
+
+        @if($rewardTotals->isNotEmpty())
+            <div class="admin-title admin-word-reward-totals-title">
+                <i class="fa-solid fa-calculator"></i>
+                <h1>Totaux par joueur</h1>
+            </div>
+
+            @component('admin.components.table-card', ['class' => 'admin-word-reward-totals-card'])
+                @component('admin.components.table', ['class' => 'admin-table--word-mystery-reward-totals'])
+                    <thead>
+                        <tr>
+                            <th>Joueur</th>
+                            <th>En attente</th>
+                            <th>Paye</th>
+                            <th>Total gagne</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($rewardTotals as $total)
+                            <tr>
+                                <td><strong>{{ $total->user?->name ?? 'Utilisateur supprime' }}</strong></td>
+                                <td><strong>{{ number_format($total->pending_total, 0, ',', ' ') }} kamas</strong></td>
+                                <td>{{ number_format($total->paid_total, 0, ',', ' ') }} kamas</td>
+                                <td>{{ number_format($total->earned_total, 0, ',', ' ') }} kamas</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                @endcomponent
+            @endcomponent
+        @endif
     </section>
 </main>
 @endsection

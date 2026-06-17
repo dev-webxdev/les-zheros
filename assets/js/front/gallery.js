@@ -1,6 +1,14 @@
-const galleryRoot = document.querySelector("[data-gallery-root]");
+window.frontModules = window.frontModules || {};
 
-if (galleryRoot) {
+window.frontModules.initGallery = (root = document) => {
+    const galleryRoot = root.querySelector("[data-gallery-root]");
+
+    if (!galleryRoot || galleryRoot.dataset.galleryInitialized === "true") {
+        return;
+    }
+
+    galleryRoot.dataset.galleryInitialized = "true";
+
     const modal = galleryRoot.querySelector("[data-gallery-modal]");
     const modalImage = galleryRoot.querySelector("[data-gallery-modal-image]");
     const modalTitle = galleryRoot.querySelector("[data-gallery-modal-title]");
@@ -39,4 +47,6 @@ if (galleryRoot) {
             closeGalleryModal();
         }
     });
-}
+};
+
+window.frontModules.initGallery();

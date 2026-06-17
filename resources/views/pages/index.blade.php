@@ -1,7 +1,7 @@
 @extends('layouts.front')
 
 @section('title', 'Les Zheros | Guilde Dofus')
-@section('description', '')
+@section('description', 'Accueil de la guilde Les Zheros: annonces, Almanax et liens rapides vers les sorties, missions, guides et classements.')
 @php($bodyClass = 'home-page')
 @php($activePage = 'index')
 
@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="home-hero-media">
-                    <img class="home-hero-image" src="{{ asset('assets/img/divers/hall-guilde.png') }}" alt="Hall de guilde">
+                    <img class="home-hero-image" src="{{ $versionedAsset('assets/img/divers/hall-guilde.png') }}" alt="Hall de guilde" width="774" height="448" fetchpriority="high">
                 </div>
             </div>
         </section>

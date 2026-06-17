@@ -10,10 +10,10 @@
     --color-text-primary: #f0f3ff;
     --color-text-secondary: #a8b5eb;
     --color-text-muted: #8491bb;
-    --color-accent: #63a8ff;
-    --color-accent-strong: #62a8ff;
+    --color-accent: #1769c2;
+    --color-accent-strong: #1769c2;
     --color-accent-soft: #5396e7;
-    --color-danger: #ff5b5b;
+    --color-danger: #d93636;
     --radius-md: 6px;
     --radius-sm: 4px;
 }
@@ -139,8 +139,8 @@
 }
 
 .btn--primary:hover {
-    background-color: #7ab5ff;
-    border-color: #7ab5ff;
+    background-color: #0f5ab0;
+    border-color: #0f5ab0;
 }
 
 .btn--danger {
@@ -149,8 +149,8 @@
 }
 
 .btn--danger:hover {
-    background-color: #ff7373;
-    border-color: #ff7373;
+    background-color: #c72f2f;
+    border-color: #c72f2f;
 }
 
 .btn--secondary {

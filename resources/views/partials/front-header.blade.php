@@ -2,7 +2,13 @@
 <header class="site-header">
     <div class="container">
         <div class="site-header-bar">
-            <a class="site-logo" href="{{ auth()->check() ? route('accueil') : route('guides.index') }}"><img src="{{ asset('assets/img/logo.png') }}" alt=""></a>
+            <a class="site-logo" href="{{ auth()->check() ? route('accueil') : route('guides.index') }}" aria-label="Accueil Les Zheros">
+                <picture>
+                    <source srcset="{{ $versionedAsset('assets/img/logo-96.avif') }}" type="image/avif">
+                    <source srcset="{{ $versionedAsset('assets/img/logo-96.webp') }}" type="image/webp">
+                    <img src="{{ $versionedAsset('assets/img/logo.png') }}" alt="">
+                </picture>
+            </a>
 
             <button class="site-menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav-panel" aria-label="Ouvrir le menu" data-nav-toggle>
                 <span class="site-menu-toggle-line"></span>

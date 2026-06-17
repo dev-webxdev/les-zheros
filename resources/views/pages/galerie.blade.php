@@ -7,10 +7,6 @@
     $activePage = 'galerie';
 @endphp
 
-@push('scripts')
-<script src="{{ asset('assets/js/front/gallery.js') }}?v={{ filemtime(public_path('assets/js/front/gallery.js')) }}" defer></script>
-@endpush
-
 @section('content')
 <section class="page-hero gallery-hero">
     <div class="container page-hero__content">

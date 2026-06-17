@@ -82,6 +82,23 @@ class WordMysteryService
             ->exists();
     }
 
+    public function hasCompletedToday(User $user): bool
+    {
+        return WordMysteryAttempt::query()
+            ->where('user_id', $user->id)
+            ->whereDate('played_at', today())
+            ->where(function ($query): void {
+                $query->where(function ($query): void {
+                    $query->where('has_won', true)
+                        ->whereHas('reward');
+                })->orWhere(function ($query): void {
+                    $query->where('has_won', false)
+                        ->where('attempts_count', '>=', self::MAX_ATTEMPTS);
+                });
+            })
+            ->exists();
+    }
+
     /**
      * @return array{attempt: WordMysteryAttempt, has_won: bool, attempts_count: int, reward: int}
      */
@@ -105,6 +122,10 @@ class WordMysteryService
 
             if ($this->hasWonToday($user) && ! $attempt?->has_won) {
                 throw new InvalidArgumentException('already_won_today');
+            }
+
+            if ($this->hasCompletedToday($user) && ! $attempt?->has_won && ! $attempt?->hasLost()) {
+                throw new InvalidArgumentException('already_completed_today');
             }
 
             if ($attempt?->has_won && ! $attempt->reward()->exists()) {

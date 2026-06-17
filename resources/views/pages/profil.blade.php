@@ -1,10 +1,14 @@
 @extends('layouts.front')
 
 @section('title', 'Les Zheros | Guilde Dofus')
-@section('description', '')
+@section('description', 'Espace profil Les Zheros pour gérer le compte, les missions et les statistiques de participation.')
 @php($bodyClass = 'profile-page-body')
 @php($activePage = 'profil')
 @php($user = auth()->user())
+
+@push('styles')
+<link rel="stylesheet" href="{{ $versionedAsset('assets/css/profil.css') }}">
+@endpush
 
 @section('content')
 @php($roleLabels = \App\Support\AdminAccess::roles())

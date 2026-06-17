@@ -7,7 +7,11 @@
 
 <aside class="admin-sidebar" aria-label="Navigation administration">
     <a class="admin-brand" href="{{ route('accueil') }}">
-        <img src="{{ asset('assets/img/logo.png') }}" alt="">
+        <picture>
+            <source srcset="{{ $versionedAsset('assets/img/logo-96.avif') }}" type="image/avif">
+            <source srcset="{{ $versionedAsset('assets/img/logo-96.webp') }}" type="image/webp">
+            <img src="{{ $versionedAsset('assets/img/logo.png') }}" alt="">
+        </picture>
         <span>Les Zheros</span>
     </a>
 

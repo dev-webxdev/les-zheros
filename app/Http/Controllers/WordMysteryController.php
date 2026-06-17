@@ -49,6 +49,7 @@ class WordMysteryController extends Controller
             'attempt' => $attempt,
             'attemptsByDifficulty' => $attemptsByDifficulty,
             'hasWonToday' => $request->user() ? $this->wordMystery->hasWonToday($request->user()) : false,
+            'hasCompletedToday' => $request->user() ? $this->wordMystery->hasCompletedToday($request->user()) : false,
             'rewardPreview' => $word ? $this->wordMystery->rewardRows($word) : [],
             'rewardPreviews' => $rewardPreviews,
         ]);
@@ -106,6 +107,7 @@ class WordMysteryController extends Controller
                 'remaining' => max(WordMysteryService::MAX_ATTEMPTS - $attemptsCount, 0),
                 'has_won' => $hasWon,
                 'has_lost' => ! $hasWon && $attemptsCount >= WordMysteryService::MAX_ATTEMPTS,
+                'daily_completed' => $hasWon || $attemptsCount >= WordMysteryService::MAX_ATTEMPTS,
                 'reward' => $reward,
                 'title' => $hasWon ? 'Mot trouve' : ($attemptsCount >= WordMysteryService::MAX_ATTEMPTS ? 'Partie terminee' : 'Essai enregistre'),
                 'message' => $hasWon
@@ -140,6 +142,7 @@ class WordMysteryController extends Controller
 
         $errors = [
             'already_won_today' => ['Gain deja obtenu', 'Tu as deja gagne une recompense aujourd hui. Reviens demain pour un nouveau gain.'],
+            'already_completed_today' => ['Partie du jour terminee', 'Tu as deja termine ta partie du jour. Reviens demain pour retenter ta chance.'],
             'already_won_word' => ['Partie terminee', 'Tu as deja trouve le mot du jour.'],
             'attempts_used' => ['Partie terminee', 'Tes 6 essais sont deja utilises.'],
         ];
@@ -170,6 +173,7 @@ class WordMysteryController extends Controller
 
         $errors = [
             'already_won_today' => ['Gain deja obtenu', 'Tu as deja gagne une recompense aujourd hui. Reviens demain pour un nouveau gain.'],
+            'already_completed_today' => ['Partie du jour terminee', 'Tu as deja termine ta partie du jour. Reviens demain pour retenter ta chance.'],
             'already_won_word' => ['Partie terminee', 'Tu as deja trouve le mot du jour.'],
             'attempts_used' => ['Partie terminee', 'Tes 6 essais sont deja utilises.'],
         ];
